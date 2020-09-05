@@ -9,4 +9,3 @@ class Post(models.Model):
     title = models.CharField(max_length=64)
     content = models.CharField(max_length=2050)
     poster = models.ForeignKey(User, related_name="posts", on_delete=models.PROTECT)
-    attached = models.BinaryField(blank=True)

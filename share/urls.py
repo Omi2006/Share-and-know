@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from knowledge.views import FrontendURL
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('knowledge/', include('knowledge.urls'))
+    path('knowledge/', include('knowledge.urls')),
+    path('', FrontendURL.as_view())
 ]

@@ -8,7 +8,7 @@ export default function Home() {
 
     useEffect(() => {
         const getPosts = async () => {
-            const response = await fetch('/knowledge/posts')
+            const response = await fetch('/knowledge/posts/')
             const result = await response.json()
             setPosts(result)
         }

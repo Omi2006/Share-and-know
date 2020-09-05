@@ -1,32 +1,23 @@
 import React, {useState} from 'react'
+import { fetchPost } from './fetchPost'
 
 function Login() {
 
     const [username, updateUsername] = useState('')
     const [password, updatPassword] = useState('')
 
-    const handleFormSubmit = async (event) => {
+    const handleFormSubmit = event => {
         event.preventDefault()
         if (username.length <= 0 || password.length <= 0) {
             alert("Fill out all fields")
             return false
         }
-        const response = await fetch('knowledge/login/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        })
-        const result = await response.json()
+        const result = fetchPost('/knowledge/login', {username: username, password: password})
+
         if (result.errors !== undefined) {
             alert(result.errors.non_field_errors[0])
         }
-        localStorage.setItem('token', result.token)
-    };
+    }
 
     return(
         <div style={{margin: "15px"}}>

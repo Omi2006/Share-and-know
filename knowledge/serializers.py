@@ -60,7 +60,7 @@ class PostSerializer(serializers.ModelSerializer):
     poster = UserSerializer(read_only=True)
     class Meta:
         model = Post
-        fields = ["title", "content", "poster", "attached"]
+        fields = ["title", "content", "poster"]
 
     def create(self, attrs):
         return Post.objects.create(**attrs)

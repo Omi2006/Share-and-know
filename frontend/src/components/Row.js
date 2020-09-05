@@ -19,7 +19,6 @@ export default function PostRow(props) {
                 </CardHeader>
                 <CardBody>
                     <CardBody>
-                        {post.attached !== '' ? <CardImg width="50%" alt="Post attached image"src={post.attached}></CardImg> : null}
                         <CardText style={{textOverflow: 'ellipsis'}}>{post.content}</CardText>
                     </CardBody>
                 </CardBody>
