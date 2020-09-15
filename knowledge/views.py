@@ -6,10 +6,34 @@ from rest_framework.response import Response
 from .serializers import GetAuthTokenSerializer, RegisterSerializer, PostSerializer
 from .models import User, Post
 from django.contrib.auth import login, authenticate
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+
+DEFAULT_PAGE = 1
+DEFAULT_PAGE_SIZE = 10
 
 import json
 import os
 import logging
+
+class PostPagination(PageNumberPagination):
+    page = DEFAULT_PAGE
+    page_size = DEFAULT_PAGE_SIZE
+    page_size_query_param = 'page_size'
+
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'total': self.page.paginator.count,
+            'page': int(self.request.GET.get('page', DEFAULT_PAGE)), # can not set default = self.page
+            'page_size': int(self.request.GET.get('page_size', self.page_size)),
+            'results': data
+        })
+
+
 
 class FrontendURL(View):
     def get(self, request):
@@ -56,11 +80,25 @@ class Register(generics.GenericAPIView):
         return Response({'errors': serializer.errors})
 
 class Posts(generics.ListAPIView):
-
+    
     serializer_class = PostSerializer
-    queryset = Post.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
+    pagination_class = PostPagination
+    queryset = Post.objects.all()
+    
+    def get(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            result = self.get_paginated_response(serializer.data)
+            data = result.data # pagination data
+        else:
+            serializer = self.get_serializer(queryset, many=True)
+            data = serializer.data
+        print(data)
+        return Response(data)
+        
 class New(generics.GenericAPIView):
     
     def post(self, request, *args, **kwargs):

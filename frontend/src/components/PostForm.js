@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { fetchPost } from './fetchPost'
 
 export default function PostForm() {
-    const [formData, setFormData] = useState({content: '', attached: '', title: ''});
+    const [formData, setFormData] = useState({content: '', title: ''});
     const [redirect, setRedirect] = useState(false)
 
     const handleInputChange = event => {
@@ -15,7 +15,7 @@ export default function PostForm() {
     const handleSubmit = (e) => {
         e.preventDefault()
         const result = fetchPost('/knowledge/new/post', formData)
-        setRedirect(true)
+        setTimeout(() => setRedirect(true), 250)
         
     }
     return redirect ? <Redirect to='/' /> : (

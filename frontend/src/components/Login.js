@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { fetchPost } from './fetchPost'
+import { Redirect } from 'react-router-dom'
 
 function Login() {
 
@@ -17,15 +18,16 @@ function Login() {
         if (result.errors !== undefined) {
             alert(result.errors.non_field_errors[0])
         }
+        localStorage.setItem('loggedIn', true)
     }
 
-    return(
+    return localStorage.getItem('loggedIn') ? <Redirect to='/' /> : (
         <div style={{margin: "15px"}}>
             <h2>Login</h2>
-            <form style={{padding: "10px"}}>
+            <form style={{padding: "10px"}} onSubmit={handleFormSubmit}>
                 <input required type="text" placeholder="Username" onChange={e => updateUsername(e.target.value)} value={username} className="form-control" name="username" aria-label="username"/>
                 <input required type="password" placeholder="Password" onChange={e => updatPassword(e.target.value)} value={password} className="form-control" name="password" aria-label="password" style={{marginTop: "10px", marginBottom: "10px"}}/>
-                <button onClick={handleFormSubmit} className="btn btn-primary" aria-label="Login" type="button">Login</button>
+                <input type='submit' value='Register' aria-label='register' className='btn btn-primary'/>
             </form>
         </div>
     )

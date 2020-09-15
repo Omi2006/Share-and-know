@@ -8,7 +8,7 @@ export default function Home() {
 
     useEffect(() => {
         const getPosts = async () => {
-            const response = await fetch('/knowledge/posts/')
+            const response = await fetch('/knowledge/posts')
             const result = await response.json()
             setPosts(result)
         }
@@ -17,8 +17,9 @@ export default function Home() {
 
     return (
         <div>
+            {console.log(posts)}
             <CardDeck>
-                {posts.map((post, i) => {
+                {posts.results.map((post, i) => {
                     return <PostRow post={post} key={i} />
                 })}
             </CardDeck>
