@@ -1,9 +1,11 @@
-import React, {useState} from 'react'
-import {fetchPost} from './fetchPost'
+import React, { useContext, useState } from 'react'
+import { fetchPost } from './fetchPost'
 import { Redirect } from 'react-router-dom'
+import LoggedInContext from './LoggedInContext'
 
 export default function Register() {
     const [formData, setFormData] = useState({username: '', password: '', confirm: '', email: ''})
+    const { handleLogin } = useContext(LoggedInContext)
 
     const handleFormSubmit = event => {
         event.preventDefault()
@@ -19,7 +21,10 @@ export default function Register() {
 
         if (result.errors !== undefined) {
             alert(result.errors.non_field_errors[0]);
+            return false;
         }
+        localStorage.setItem('loggedIn', true)
+        handleLogin(true)
     }
 
     const handleInputChange = event => {
@@ -27,10 +32,9 @@ export default function Register() {
         const {name} = event.target;
         const {value} = event.target;
         setFormData(oldFormData => ({...oldFormData, [name]: value}));
-        localStorage.setItem('loggedIn', true)
     }
 
-    return localStorage.getItem('loggedIn') ? <Redirect to='/' /> : (
+    return (
         <div style={{margin: '15px'}}>
             <h2>Register</h2>
             <form style={{padding: '10px'}} onSubmit={handleFormSubmit}>

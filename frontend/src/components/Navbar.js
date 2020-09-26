@@ -1,31 +1,49 @@
-import React, { useState, useLayoutEffect } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
-import '../style/navbar.css'
+import React, { useContext, useState } from 'react';
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import LoggedInContext from './LoggedInContext'
 
-export default function Navbar() {
+import './../style/navbar.css'
 
-    const [navClass, updateNavClass] = useState('topnav');
-    const { pathname } = useLocation();
-    
-    useLayoutEffect(() => {
-        updateNavClass('topnav responsive');
-    }, [])
+export default function Navigation() {
+    const [collapsed, setCollapsed] = useState(true);
+    const { handleLogin, loggedIn } = useContext(LoggedInContext)
 
-    const toggleNav = () => {
-        updateNavClass(navClass === 'topnav' ? 'topnav responsive': 'topnav');
+    const toggleNavbar = () => setCollapsed(!collapsed);
+
+    const logout = () => {
+        localStorage.setItem('loggedIn', false)
+        handleLogin(false)
     }
 
     return (
-        <div className={navClass} >
-            <Link exact to='/' className={pathname === '/' ? 'active' : ''}>Home</Link>
-            <Link exact to='/register'className={pathname === '/register' ? 'active' : ''}>Register</Link>
-            <Link exact to='/login' className={pathname === '/login' ? 'active' : ''}>Login</Link>
-            <Link exact to='/new/post' className={pathname === '/new/post' ? 'active' : ''}>New Post</Link>
-            <FontAwesomeIcon icon={faBars} className='icon' onClick={toggleNav}/>
-        </div>
-    )
-
+        <Navbar color="gray" dark className='navbar'>
+            <NavbarBrand className="mr-auto" href='/'>Share</NavbarBrand>
+            <NavbarToggler onClick={toggleNavbar} className="mr-2" />
+            <Collapse isOpen={!collapsed} navbar>
+                <Nav navbar>
+                    {loggedIn ? (
+                        <div>
+                            <NavItem>
+                                <NavLink><Link to='/new/post'>New post</Link></NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink><Link onClick={() => logout()}>Logout</Link></NavLink>
+                            </NavItem>
+                        </div>
+                    ) : (
+                        <div>
+                            <NavItem>
+                                <NavLink><Link to='/register'>Register</Link></NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink><Link to='/login'>Login</Link></NavLink>
+                            </NavItem>
+                        </div>
+                    )}
+                    
+                </Nav>
+            </Collapse>
+        </Navbar>
+  );
 }

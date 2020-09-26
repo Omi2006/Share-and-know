@@ -58,9 +58,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     poster = UserSerializer(read_only=True)
+    date = serializers.ReadOnlyField(source="get_post_date", required=False)
     class Meta:
         model = Post
-        fields = ["title", "content", "poster"]
+        fields = ["title", "content", "poster", "uuid", "date"]
 
     def create(self, attrs):
         return Post.objects.create(**attrs)
