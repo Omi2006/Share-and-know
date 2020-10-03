@@ -1,20 +1,18 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import HttpResponse
 from django.conf import settings
 from rest_framework import generics, permissions
 from django.views.generic import View
 from rest_framework import serializers
 from rest_framework.response import Response
-from .serializers import GetAuthTokenSerializer, RegisterSerializer, PostSerializer
-from .models import User, Post
-from django.contrib.auth import login, authenticate
+from .serializers import LoginSerializer, RegisterSerializer, PostSerializer
+from .models import Post
+from django.contrib.auth import login
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from copy import deepcopy
 
 DEFAULT_PAGE = 1
 DEFAULT_PAGE_SIZE = 10
 
-import json
 import os
 import logging
 
@@ -48,10 +46,10 @@ class FrontendURL(View):
 class Login(generics.GenericAPIView):
 
     permission_classes = [permissions.AllowAny]
-    serializer_class = GetAuthTokenSerializer
+    serializer_class = LoginSerializer
 
-    def post(self, request, *args, **kwargs):
-        serializer = GetAuthTokenSerializer(data=request.data, context={"request": request})
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
@@ -64,7 +62,7 @@ class Register(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = RegisterSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         serializer = self.serializer_class(data=request.data, context={"request": request})
         if serializer.is_valid():
             user = serializer.validated_data['user']
@@ -98,14 +96,12 @@ class New(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        data = deepcopy(request.data)
-        data["poster"] = request.user
+        data = {**request.data, 'poster': request.user}
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             serializer.create(data)
             return Response({'message': 'posted successfully'})
         else:
-            print(serializer.errors)
             return Response({'error': serializer.errors})
 
 class OnePost(generics.GenericAPIView):
@@ -113,7 +109,7 @@ class OnePost(generics.GenericAPIView):
     serializer_class = PostSerializer
     
     def get(self, request):
-        uuid = request.query_params["uuid"]
+        uuid = request.query_params['uuid']
         post = Post.objects.get(uuid=uuid)
         serializer = self.serializer_class(post)
         return Response(serializer.data)

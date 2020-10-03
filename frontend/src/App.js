@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import { HashRouter as Router , Redirect, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css';
 import './index.css'
-import Register from "./components/Register";
-import Login from './components/Login';
-import Navbar from './components/Navbar'
-import Footer from './components/Footer';
-import Post from './components/Post'
-import PostForm from './components/PostForm'
+import Register from "./components/Auth/Register";
+import Login from './components/Auth/Login';
+import Navbar from './components/General/Navbar'
+import Footer from './components/General/Footer';
+import Post from './components/Post/Post'
+import PostForm from './components/Post/New'
 import Home from './components/Home'
-import { LoginProvider } from './components/LoggedInContext';
+import { LoginProvider } from './components/General/LoggedInContext';
 
 export default function App(){
 

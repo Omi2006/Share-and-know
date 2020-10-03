@@ -8,7 +8,7 @@ function getCookie(name) {
 
     if (token.length === 0) {
     return null;
-    }
+    };
     return decodeURIComponent(token[0].split('=')[1]);
 }
 
@@ -23,7 +23,7 @@ export async function fetchPost(url, body) {
             'X-CSRFToken': getCookie('csrftoken') 
         },
         body: JSON.stringify(body)
-    })
-    const result = await response.json()
-    return result
+    });
+    const result = await response.json();
+    return result;
 }

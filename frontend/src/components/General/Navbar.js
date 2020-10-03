@@ -3,7 +3,7 @@ import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } f
 import { Link } from 'react-router-dom';
 import LoggedInContext from './LoggedInContext'
 
-import './../style/navbar.css'
+import './../../style/navbar.css'
 
 export default function Navigation() {
     const [collapsed, setCollapsed] = useState(true);

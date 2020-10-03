@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react'
 import { fetchPost } from './fetchPost'
 import { Redirect } from 'react-router-dom'
-import LoggedInContext from './LoggedInContext'
+import LoggedInContext from '../General/LoggedInContext'
 
 export default function Register() {
     const [formData, setFormData] = useState({username: '', password: '', confirm: '', email: ''})
     const { handleLogin } = useContext(LoggedInContext)
 
-    const handleFormSubmit = event => {
-        event.preventDefault()
+    const handleFormSubmit = async event => {
+        event.preventDefault();
         if (formData.username.length <= 0 || formData.password.length <= 0 || formData.confirm.length <= 0 || formData.email.length <= 0) {
             alert('Fill out all fields');
             return false;
@@ -17,14 +17,13 @@ export default function Register() {
             alert('Password and confirm must match.');
             return false;
         }
-        const result = fetchPost('/knowledge/register', formData);
-
+        const result = await fetchPost('/knowledge/register', formData);
         if (result.errors !== undefined) {
             alert(result.errors.non_field_errors[0]);
             return false;
         }
-        localStorage.setItem('loggedIn', true)
-        handleLogin(true)
+        localStorage.setItem('loggedIn', true);
+        handleLogin(true);
     }
 
     const handleInputChange = event => {

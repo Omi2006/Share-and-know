@@ -1,0 +1,21 @@
+#posttitle {
+    text-align: center;
+    color: lightgrey;
+}
+
+#postdiv {
+    border-color: black;
+    margin: 20px;
+    border-style: dashed;
+    border-width: 1px;
+    font-size: 23px;
+    padding-top: 20px;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    background-color: lightgreen;
+}

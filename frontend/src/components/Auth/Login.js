@@ -1,29 +1,27 @@
 import React, { useState, useContext } from 'react'
 import { fetchPost } from './fetchPost'
-import { Redirect } from 'react-router-dom'
-import LoggedInContext from './LoggedInContext'
+import LoggedInContext from '../General/LoggedInContext'
 
 export default function Login() {
 
-    const [username, updateUsername] = useState('')
-    const [password, updatPassword] = useState('')
-    const { handleLogin } = useContext(LoggedInContext)
+    const [username, updateUsername] = useState('');
+    const [password, updatPassword] = useState('');
+    const { handleLogin } = useContext(LoggedInContext);
 
-    const handleFormSubmit = event => {
-        event.preventDefault()
+    const handleFormSubmit = async event => {
+        event.preventDefault();
         if (username.length <= 0 || password.length <= 0) {
-            alert("Fill out all fields")
-            return false
-        }
-        const result = fetchPost('/knowledge/login', {username: username, password: password})
-
+            alert("Fill out all fields");
+            return false;
+        };
+        const result = await fetchPost('/knowledge/login', {username: username, password: password});
         if (result.errors !== undefined) {
-            console.log(result.errors)
-            alert(result.errors.non_field_errors[0])
-            return ;
+            console.log(result);
+            alert(result.errors.non_field_errors[0]);
+            return false;
         }
-        localStorage.setItem('loggedIn', true)
-        handleLogin(true)
+        localStorage.setItem('loggedIn', true);
+        handleLogin(true);
     }
 
     return (

@@ -12,13 +12,10 @@ import {
   } from 'reactstrap';
 import { Link } from 'react-router-dom'
 
-export default function PostRow(props) {
-    const {post} = props
+export default function Row(props) {
+    const { post } = props;
 
-    if (post === undefined) {
-        return null
-    }
-    return (
+    return post === undefined ? null : (
         <Col md="4" style={{paddingBottom: "10px"}}>
             <Card>
                 <CardHeader>
@@ -28,7 +25,7 @@ export default function PostRow(props) {
                 <CardBody style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                     <CardText>{post.content}</CardText>
                 </CardBody>
-                <CardFooter style={{justifyContent: 'space-between', display: 'inline-block'}}>
+                <CardFooter style={{justifyContent: 'space-between', display: 'inline-flex'}}>
                     <CardLink><Link to={`posts/${post.uuid}`}>See more</Link></CardLink>
                     <CardText>{post.date}</CardText>
                 </CardFooter>

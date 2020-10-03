@@ -4,12 +4,16 @@ from django.db import IntegrityError
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 
-class GetAuthTokenSerializer(serializers.Serializer):
-    username = serializers.CharField()
+class LoginSerializer(serializers.ModelSerializer):
+    
     password = serializers.CharField(label=_("Password",),
         style={'input_type': 'password'},
         trim_whitespace=False)
-            
+    
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+
     def validate(self, attrs):
 
         username = attrs["username"]

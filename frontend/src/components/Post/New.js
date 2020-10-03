@@ -1,21 +1,25 @@
 import React, {useState} from 'react'
 import {FormGroup, Form, Input, Label} from 'reactstrap'
 import { Redirect } from 'react-router-dom';
-import { fetchPost } from './fetchPost'
+import { fetchPost } from '../Auth/fetchPost'
 
 export default function PostForm() {
     const [formData, setFormData] = useState({content: '', title: ''});
-    const [redirect, setRedirect] = useState(false)
+    const [redirect, setRedirect] = useState(false);
 
     const handleInputChange = event => {
         const {id, value} = event.target;
         setFormData(oldForm => ({...oldForm, [id]: value}));
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const result = fetchPost('/knowledge/new/post', formData)
-        setTimeout(() => setRedirect(true), 250)
+    const handleSubmit = async event => {
+        event.preventDefault();
+        const result = await fetchPost('/knowledge/new/post', formData);
+        if (result.errors !== undefined) {
+            alert(Object.keys(result.errors)[0]);
+            return false;
+        };
+        setRedirect(true);
         
     }
     return redirect ? <Redirect to='/' /> : (
