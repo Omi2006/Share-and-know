@@ -17,7 +17,7 @@ export default function Row(props) {
 
     return post === undefined ? null : (
         <Col md="4" style={{paddingBottom: "10px"}}>
-            <Card>
+            <Card style={{margin: '0px'}}>
                 <CardHeader>
                     <CardTitle><h5>{post.title}</h5></CardTitle>
                     <CardSubtitle>By: {post.poster.username}</CardSubtitle>

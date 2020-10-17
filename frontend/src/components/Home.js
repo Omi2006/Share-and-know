@@ -31,7 +31,7 @@ export default function Home() {
         };
         range.push(posts.total);
         //Remove repeated numbers
-        range = [... new Set(range)];
+        range = [...new Set(range)];
         setNumRange(range);
     }, [posts, currentPage])
 

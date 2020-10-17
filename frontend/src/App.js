@@ -19,7 +19,7 @@ export default function App(){
 		<Router>
 			<LoginProvider value={{loggedIn: loggedIn, handleLogin: setLoggedIn}}>
 				<Navbar/>
-				<div className='App'>
+				<div className='App' style={{gridRow: '2 / 3'}}>
 					<Route path='/' exact component={Home} />
 					<Route path='/register' exact component={() => loggedIn ? <Redirect to='/' /> : <Register/>} />
 					<Route path='/login' exact component={() => loggedIn ? <Redirect to='/' /> : <Login/>} />

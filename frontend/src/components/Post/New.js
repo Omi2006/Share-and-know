@@ -1,40 +1,60 @@
-import React, {useState} from 'react'
-import {FormGroup, Form, Input, Label} from 'reactstrap'
-import { Redirect } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { FormGroup, Form, UncontrolledAlert, Label, Button, Alert, FormText } from 'reactstrap'
+import { Redirect } from 'react-router-dom'
 import { fetchPost } from '../Auth/fetchPost'
 
 export default function PostForm() {
-    const [formData, setFormData] = useState({content: '', title: ''});
     const [redirect, setRedirect] = useState(false);
+    const { register, handleSubmit, errors } = useForm();
+    const [message, setMessage] = useState({});
 
-    const handleInputChange = event => {
-        const {id, value} = event.target;
-        setFormData(oldForm => ({...oldForm, [id]: value}));
-    }
-
-    const handleSubmit = async event => {
-        event.preventDefault();
-        const result = await fetchPost('/knowledge/new/post', formData);
+    const onSubmit = async data => {
+        const result = await fetchPost('/knowledge/new/post', data);
         if (result.errors !== undefined) {
-            alert(Object.keys(result.errors)[0]);
+            setMessage({type: 'danger', content: result.errors[Object.keys(result.errors)[0]]});
             return false;
         };
         setRedirect(true);
         
     }
+
     return redirect ? <Redirect to='/' /> : (
-        
-        <Form style={{margin: '10px'}} method='POST' onSubmit={handleSubmit}>
-            <h6>In here you make a new post. The content will be rendered using markdown. <a href='https://www.markdowntutorial.com/' target='_blank' rel="noopener noreferrer">What is markdown and how to use it.</a></h6>
-            <FormGroup>
-                <Label for='title'>Title: </Label>
-                <Input type='text' aria-label='title' id='title' placeholder='Title' onChange={handleInputChange} className='form-control' required/>
-            </FormGroup>
-            <FormGroup>
-                <Label for='content'>Content: </Label>
-                <textarea type='text' aria-label='content' id='content' placeholder='Some good content' onChange={handleInputChange} className='form-control' rows={20} maxLength="2050" required></textarea>
-            </FormGroup>
-            <input type='submit' value='Create Post' />
-        </Form>
+        <div>
+            {message.content === undefined ? null : (<Alert color={message.type} toggle={() => setMessage({})}>{message.content}</Alert>)}
+            {errors.title && <UncontrolledAlert style={{marginTop: '10px'}} color='danger'>You must provide a title!</UncontrolledAlert>}
+            {errors.content && <UncontrolledAlert color='danger'>You must provide some content!</UncontrolledAlert>}
+            <Form style={{margin: '10px'}} method='POST' onSubmit={handleSubmit(onSubmit)}>
+                <h6>In here you make a new post. The content will be rendered using markdown. <a href='https://www.markdowntutorial.com/' target='_blank' rel="noopener noreferrer">What is markdown and how to use it.</a></h6>
+                <FormGroup>
+                    <Label for='title'>Title: </Label>
+                    <input 
+                        type='text' 
+                        aria-label='title' 
+                        name='title' 
+                        id='title' 
+                        placeholder='Title...' 
+                        className='form-control'
+                        ref={register({ required: true })} 
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <Label for='content'>Content: </Label>
+                    <textarea
+                        type='text' 
+                        aria-label='content' 
+                        name='content' 
+                        id='content' 
+                        className='form-control'
+                        placeholder='Some good content...' 
+                        ref={register({ required: true })} 
+                        rows={20} 
+                        maxLength="2050"
+                    />
+                    <FormText>Tip: you can drag the right lower edge of the input box to make it bigger or smaller.</FormText>
+                </FormGroup>
+                <Button color='primary'>Submit</Button>
+            </Form>
+        </div>
     )
 }

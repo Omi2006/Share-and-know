@@ -5,10 +5,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(63, 178, 216);
+  background-color: whitesmoke;
+  display: grid;
+  grid-template-rows: 1fr 9fr;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+[data-theme='dark'] {
+  filter: invert(1) hue-rotate(180deg);
 }

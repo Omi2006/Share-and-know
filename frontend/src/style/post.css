@@ -1,13 +1,9 @@
 #posttitle {
-    text-align: center;
-    color: lightgrey;
+    text-align: center
 }
 
 #postdiv {
-    border-color: black;
     margin: 20px;
-    border-style: dashed;
-    border-width: 1px;
     font-size: 23px;
     padding-top: 20px;
     white-space: pre-wrap;
@@ -17,5 +13,4 @@
     word-wrap: break-word;
     display: flex;
     flex-direction: column;
-    background-color: lightgreen;
 }
