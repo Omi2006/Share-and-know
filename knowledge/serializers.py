@@ -13,7 +13,6 @@ class LoginSerializer(serializers.Serializer):
     def validate(self, attrs):
         username = attrs["username"]
         password = attrs["password"]
-        print(username)
 
         if username and password:
             user = authenticate(username=username, password=password)

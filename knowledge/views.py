@@ -122,7 +122,7 @@ class Comment(generics.GenericAPIView):
         }
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
-            serializer.create(data)
-            return Response({"message": "commented successfully"})
+            comment = serializer.create(data)
+            return Response({"comment": self.serializer_class(comment).data})
         else:
             return Response({"errors": serializer.errors})

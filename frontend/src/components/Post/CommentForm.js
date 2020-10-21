@@ -4,7 +4,7 @@ import { Form, FormGroup, Label, UncontrolledAlert, Alert, FormText } from 'reac
 import { useForm } from 'react-hook-form';
 
 export default function CommentForm(props) {
-    const { register, handleSubmit, errors } = useForm();
+    const { register, handleSubmit, reset, errors } = useForm();
     const [message, setMessage] = useState({});
     const submitButton = useRef();
 
@@ -23,11 +23,13 @@ export default function CommentForm(props) {
         const result = await fetchPost('/knowledge/new/comment', formData);
         if (result.errors === undefined) {
             setMessage({type: 'success', content: 'Comment posted successfully.'});
+            reset();
         }
         else {
             setMessage({type: 'danger', content: result.errors[Object.keys(result.errors)[0]]});
         }
         submitButton.current.disabled = false;
+        props.setComments(prevComments => [result.comment, ...prevComments])
     }
 
     return (
@@ -37,7 +39,14 @@ export default function CommentForm(props) {
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <FormGroup>
                     <Label for='content'>Content</Label>
-                    <textarea ref={register({ required: true })} placeholder='A valuable comment...' id='content' name='content' aria-label='Comment content' className='form-control' />
+                    <textarea 
+                        ref={register({ required: true })} 
+                        placeholder='A valuable comment...' 
+                        id='content' 
+                        name='content' 
+                        aria-label='Comment content' 
+                        className='form-control' 
+                    />
                     <FormText>Tip: you can drag the right lower edge of the input box to make it bigger or smaller.</FormText>
                 </FormGroup>
                 <input type='submit' value='Share your comment' className='btn btn-primary' ref={submitButton}/>

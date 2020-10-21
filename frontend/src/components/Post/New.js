@@ -22,8 +22,6 @@ export default function PostForm() {
     return redirect ? <Redirect to='/' /> : (
         <div>
             {message.content === undefined ? null : (<Alert color={message.type} toggle={() => setMessage({})}>{message.content}</Alert>)}
-            {errors.title && <UncontrolledAlert style={{marginTop: '10px'}} color='danger'>You must provide a title!</UncontrolledAlert>}
-            {errors.content && <UncontrolledAlert color='danger'>You must provide some content!</UncontrolledAlert>}
             <Form style={{margin: '10px'}} method='POST' onSubmit={handleSubmit(onSubmit)}>
                 <h6>In here you make a new post. The content will be rendered using markdown. <a href='https://www.markdowntutorial.com/' target='_blank' rel="noopener noreferrer">What is markdown and how to use it.</a></h6>
                 <FormGroup>
@@ -37,6 +35,7 @@ export default function PostForm() {
                         className='form-control'
                         ref={register({ required: true })} 
                     />
+                    {errors.title && <p style={{ color: '#bf1650'}}>⚠ You must provide a title!</p>}
                 </FormGroup>
                 <FormGroup>
                     <Label for='content'>Content: </Label>
@@ -52,6 +51,7 @@ export default function PostForm() {
                         maxLength="2050"
                     />
                     <FormText>Tip: you can drag the right lower edge of the input box to make it bigger or smaller.</FormText>
+                    {errors.content && <p style={{ color: '#bf1650'}}>⚠ You must provide some content!</p>}
                 </FormGroup>
                 <Button color='primary'>Submit</Button>
             </Form>

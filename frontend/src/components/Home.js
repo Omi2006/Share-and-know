@@ -25,7 +25,7 @@ export default function Home() {
             return () => {};
         };
         let range = [1];
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 2; i++) {
             //If smaller than 2, we wanna choose the biggest to prevent negatives and if smaller, prevent overboarding by choosing the smallest one
             i < 2 ? range.push(Math.max(1, currentPage + (i - 2))) : range.push(Math.min(posts.total, currentPage + (i - 2)));
         };

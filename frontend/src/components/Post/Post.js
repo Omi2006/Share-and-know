@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import '../../style/post.css'
 import CommentList from './CommentList'
 import CommentForm from './CommentForm'
+import LoggedInContext from '../General/LoggedInContext'
+import { Alert } from 'reactstrap'
 
 export default function Post() {
     const { uuid } = useParams();
     const [post, setPost] = useState({});
+    const [comments, setComments] = useState(post.comments)
+    const { loggedIn } = useContext(LoggedInContext);
     useEffect(() => {
         const getPost = async () => {
             const response = await fetch(`knowledge/post?uuid=${uuid}`);
             const result = await response.json();
-            console.log(result)
             setPost(result);
+            setComments(result.comments);
         }
         getPost();
     }, [uuid])
@@ -28,9 +32,9 @@ export default function Post() {
                 {post.content}
             </div>
             <hr />
-            <CommentForm post={post.id}/>
+            {loggedIn ? <CommentForm post={post.id} setComments={setComments}/> : <Alert color='danger'>You must be logged in to comment!</Alert>}
             <hr />
-            <CommentList comments={post.comments}/>
+            {comments ? <CommentList comments={comments}/> : null}
         </div>
     )
 }
