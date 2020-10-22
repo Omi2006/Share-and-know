@@ -9,6 +9,7 @@ export default function CommentForm(props) {
     const submitButton = useRef();
 
     const onSubmit = async data => {
+        //Disable button to prevent submitting twice
         submitButton.current.disabled = true;
 
         if (data.content.length < 1) {
@@ -21,7 +22,8 @@ export default function CommentForm(props) {
             'post': props.post,
         };
         const result = await fetchPost('/knowledge/new/comment', formData);
-        if (result.errors === undefined) {
+        //Check for server errors
+        if (!result.errors) {
             setMessage({type: 'success', content: 'Comment posted successfully.'});
             reset();
         }
@@ -29,6 +31,7 @@ export default function CommentForm(props) {
             setMessage({type: 'danger', content: result.errors[Object.keys(result.errors)[0]]});
         }
         submitButton.current.disabled = false;
+        //Add comment to comment lists
         props.setComments(prevComments => [result.comment, ...prevComments])
     }
 

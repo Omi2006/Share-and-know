@@ -7,12 +7,12 @@ from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from .serializers import CommentSerializer, LoginSerializer, RegisterSerializer, PostSerializer
 from .models import Post
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 DEFAULT_PAGE = 1
-DEFAULT_PAGE_SIZE = 10
+DEFAULT_PAGE_SIZE = 9
 
 import os
 import logging
@@ -50,11 +50,11 @@ class Login(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
-        serializer = LoginSerializer(data=request.data, context={"request": request})
+        serializer = self.serializer_class(data=request.data, context={"request": request})
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
-            return Response({"username": user.username})
+            return Response({'message': 'success'})
         return Response({"errors": serializer.errors})
 
 class Register(generics.GenericAPIView):
@@ -67,7 +67,7 @@ class Register(generics.GenericAPIView):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
-            return Response({"username": user.username})
+            return Response({'message': 'success'})
 
         return Response({"errors": serializer.errors})
 
@@ -126,3 +126,9 @@ class Comment(generics.GenericAPIView):
             return Response({"comment": self.serializer_class(comment).data})
         else:
             return Response({"errors": serializer.errors})
+
+class Logout(generics.GenericAPIView):
+
+    def get(self, request):
+        logout(request)
+        return Response({'message': 'success'})

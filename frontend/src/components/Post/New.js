@@ -1,22 +1,26 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { FormGroup, Form, UncontrolledAlert, Label, Button, Alert, FormText } from 'reactstrap'
+import { FormGroup, Form, Label, Alert, FormText } from 'reactstrap'
 import { Redirect } from 'react-router-dom'
 import { fetchPost } from '../Auth/fetchPost'
 
 export default function PostForm() {
     const [redirect, setRedirect] = useState(false);
+    const submitButton = useRef();
     const { register, handleSubmit, errors } = useForm();
     const [message, setMessage] = useState({});
 
     const onSubmit = async data => {
+        submitButton.current.disabled = true;
         const result = await fetchPost('/knowledge/new/post', data);
-        if (result.errors !== undefined) {
+        //Check for server errors
+        if (result.errors) {
+            submitButton.current.disabled = false;
             setMessage({type: 'danger', content: result.errors[Object.keys(result.errors)[0]]});
             return false;
         };
+        submitButton.current.disabled = true;
         setRedirect(true);
-        
     }
 
     return redirect ? <Redirect to='/' /> : (
@@ -53,7 +57,7 @@ export default function PostForm() {
                     <FormText>Tip: you can drag the right lower edge of the input box to make it bigger or smaller.</FormText>
                     {errors.content && <p style={{ color: '#bf1650'}}>⚠ You must provide some content!</p>}
                 </FormGroup>
-                <Button color='primary'>Submit</Button>
+                <input type='submit' value='Register' className='btn btn-primary' ref={submitButton} />
             </Form>
         </div>
     )

@@ -14,3 +14,18 @@
     display: flex;
     flex-direction: column;
 }
+
+.post-content {
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    overflow: hidden
+}
+
+.back-blue {
+    background-color: #a5e6f3;
+}
+
+.footer {
+    justify-content: space-between; 
+    display: inline-flex
+}

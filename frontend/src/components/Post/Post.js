@@ -12,6 +12,7 @@ export default function Post() {
     const [comments, setComments] = useState(post.comments)
     const { loggedIn } = useContext(LoggedInContext);
     useEffect(() => {
+        //get the post and set the comments
         const getPost = async () => {
             const response = await fetch(`knowledge/post?uuid=${uuid}`);
             const result = await response.json();

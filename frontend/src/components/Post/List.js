@@ -4,13 +4,11 @@ import { CardDeck } from 'reactstrap'
 
 export default function PostList(props) {
 
-    const posts = props.posts.results.map(post => {
-        return <Row post={post} key={post.id.toString()} />
-    })
-
     return (
-        <CardDeck style={{justifyContent: 'center', padding: '30px', width: '100%'}}>
-            {posts}
+        <CardDeck style={{ padding: '10px', width: '100%' }}>
+            {props.posts.results.map(post => {
+                return <Row post={post} key={post.id.toString()} />
+            })}
         </CardDeck>
     )
 }

@@ -13,13 +13,13 @@ import { LoginProvider } from './components/General/LoggedInContext';
 
 export default function App(){
 
-	const [loggedIn, setLoggedIn] = useState(localStorage.getItem('loggedIn'))
+	const [loggedIn, setLoggedIn] = useState((localStorage.getItem('loggedIn') === 'true'))
 
-	return(
+	return (
 		<Router>
 			<LoginProvider value={{loggedIn: loggedIn, handleLogin: setLoggedIn}}>
 				<Sidebar>
-					<div className='App' style={{ marginTop: '60px' }}>
+					<div className='App' style={{ marginTop: '65px' }}>
 						<Route path='/' exact component={Home} />
 						<Route path='/register' exact component={() => loggedIn ? <Redirect to='/' /> : <Register/>} />
 						<Route path='/login' exact component={() => loggedIn ? <Redirect to='/' /> : <Login/>} />

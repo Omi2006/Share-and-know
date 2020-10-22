@@ -10,9 +10,14 @@ import { faHome, faPlus, faSignInAlt, faSignOutAlt, faUser } from '@fortawesome/
 export default function SidebarContent () {
     const { handleLogin, loggedIn } = useContext(LoggedInContext);
 
-    const logout = () => {
-        localStorage.setItem('loggedIn', false)
-        handleLogin(false)
+    const logout = async () => {
+        const response = await fetch('/knowledge/logout');
+        const result = await response.json()
+        if (result.errors) {
+            alert('An error has occured')
+        }
+        localStorage.setItem('loggedIn', false);
+        handleLogin(false);
     }
 
     return (
@@ -27,7 +32,7 @@ export default function SidebarContent () {
             </NavItem>
             {loggedIn ? (
 
-                <div>
+                <>
                     <NavItem>
                         <Link to='/new/post' className='nav-link navnavlink'>
                             <FontAwesomeIcon icon={faPlus} className='navnavitem'/><p className='navnavtext'>New post</p>
@@ -38,10 +43,10 @@ export default function SidebarContent () {
                             <FontAwesomeIcon icon={faSignOutAlt} className='navnavitem'/><p className='navnavtext'>Logout</p>
                         </button>
                     </NavItem>
-                </div>
+                </>
 
             ) : (
-                <div>        
+                <>        
                     <NavItem>
                         <Link to='/login' className='nav-link navnavlink'>
                             <FontAwesomeIcon icon={faSignInAlt} className='navnavitem'/><p className='navnavtext'>Login</p>
@@ -52,7 +57,7 @@ export default function SidebarContent () {
                             <FontAwesomeIcon icon={faUser} className='navnavitem'/><p className='navnavtext'>Register</p>
                         </Link>
                     </NavItem>
-                </div>
+                </>
             )}
         </Nav>
 

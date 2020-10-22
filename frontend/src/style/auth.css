@@ -1,0 +1,31 @@
+.input {
+    border: none!important;
+    border-bottom: 1px solid #ced4da!important;
+    border-radius: 0;
+    padding: 0!important;
+    margin-bottom: 20px;
+    background: transparent!important;
+    transition: border-color 0.4s ease-in!important;
+}
+
+.input:focus {
+    box-shadow: none!important;
+    border-bottom: 2px solid #4dd1e1!important;
+    backface-visibility: hidden!important;
+}
+
+.error-message {
+    color: #bf1650;
+}
+
+.error-message::before {
+    content: "⚠ ";
+}
+
+.col-md-12 {
+    text-align: center;
+}
+
+.btn {
+    margin-bottom: 20px;
+}

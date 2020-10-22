@@ -8,8 +8,8 @@ import {
 export default function Paginate(props) {
     return (
         <Pagination style={{justifyContent: 'center'}}>
-
-            <PaginationItem disabled={props.currentPage - 1 < 1} key='prev'>
+            {/* Make sure current page isn't the first to disable it */}
+            <PaginationItem disabled={props.currentPage === 1} key='prev'>
                 <PaginationLink previous onClick={() => props.setCurrentPage(props.currentPage - 1)}/>
             </PaginationItem>
 
@@ -20,8 +20,8 @@ export default function Paginate(props) {
                 </PaginationItem>
                 )
             })}
-
-            <PaginationItem disabled={props.currentPage + 1 > props.numRange.length} key='next'>
+            {/* Make sure current page isn't the last to disable it */}
+            <PaginationItem disabled={props.currentPage === props.numRange.slice(-1)[0]} key='next'>
                 <PaginationLink next onClick={() => props.setCurrentPage(props.currentPage + 1)}/>
             </PaginationItem>
             

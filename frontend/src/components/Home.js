@@ -21,23 +21,17 @@ export default function Home() {
     //generate the pagination number ranges
     useEffect(() => {
         //If posts is undefined, don't run this part
-        if (posts.results === undefined) {
+        if (!posts.results) {
             return () => {};
         };
-        let range = [1];
-        for (let i = 0; i < 2; i++) {
-            //If smaller than 2, we wanna choose the biggest to prevent negatives and if smaller, prevent overboarding by choosing the smallest one
-            i < 2 ? range.push(Math.max(1, currentPage + (i - 2))) : range.push(Math.min(posts.total, currentPage + (i - 2)));
-        };
-        range.push(posts.total);
-        //Remove repeated numbers
-        range = [...new Set(range)];
-        setNumRange(range);
+        //Change the numrange when the posts change
+        const newRange = [1, currentPage, posts.total]
+        setNumRange([...new Set(newRange)]);
     }, [posts, currentPage])
 
     return posts.results === undefined ? null : (
         <div>
-            <h3>Home</h3>
+            <h3 style={{ textAlign: 'center' }}>Home</h3>
             <PostList posts={posts} />
             <Pagination currentPage={currentPage} numRange={numRange} setCurrentPage={setCurrentPage} />
         </div>
