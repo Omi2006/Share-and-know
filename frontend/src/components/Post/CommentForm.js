@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import {fetchPost} from '../Auth/fetchPost';
-import { Form, FormGroup, Label, UncontrolledAlert, Alert, FormText } from 'reactstrap';
+import { fetchCsrf } from '../Auth/fetchCsrf';
+import { Form, FormGroup, Label, UncontrolledAlert, Alert } from 'reactstrap';
 import { useForm } from 'react-hook-form';
+import TextArea from 'react-autosize-textarea';
 
 export default function CommentForm(props) {
     const { register, handleSubmit, reset, errors } = useForm();
@@ -13,47 +14,79 @@ export default function CommentForm(props) {
         submitButton.current.disabled = true;
 
         if (data.content.length < 1) {
-            setMessage({type: 'danger', content: 'You must fill out the comment!'});
+            setMessage({
+                type: 'danger',
+                content: 'You must fill out the comment!',
+            });
             submitButton.current.disabled = false;
-            return ;
+            return;
         }
         const formData = {
-            'content': data.content,
-            'post': props.post,
+            content: data.content,
+            post: props.post,
         };
-        const result = await fetchPost('/knowledge/new/comment', formData);
+        const result = await fetchCsrf('/knowledge/comment', formData, 'POST');
         //Check for server errors
-        if (!result.errors) {
-            setMessage({type: 'success', content: 'Comment posted successfully.'});
+        if (result.errors) {
+            setMessage({
+                type: 'danger',
+                content: result.errors[Object.keys(result.errors)[0]],
+            });
+        } else {
+            setMessage({
+                type: 'success',
+                content: 'Comment posted successfully.',
+            });
             reset();
-        }
-        else {
-            setMessage({type: 'danger', content: result.errors[Object.keys(result.errors)[0]]});
         }
         submitButton.current.disabled = false;
         //Add comment to comment lists
-        props.setComments(prevComments => [result.comment, ...prevComments])
-    }
+        try {
+            props.setComments(prevComments => [
+                result.comment,
+                ...prevComments,
+            ]);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <div>
-            {message.content === undefined ? null : (<Alert color={message.type} toggle={() => setMessage({})}>{message.content}</Alert>)}
-            {errors.content && <UncontrolledAlert color='danger'>You must fill out the comment!</UncontrolledAlert>}
+            {message.content && (
+                <Alert color={message.type} toggle={() => setMessage({})}>
+                    {message.content}
+                </Alert>
+            )}
+            {errors.content && (
+                <UncontrolledAlert color="danger">
+                    {errors.content.type === 'required'
+                        ? 'You must fill out the comment!'
+                        : 'Comment must be under 256 characters!'}
+                </UncontrolledAlert>
+            )}
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <FormGroup>
-                    <Label for='content'>Content</Label>
-                    <textarea 
-                        ref={register({ required: true })} 
-                        placeholder='A valuable comment...' 
-                        id='content' 
-                        name='content' 
-                        aria-label='Comment content' 
-                        className='form-control' 
+                    <Label for="content">Content</Label>
+                    <TextArea
+                        ref={register({
+                            required: true,
+                            validate: value => value.length < 256,
+                        })}
+                        placeholder="A valuable comment..."
+                        id="content"
+                        name="content"
+                        aria-label="Comment content"
+                        className="form-control"
                     />
-                    <FormText>Tip: you can drag the right lower edge of the input box to make it bigger or smaller.</FormText>
                 </FormGroup>
-                <input type='submit' value='Share your comment' className='btn btn-primary' ref={submitButton}/>
+                <input
+                    type="submit"
+                    value="Share your comment"
+                    className="btn btn-primary"
+                    ref={submitButton}
+                />
             </Form>
         </div>
-    )
+    );
 }

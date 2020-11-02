@@ -1,7 +1,6 @@
 from os import name
 from django.urls import path
-from .views import Login, Register, Posts, OnePost, Comment, Logout
-from django.urls import path
+from .views import Login, Register, Posts, OnePost, Comments, Logout
 
 
 urlpatterns = [
@@ -9,7 +8,8 @@ urlpatterns = [
     path('register', Register.as_view(), name="register"),
     path('posts', Posts.as_view(), name='posts'),
     path('new/post', Posts.as_view(), name='new'),
-    path('post', OnePost.as_view(), name='post'),
-    path('new/comment', Comment.as_view(), name='post'),
+    path('post/<str:uuid>', OnePost.as_view(), name='post'),
+    path('comment/<int:id>', Comments.as_view(), name='edit'),
+    path('comment', Comments.as_view(), name='post'),
     path('logout', Logout.as_view(), name='logout')
 ]

@@ -1,13 +1,12 @@
-import React from 'react'
-import Comment from './Comment'
+import React from 'react';
+import Comment from './Comment';
 
 export default function CommentList(props) {
-
     return (
         <div>
             {props.comments.map(comment => {
-                return <Comment key={comment.id} comment={comment}/>
+                return <Comment key={comment.id} comment={comment} />;
             })}
         </div>
-    )
+    );
 }

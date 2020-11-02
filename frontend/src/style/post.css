@@ -1,11 +1,13 @@
-#posttitle {
+#post-title {
     text-align: center
 }
 
-#postdiv {
+#post-div {
     margin: 20px;
+    margin-left: 0px;
     font-size: 23px;
     padding-top: 20px;
+    max-width: 768px;
     white-space: pre-wrap;
     white-space: -moz-pre-wrap;
     white-space: -pre-wrap;
@@ -28,4 +30,16 @@
 .footer {
     justify-content: space-between; 
     display: inline-flex
+}
+
+.edit-comment {
+    width: 100%;
+    background: transparent;
+}
+
+.like-button {
+    all: unset; 
+    text-decoration: none;
+    background-color: transparent;
+    display: block;
 }
