@@ -10,10 +10,16 @@ jobs:
       with:
         python-version: 3.8
     - name: Install dependencies
+    - env:
+        SECRET_KEY: 02963a29894ceaf3fd4d34afdd58927ab5244c58612cb5ca19
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run migrations
+    - env:
+        SECRET_KEY: 02963a29894ceaf3fd4d34afdd58927ab5244c58612cb5ca19
       run: python manage.py migrate
     - name: Run tests
+    - env:
+        SECRET_KEY: 02963a29894ceaf3fd4d34afdd58927ab5244c58612cb5ca19
       run: python manage.py test
