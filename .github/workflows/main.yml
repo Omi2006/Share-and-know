@@ -26,6 +26,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run Tests
+    - uses: actions/checkout@v2
     - env: 
         SECRET_KEY: 02963a29894ceaf3fd4d34afdd58927ab5244c58612cb5ca19
       run: python manage.py test knowledge/tests/
