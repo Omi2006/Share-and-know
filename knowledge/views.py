@@ -56,9 +56,9 @@ class Login(generics.GenericAPIView):
     #Get logged in user
     def get(self, request):
         if not request.user.is_authenticated:
-            return Response({"user": None})
+            return Response({'user': None})
         else:
-            return Response({"user": request.user.username})
+            return Response({'user': request.user.username})
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data, context={'request': request})
@@ -80,7 +80,7 @@ class Register(generics.GenericAPIView):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             login(request, user)
-            return Response({'message': 'success'})
+            return Response({'username': user.username})
 
         return Response({'errors': serializer.errors})
 
@@ -92,7 +92,7 @@ class Posts(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-date')
     
     def get(self, request):
         queryset = self.filter_queryset(self.get_queryset())
@@ -113,7 +113,6 @@ class Posts(generics.ListCreateAPIView):
             serializer.create(data)
             return Response({'message': 'posted successfully'})
         else:
-            print(serializer.errors)
             return Response({'errors': serializer.errors})
     
 class OnePost(generics.RetrieveAPIView):
@@ -126,7 +125,7 @@ class OnePost(generics.RetrieveAPIView):
 
     def put(self, request, uuid):
         post = Post.objects.get(uuid=uuid)
-        serializer = self.serializer_class(post, data={'likes': [{'username': request.data['likes']}]}, partial=True)
+        serializer = self.serializer_class(post, data={'likes': [{'username': request.user.username}]}, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({'likes': UserSerializer(post.likes.all(), many=True).data})

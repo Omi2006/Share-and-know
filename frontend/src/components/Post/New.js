@@ -61,11 +61,16 @@ export default function PostForm() {
                         id="title"
                         placeholder="Title..."
                         className="form-control"
-                        ref={register({ required: true })}
+                        ref={register({
+                            required: true,
+                            validate: value => value.length < 65,
+                        })}
                     />
                     {errors.title && (
                         <p className="error-message">
-                            You must provide a title!
+                            {errors.title.type === 'required'
+                                ? 'You must provide a title!'
+                                : 'Title must be 64 characters at most!'}
                         </p>
                     )}
                 </FormGroup>

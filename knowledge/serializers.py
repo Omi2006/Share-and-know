@@ -37,11 +37,11 @@ class RegisterSerializer(serializers.Serializer):
     def validate(self, attrs):
 
         if attrs['confirm'] != attrs['password']:
-            raise serializers.ValidationError('Passwords must match', code='registration')
+            raise serializers.ValidationError('Password and confirm must match!', code='registration')
         try:
             user = User.objects.create_user(username=attrs['username'], email=attrs['email'], password=attrs['password'])
         except IntegrityError:
-            raise serializers.ValidationError('User already exists', code='registratins')
+            raise serializers.ValidationError('Username is already taken!', code='registratins')
         attrs['user'] = user
         return attrs
 

@@ -10,6 +10,6 @@ urlpatterns = [
     path('new/post', Posts.as_view(), name='new'),
     path('post/<str:uuid>', OnePost.as_view(), name='post'),
     path('comment/<int:id>', Comments.as_view(), name='edit'),
-    path('comment', Comments.as_view(), name='post'),
+    path('comment', Comments.as_view(), name='comment'),
     path('logout', Logout.as_view(), name='logout')
 ]

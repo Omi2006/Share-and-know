@@ -10,7 +10,7 @@ class User(AbstractUser):
 
 class Post(models.Model):
     title = models.CharField(max_length=64)
-    content = models.CharField(max_length=2050)
+    content = models.TextField()
     poster = models.ForeignKey(User, related_name='posts', on_delete=models.SET_NULL, null=True)
     uuid = models.CharField(default=uuid.uuid4().hex[:8].upper(), unique=True, max_length=8)
     date = models.DateTimeField(auto_now_add=True)

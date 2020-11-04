@@ -36,4 +36,19 @@ describe('Testing comment form', () => {
             await screen.findByText('You must fill out the comment!')
         ).toBeInTheDocument();
     });
+
+    test('Handles too long of a comment', async () => {
+        render(<TestWrapper />);
+        const commentInput = screen.getByPlaceholderText(
+            'A valuable comment...'
+        );
+        const submitInput = screen.getByDisplayValue('Share your comment');
+        userEvent.type(commentInput, 'x'.repeat('257'));
+        act(() => {
+            userEvent.click(submitInput);
+        });
+        expect(
+            await screen.findByText('Comment must be under 257 characters!')
+        ).toBeInTheDocument();
+    });
 });

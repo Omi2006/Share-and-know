@@ -11,9 +11,7 @@ export default function LikeButton(props) {
     const handleLike = async () => {
         const result = await fetchCsrf(
             `knowledge/post/${props.uuid}`,
-            {
-                likes: loggedIn,
-            },
+            {},
             'PUT'
         );
         if (result.errors) {

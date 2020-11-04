@@ -46,6 +46,21 @@ describe('Testing new post', () => {
         expect(screen.getByDisplayValue('General Kenobi')).toBeInTheDocument();
     });
 
+    test('Handles too long of a title', async () => {
+        render(
+            <HashRouter>
+                <PostForm />
+            </HashRouter>
+        );
+        const titleInput = screen.getByPlaceholderText('Title...');
+        const bodyInput = screen.getByPlaceholderText('Some good content...');
+        userEvent.type(titleInput, 'x'.repeat(65));
+        userEvent.type(bodyInput, 'General Kenobi');
+        const submitInput = screen.getByDisplayValue('Create post');
+        userEvent.click(submitInput);
+        expect(await screen.findByText('Title must be 64 characters at most!'));
+    });
+
     test('Handles submission reject', async () => {
         render(
             <HashRouter>

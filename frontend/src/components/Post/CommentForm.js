@@ -62,7 +62,7 @@ export default function CommentForm(props) {
                 <UncontrolledAlert color="danger">
                     {errors.content.type === 'required'
                         ? 'You must fill out the comment!'
-                        : 'Comment must be under 256 characters!'}
+                        : 'Comment must be under 257 characters!'}
                 </UncontrolledAlert>
             )}
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -71,7 +71,7 @@ export default function CommentForm(props) {
                     <TextArea
                         ref={register({
                             required: true,
-                            validate: value => value.length < 256,
+                            validate: value => value.length < 257,
                         })}
                         placeholder="A valuable comment..."
                         id="content"
