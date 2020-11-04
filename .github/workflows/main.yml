@@ -37,7 +37,7 @@ jobs:
       - uses: actions/ckeckout@v2
       - uses: borales/actions-yarn@v2.0.0
       - name: Run tests
-      run: | 
-        cd frontend
-        yarn install
-        yarn test:nowatch
+        run: | 
+          cd frontend
+          yarn install
+          yarn test:nowatch
