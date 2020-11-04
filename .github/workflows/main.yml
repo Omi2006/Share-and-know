@@ -16,7 +16,7 @@ jobs:
     - name: Run migrations
       run: python manage.py migrate
     - name: Run tests
-    - env:
+      env:
         SECRET_KEY: 02963a29894ceaf3fd4d34afdd58927ab5244c58612cb5ca19
       run: |
         python manage.py test
