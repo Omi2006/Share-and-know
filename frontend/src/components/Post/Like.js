@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { fetchCsrf } from '../Auth/fetchCsrf';
 import LoginContext from '../General/LoggedInContext';
+import '../../style/post.css';
+import { Badge } from 'reactstrap';
 
 export default function LikeButton(props) {
     const { loggedIn } = useContext(LoginContext);
@@ -27,16 +29,18 @@ export default function LikeButton(props) {
                 <button onClick={handleLike} className="like-button">
                     <FontAwesomeIcon
                         icon={faHeart}
-                        style={{
-                            color: usernames.includes(loggedIn)
-                                ? 'red'
-                                : 'grey',
-                        }}
-                        title="like button"
+                        title="like-icon"
+                        className={
+                            usernames.includes(loggedIn)
+                                ? 'dislike-icon'
+                                : 'like-icon'
+                        }
                     />
                 </button>
             )}
-            <p>{props.likes.length}</p>
+            <Badge pill color="info">
+                {props.likes.length}
+            </Badge>
         </div>
     );
 }

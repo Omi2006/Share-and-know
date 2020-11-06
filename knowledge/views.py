@@ -92,7 +92,9 @@ class Posts(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     pagination_class = PostPagination
-    queryset = Post.objects.all().order_by('-date')
+    
+    def get_queryset(self):
+        return Post.objects.order_by(self.request.query_params['sort'])
     
     def get(self, request):
         queryset = self.filter_queryset(self.get_queryset())
@@ -156,10 +158,12 @@ class Comments(generics.UpdateAPIView):
 
     def put(self, request, id):
         comment = Comment.objects.get(id=id)
+        if comment.commenter != request.user:
+            return Response({'errors': {'comment': 'You can not edit this post!'}})
         serializer = self.serializer_class(comment, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response('works')
+            return Response({'message': 'Comment edited successfully'})
         else:
             return Response({'errors': serializer.errors})
 

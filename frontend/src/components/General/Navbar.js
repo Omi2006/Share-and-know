@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from 'react-sidebar';
-import SideBarContent from './SideBarContent';
+import SideBarContent from './SidebarContent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon, faBars } from '@fortawesome/free-solid-svg-icons';
 

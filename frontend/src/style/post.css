@@ -40,6 +40,24 @@
 .like-button {
     all: unset; 
     text-decoration: none;
-    background-color: transparent;
+    background: none;
     display: block;
+}
+
+.like-icon, .dislike-icon {
+    display: table;
+    font-size: 1.25rem;
+}
+
+.like-button:hover .like-icon {
+    color: red;
+}  
+
+.like-icon {
+    transition: color .25s linear;
+    color: rgb(206, 203, 203);
+}
+
+.dislike-icon {
+    color: red;
 }

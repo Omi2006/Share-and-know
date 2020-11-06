@@ -63,6 +63,10 @@ export default function Comment({ comment }) {
                             style={{ marginLeft: '10px' }}
                             maxLength="256"
                             outline
+                            disabled={
+                                editCommentContent.current &&
+                                editCommentContent.current.length < 1
+                            }
                             onClick={() => editComment()}
                         >
                             {editing ? 'Save' : 'Edit'}

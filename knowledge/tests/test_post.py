@@ -26,8 +26,10 @@ class PostTestCase(APITestCase):
         """
         Tests whether all posts returned are correctly.
         """
+        c = APIClient()
         url = reverse('posts')
-        response = self.client.get(url)
+
+        response = c.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, { 
             "total": 1, 
@@ -41,8 +43,10 @@ class PostTestCase(APITestCase):
         """
         Tests whether one post is returned correctly
         """
+        c = APIClient()
         url = '/knowledge/post/ABCD'
-        response = self.client.get(url)
+
+        response = c.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, {
             'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'}, 'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': []
