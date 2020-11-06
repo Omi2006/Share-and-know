@@ -29,7 +29,7 @@ export default function LikeButton(props) {
                 <button onClick={handleLike} className="like-button">
                     <FontAwesomeIcon
                         icon={faHeart}
-                        title="like-icon"
+                        title="like button"
                         className={
                             usernames.includes(loggedIn)
                                 ? 'dislike-icon'
