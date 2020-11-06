@@ -10,6 +10,7 @@ import Post from './components/Post/Post';
 import PostForm from './components/Post/New';
 import Home from './components/Home';
 import { LoginProvider } from './components/General/LoggedInContext';
+import Category from './components/Category';
 
 export default function App() {
     const [loggedIn, setLoggedIn] = useState(null);
@@ -57,6 +58,11 @@ export default function App() {
                             }
                         />
                         <Route path="/posts/:uuid" exact component={Post} />
+                        <Route
+                            path="/category/:name"
+                            exact
+                            component={Category}
+                        />
                         <Footer />
                     </div>
                 </Sidebar>

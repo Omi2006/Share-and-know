@@ -31,7 +31,7 @@ export default function Row({ post }) {
                 </CardBody>
                 <CardFooter className="footer back-blue">
                     <p className="card-link">
-                        <Link to={`posts/${post.uuid}`}>See more</Link>
+                        <Link to={`/posts/${post.uuid}`}>See more</Link>
                     </p>
                     <CardText className="text-muted">{post.date}</CardText>
                 </CardFooter>

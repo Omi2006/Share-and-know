@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import CommentForm from '../../components/Post/CommentForm';
+import CommentForm from '../../components/Comment/New';
 import { act } from 'react-dom/test-utils';
 
 global.fetch = jest.fn(() =>

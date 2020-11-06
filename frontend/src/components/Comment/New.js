@@ -4,7 +4,7 @@ import { Form, FormGroup, Label, UncontrolledAlert, Alert } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import TextArea from 'react-autosize-textarea';
 
-export default function CommentForm(props) {
+export default function New(props) {
     const { register, handleSubmit, reset, errors } = useForm();
     const [message, setMessage] = useState({});
     const submitButton = useRef();

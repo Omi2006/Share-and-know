@@ -15,6 +15,7 @@ class Post(models.Model):
     uuid = models.CharField(default=uuid.uuid4().hex[:8].upper(), unique=True, max_length=8)
     date = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='posts_liked')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='posts')
 
     def get_post_date(self):
         
@@ -30,3 +31,8 @@ class Comment(models.Model):
     def get_comment_date(self):
 
         return naturaltime(self.date)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=20)
+    parent = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='sub_categories', null=True)

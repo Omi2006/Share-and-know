@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Alert, Spinner } from 'reactstrap';
+import { useParams, Link } from 'react-router-dom';
+import { Alert, Badge, Spinner } from 'reactstrap';
 import Markdown from 'react-markdown';
-import CommentList from './CommentList';
-import CommentForm from './CommentForm';
+import CommentList from '../Comment/List';
+import CommentForm from '../Comment/New';
 import LoggedInContext from '../General/LoggedInContext';
 import LikeButton from './Like';
 
@@ -31,7 +31,10 @@ export default function Post() {
     ) : (
         <div style={{ padding: '10px' }}>
             <div>
-                <h6>{post.poster.username}</h6>
+                <h4>{post.poster.username}</h4>
+                <Link to={`/category/${post.category}`}>
+                    <Badge color="primary">{post.category}</Badge>
+                </Link>
                 {likes && (
                     <LikeButton
                         setLikes={setLikes}

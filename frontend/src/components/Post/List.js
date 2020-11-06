@@ -11,7 +11,7 @@ export default function PostList(props) {
                 justifyContent: 'space-evenly',
             }}
         >
-            {props.posts.results.map(post => {
+            {props.posts.map(post => {
                 return <Row post={post} key={post.id.toString()} />;
             })}
         </CardDeck>

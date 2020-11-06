@@ -11,8 +11,8 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .serializers import CommentSerializer, LoginSerializer, RegisterSerializer, PostSerializer, UserSerializer
-from .models import Post, Comment
+from .serializers import CategorySerializer, CommentSerializer, LoginSerializer, RegisterSerializer, PostSerializer, UserSerializer
+from .models import Category, Post, Comment
 
 DEFAULT_PAGE = 1
 DEFAULT_PAGE_SIZE = 9
@@ -166,6 +166,13 @@ class Comments(generics.UpdateAPIView):
             return Response({'message': 'Comment edited successfully'})
         else:
             return Response({'errors': serializer.errors})
+
+
+class OneCategory(generics.RetrieveAPIView):
+
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    lookup_field = 'name'
 
 
 class Logout(generics.GenericAPIView):

@@ -6,7 +6,6 @@ import Pagination from './Pagination';
 export default function Home() {
     const [posts, setPosts] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
-    const [numRange, setNumRange] = useState([]);
     const [sortBy, setSortBy] = useState({ value: '-date' });
 
     //get the posts for a page
@@ -23,17 +22,6 @@ export default function Home() {
         getPosts();
     }, [currentPage, sortBy]);
 
-    //generate the pagination number ranges
-    useEffect(() => {
-        //If posts is undefined, don't run this part
-        if (!posts.results) {
-            return () => {};
-        }
-        //Change the numrange when the posts change
-        const newRange = [1, currentPage, posts.total];
-        setNumRange([...new Set(newRange)]);
-    }, [posts, currentPage]);
-
     return !posts.results ? (
         <Spinner color="primary" />
     ) : (
@@ -45,7 +33,7 @@ export default function Home() {
                 style={{
                     marginLeft: '14px',
                     width: '130px',
-                    backgroundColor: '#2edbff',
+                    backgroundColor: '#68d8ee',
                 }}
                 onChange={e => setSortBy({ value: e.target.value })}
             >
@@ -54,10 +42,10 @@ export default function Home() {
                 <option value="-likes">Most liked</option>
                 <option value="likes">Least liked</option>
             </Input>
-            <PostList posts={posts} />
+            <PostList posts={posts.results} />
             <Pagination
                 currentPage={currentPage}
-                numRange={numRange}
+                last={posts.total}
                 setCurrentPage={setCurrentPage}
             />
         </div>

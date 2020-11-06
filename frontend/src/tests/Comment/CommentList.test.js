@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import CommentList from '../../components/Post/CommentList';
+import CommentList from '../../components/Comment/List';
 
 describe('Testing Comment list', () => {
     const comments = [

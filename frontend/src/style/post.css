@@ -49,7 +49,7 @@
     font-size: 1.25rem;
 }
 
-.like-button:hover .like-icon {
+.like-button:hover:not(.like-button:active) .like-icon {
     color: red;
 }  
 

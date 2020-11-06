@@ -12,7 +12,7 @@ export default function Paginate(props) {
                 />
             </PaginationItem>
 
-            {props.numRange.map(number => {
+            {[...new Set([1, props.currentPage, props.last])].map(number => {
                 return (
                     <PaginationItem
                         active={number === props.currentPage}
@@ -28,7 +28,7 @@ export default function Paginate(props) {
             })}
             {/* Make sure current page isn't the last to disable it */}
             <PaginationItem
-                disabled={props.currentPage === props.numRange.slice(-1)[0]}
+                disabled={props.currentPage === props.last}
                 key="next"
             >
                 <PaginationLink

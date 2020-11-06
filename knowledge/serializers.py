@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from .models import User, Post, Comment
+from .models import User, Post, Comment, Category
 from django.db import IntegrityError
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
+
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -60,6 +61,7 @@ class UserSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     poster = UserSerializer(read_only=True)
     likes = UserSerializer(read_only=False, many=True, required=False)
+    category = serializers.CharField(source='category.name', read_only=True)
     date = serializers.ReadOnlyField(source='get_post_date', required=False)
     
     extra_kwargs = {
@@ -70,7 +72,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('id', 'title', 'content', 'poster', 'uuid', 'date', 'comments', 'likes')
+        fields = ('id', 'title', 'content', 'poster', 'uuid', 'date', 'comments', 'likes', 'category')
 
     def get_fields(self):
         fields = super(PostSerializer, self).get_fields()
@@ -78,7 +80,7 @@ class PostSerializer(serializers.ModelSerializer):
         return fields
 
     def create(self, validated_data):
-        post = Post.objects.create(**validated_data)
+        post = Post.objects.create(**validated_data, category=Category.objects.get(id=1))
         return post
 
     def update(self, instance, validated_data):
@@ -106,3 +108,20 @@ class CommentSerializer(serializers.ModelSerializer):
         instance.content = validated_data['content']
         instance.save()
         return instance
+
+class SubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('id', 'name')
+
+class CategorySerializer(serializers.ModelSerializer):
+    posts = PostSerializer(read_only=True, many=True)
+    sub_categories = SubCategorySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Category
+        fields = ('id', 'name', 'posts', 'sub_categories')
+        depth = 2
+
+    def create(self, validated_data):
+        return Category.objects.create(**validated_data)

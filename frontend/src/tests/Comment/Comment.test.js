@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Comment from '../../components/Post/Comment';
+import Comment from '../../components/Comment/Comment';
 import { LoginProvider } from '../../components/General/LoggedInContext';
 import { act } from 'react-dom/test-utils';
 
