@@ -3,7 +3,7 @@ import { HashRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Comment from '../../components/Comment/Comment';
-import { LoginProvider } from '../../components/General/LoggedInContext';
+import { LoggedinProvider } from '../../components/Auth/LoggedInContext';
 import { act } from 'react-dom/test-utils';
 
 global.fetch = jest.fn(() =>
@@ -43,83 +43,83 @@ describe('Testing comments', () => {
     test('Renders correctly when logged in user is poster', () => {
         render(
             <HashRouter>
-                <LoginProvider value={{ loggedIn: 'joe' }}>
+                <LoggedinProvider value="joe">
                     <Comment comment={commentData} />
-                </LoginProvider>
+                </LoggedinProvider>
             </HashRouter>
         );
         expect(screen.getByText('@joe')).toBeInTheDocument();
         expect(screen.getByText('Joe')).toBeInTheDocument();
         expect(screen.getByText('10 days ago')).toBeInTheDocument();
-        expect(screen.getByText('Edit')).toBeInTheDocument();
+        expect(screen.getByText('edit')).toBeInTheDocument();
     });
 
     test('Renders correctly when logged in user is not poster', () => {
         render(
             <HashRouter>
-                <LoginProvider value={{ loggedIn: 'peter' }}>
+                <LoggedinProvider value="peter">
                     <Comment comment={commentData} />
-                </LoginProvider>
+                </LoggedinProvider>
             </HashRouter>
         );
         expect(screen.getByText('@joe')).toBeInTheDocument();
         expect(screen.getByText('Joe')).toBeInTheDocument();
         expect(screen.getByText('10 days ago')).toBeInTheDocument();
-        expect(screen.queryByText('Edit')).toBeNull();
+        expect(screen.queryByText('edit')).toBeNull();
     });
 
     test('Edit shows textarea, save, and cancel', async () => {
         render(
             <HashRouter>
-                <LoginProvider value={{ loggedIn: 'joe' }}>
+                <LoggedinProvider value="joe">
                     <Comment comment={commentData} />
-                </LoginProvider>
+                </LoggedinProvider>
             </HashRouter>
         );
         act(() => {
-            userEvent.click(screen.getByText('Edit'));
+            userEvent.click(screen.getByText('edit'));
         });
-        expect(screen.getByText('Cancel')).toBeInTheDocument();
-        expect(screen.getByText('Save')).toBeInTheDocument();
+        expect(screen.getByText('cancel')).toBeInTheDocument();
+        expect(screen.getByText('save')).toBeInTheDocument();
         expect(screen.getByRole('textbox')).toBeInTheDocument();
     });
 
     test('Editing textbox and saving changes content', async () => {
         render(
             <HashRouter>
-                <LoginProvider value={{ loggedIn: 'joe' }}>
+                <LoggedinProvider value="joe">
                     <Comment comment={commentData} />
-                </LoginProvider>
+                </LoggedinProvider>
             </HashRouter>
         );
         act(() => {
-            userEvent.click(screen.getByText('Edit'));
+            userEvent.click(screen.getByText('edit'));
         });
         userEvent.type(screen.getByRole('textbox'), 'lol');
         expect(screen.getByRole('textbox')).toHaveValue('lol');
         act(() => {
-            userEvent.click(screen.getByText('Save'));
+            userEvent.click(screen.getByText('save'));
         });
         expect(await screen.findByText('lol')).toBeInTheDocument();
-        expect(await screen.findByText('Edit')).toBeInTheDocument();
+        expect(await screen.findByText('edit')).toBeInTheDocument();
     });
 
     test('Cancel editing works', () => {
         render(
             <HashRouter>
-                <LoginProvider value={{ loggedIn: 'joe' }}>
+                <LoggedinProvider value="joe">
                     <Comment comment={commentData} />
-                </LoginProvider>
+                </LoggedinProvider>
             </HashRouter>
         );
         act(() => {
-            userEvent.click(screen.getByText('Edit'));
+            userEvent.click(screen.getByText('edit'));
         });
         userEvent.type(screen.getByRole('textbox'), 'lol');
         act(() => {
-            userEvent.click(screen.getByText('Cancel'));
+            userEvent.click(screen.getByText('cancel'));
         });
         expect(screen.getByText('Joe')).toBeInTheDocument();
-        expect(screen.getByText('Edit')).toBeInTheDocument();
+        expect(screen.getByText('edit')).toBeInTheDocument();
     });
 });

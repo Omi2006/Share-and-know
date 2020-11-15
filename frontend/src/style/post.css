@@ -1,5 +1,6 @@
 #post-title {
-    text-align: center
+    text-align: center;
+    margin-top: 20px;
 }
 
 #post-div {
@@ -18,18 +19,24 @@
 }
 
 .post-content {
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    overflow: hidden
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .back-blue {
     background-color: #a5e6f3;
 }
 
+.post-list {
+    padding: 10px;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
 .footer {
-    justify-content: space-between; 
-    display: inline-flex
+    justify-content: space-between;
+    display: inline-flex;
 }
 
 .edit-comment {
@@ -38,26 +45,37 @@
 }
 
 .like-button {
-    all: unset; 
+    all: unset;
     text-decoration: none;
     background: none;
     display: block;
 }
 
-.like-icon, .dislike-icon {
+.like-icon,
+.dislike-icon {
+    margin-top: 20px;
     display: table;
     font-size: 1.25rem;
 }
 
-.like-button:hover:not(.like-button:active) .like-icon {
+.like-button:hover:active .like-icon {
     color: red;
-}  
+}
 
 .like-icon {
-    transition: color .25s linear;
+    transition: color 0.25s linear;
     color: rgb(206, 203, 203);
 }
 
 .dislike-icon {
     color: red;
+}
+
+.post-card:hover {
+    transform: scale(1.01);
+}
+
+.post-card {
+    margin: 0px;
+    cursor: pointer;
 }

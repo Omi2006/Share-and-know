@@ -1,0 +1,36 @@
+.radiowrapper {
+    width: 250px;
+    border: none;
+    border-radius: 7px;
+    font-size: 22px;
+    padding: 0 20px;
+    line-height: 49px;
+    outline: none;
+}
+
+.radio {
+    display: flex;
+    justify-content: space-between;
+}
+
+.radiocontent {
+    display: flex;
+    flex-flow: column nowrap;
+    font-size: 1rem;
+    padding: 10px;
+    margin-top: 10px;
+    background: #ebebeb;
+    border-radius: 7px;
+}
+
+.radiocontent button {
+    background: none;
+    border: none;
+    margin: 0;
+    color: #4e4e4e;
+    padding: 6px 0;
+}
+
+.radiocontent button:active {
+    border: 1px solid black;
+}

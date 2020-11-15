@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import LoggedInContext from './LoggedInContext';
+import LoggedInContext from '../Auth/LoggedInContext';
 import { Nav, NavItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
@@ -12,9 +12,11 @@ import {
     faSignOutAlt,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
+import ToggleLoggedinContext from '../Auth/ToggleLoginContext';
 
 export default function SidebarContent() {
-    const { handleLogin, loggedIn } = useContext(LoggedInContext);
+    const loggedIn = useContext(LoggedInContext);
+    const handleLogin = useContext(ToggleLoggedinContext);
 
     const logout = async () => {
         const response = await fetch('/knowledge/logout');

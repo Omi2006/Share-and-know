@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { screen, render, act } from '@testing-library/react';
 import Like from '../../components/Post/Like';
-import { LoginProvider } from '../../components/General/LoggedInContext';
+import { LoggedinProvider } from '../../components/Auth/LoggedInContext';
 import userEvent from '@testing-library/user-event';
 
 global.fetch = jest.fn(() =>
@@ -21,9 +21,9 @@ function TestWrapper(props) {
     const [likes, setLikes] = useState(props.likes);
 
     return (
-        <LoginProvider value={{ loggedIn: props.loggedIn }}>
+        <LoggedinProvider value={props.loggedIn}>
             <Like setLikes={setLikes} likes={likes} />
-        </LoginProvider>
+        </LoggedinProvider>
     );
 }
 

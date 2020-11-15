@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PostList from './Post/List';
-import { Input, Spinner } from 'reactstrap';
-import Pagination from './Pagination';
+import { Spinner } from 'reactstrap';
+import Paginate from './Pagination';
+import Dropdown from './General/Dropdown';
 
 export default function Home() {
-    const [posts, setPosts] = useState({});
+    const [posts, setPosts] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [sortBy, setSortBy] = useState({ value: '-date' });
+    const [sortBy, setSortBy] = useState(['-date', 'Newest']);
 
     //get the posts for a page
 
@@ -14,7 +15,7 @@ export default function Home() {
         setPosts({});
         const getPosts = async () => {
             const response = await fetch(
-                `knowledge/posts?page=${currentPage}&sort=${sortBy.value}`
+                `knowledge/category/items/1?page=${currentPage}&sort=${sortBy[0]}&type=posts&search=`
             );
             const result = await response.json();
             setPosts(result);
@@ -22,32 +23,35 @@ export default function Home() {
         getPosts();
     }, [currentPage, sortBy]);
 
-    return !posts.results ? (
+    const options = [
+        ['-date', 'Newest'],
+        ['date', 'Oldest'],
+        ['-likes', 'Most Liked'],
+        ['likes', 'Least liked'],
+    ];
+
+    return posts === null ? (
         <Spinner color="primary" />
     ) : (
-        <div>
+        <div style={{ overflow: 'hidden' }}>
             <h3 style={{ textAlign: 'center' }}>Home</h3>
-            <Input
-                type="select"
-                value={sortBy.value}
-                style={{
-                    marginLeft: '14px',
-                    width: '130px',
-                    backgroundColor: '#68d8ee',
-                }}
-                onChange={e => setSortBy({ value: e.target.value })}
-            >
-                <option value="-date">Newest</option>
-                <option value="date">Oldest</option>
-                <option value="-likes">Most liked</option>
-                <option value="likes">Least liked</option>
-            </Input>
-            <PostList posts={posts.results} />
-            <Pagination
-                currentPage={currentPage}
-                last={posts.total}
-                setCurrentPage={setCurrentPage}
+            <Dropdown
+                options={options}
+                setSortBy={setSortBy}
+                selected={sortBy[1]}
             />
+            {posts.results ? (
+                <>
+                    <PostList posts={posts.results} />
+                    <Paginate
+                        currentPage={currentPage}
+                        last={posts.total}
+                        setCurrentPage={setCurrentPage}
+                    />
+                </>
+            ) : (
+                <Spinner color="primary" />
+            )}
         </div>
     );
 }

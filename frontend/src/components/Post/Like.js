@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { fetchCsrf } from '../Auth/fetchCsrf';
-import LoginContext from '../General/LoggedInContext';
-import '../../style/post.css';
 import { Badge } from 'reactstrap';
+import LoggedinContext from '../Auth/LoggedInContext';
+import '../../style/post.css';
 
 export default function LikeButton(props) {
-    const { loggedIn } = useContext(LoginContext);
+    const loggedIn = useContext(LoggedinContext);
     const usernames = props.likes.map(user => user.username);
 
     const handleLike = async () => {
@@ -36,6 +36,10 @@ export default function LikeButton(props) {
                                 : 'like-icon'
                         }
                     />
+                    <span className="visually-hidden">
+                        {usernames.includes(loggedIn) ? 'Like' : 'Dislike'}
+                        the post
+                    </span>
                 </button>
             )}
             <Badge pill color="info">

@@ -1,14 +1,19 @@
 import React, { useContext, useRef, useState } from 'react';
 import { Card, CardHeader, CardText, CardBody, Button } from 'reactstrap';
-import LoginContext from '../General/LoggedInContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faEdit,
+    faSave,
+    faWindowClose,
+} from '@fortawesome/free-solid-svg-icons';
 import TextArea from 'react-autosize-textarea';
 import Markdown from 'react-markdown';
-
+import LoggedinContext from '../Auth/LoggedInContext';
 import '../../style/post.css';
 import { fetchCsrf } from '../Auth/fetchCsrf';
 
 export default function Comment({ comment }) {
-    const { loggedIn } = useContext(LoginContext);
+    const loggedIn = useContext(LoggedinContext);
     const editCommentContent = useRef();
     const [content, setContent] = useState(comment.content);
     const [editing, setEditing] = useState(false);
@@ -33,7 +38,7 @@ export default function Comment({ comment }) {
         setEditing(!editing);
     };
     return (
-        <Card style={{ margin: '20px' }}>
+        <Card style={{ margin: '20px', height: 'auto' }}>
             <CardHeader
                 style={{
                     backgroundColor: 'rgb(203, 223, 230)',
@@ -50,39 +55,53 @@ export default function Comment({ comment }) {
                         {editing && (
                             <Button
                                 color="danger"
-                                size="sm"
+                                style={{ fontSize: '0.9rem' }}
                                 outline
+                                title="Cancel"
                                 onClick={() => setEditing(false)}
                             >
-                                Cancel
+                                <span className="visually-hidden">cancel</span>
+                                <FontAwesomeIcon icon={faWindowClose} />
                             </Button>
                         )}
                         <Button
-                            color="success"
-                            size="sm"
-                            style={{ marginLeft: '10px' }}
-                            maxLength="256"
+                            color={editing ? 'success' : 'primary'}
+                            style={{ marginLeft: '10px', fontSize: '0.9rem' }}
                             outline
+                            title={editing ? 'Save' : 'Edit'}
                             disabled={
                                 editCommentContent.current &&
                                 editCommentContent.current.length < 1
                             }
                             onClick={() => editComment()}
                         >
-                            {editing ? 'Save' : 'Edit'}
+                            <span className="visually-hidden">
+                                {editing ? 'save' : 'edit'}
+                            </span>
+                            <FontAwesomeIcon icon={editing ? faSave : faEdit} />
                         </Button>
                     </div>
                 )}
             </CardHeader>
             <CardBody style={{ backgroundColor: 'rgb(215, 245, 255)' }}>
                 {editing ? (
-                    <TextArea className="edit-comment" ref={editCommentContent}>
+                    <TextArea
+                        className="edit-comment"
+                        ref={editCommentContent}
+                        maxLength="256"
+                    >
                         {content}
                     </TextArea>
                 ) : (
-                    <CardText tag="pre">
-                        <Markdown>{content}</Markdown>
-                    </CardText>
+                    <Markdown
+                        style={{
+                            whiteSpcae: 'preWrap',
+                            marginTop: '0px',
+                            marginBottom: '1rem',
+                        }}
+                    >
+                        {content}
+                    </Markdown>
                 )}
             </CardBody>
         </Card>

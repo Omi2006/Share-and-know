@@ -1,53 +1,53 @@
 .navnavbar {
-  position: fixed;
-  width: 100%;
-  background-blend-mode: soft-light;
-  z-index: 100;
-  background-color: #3BB2F1;
-  top: 0;
-  padding: 16px;
-  display: inline-flex;
-  justify-content: space-between;
+    position: fixed;
+    width: 100%;
+    background-blend-mode: soft-light;
+    z-index: 100;
+    background-color: #3bb2f1;
+    top: 0;
+    padding: 16px;
+    display: inline-flex;
+    justify-content: space-between;
 }
 
 .theme {
-  cursor: pointer;
-  width: 1.5em;
-  height: 1.5em;
-  margin-right: 20px;
-  color: black;
+    cursor: pointer;
+    width: 1.5em;
+    height: 1.5em;
+    margin-right: 20px;
+    color: black;
 }
 
 .navnav {
-  position: relative;
+    position: relative;
 }
 
 .navnavlink:hover {
-  background-color: lightsalmon;
-  background-blend-mode: lighten;
+    background-color: lightsalmon;
+    background-blend-mode: lighten;
 }
 
 .navnavitem {
-  margin-right: 20px;
+    margin-right: 20px;
 }
 
 .navnavbutton {
-  all: unset; 
-  color: #007bff; 
-  text-decoration: none;
-  background-color: transparent;
-  display: block;
-  padding: .5rem 1rem;
+    all: unset;
+    color: #154579;
+    text-decoration: none;
+    background-color: transparent;
+    display: block;
+    padding: 0.5rem 1rem;
 }
 
 .navnavlink:hover .navnavitem {
-  color: green;
+    color: green;
 }
 
 .navnavtext {
-  all: unset;
+    all: unset;
 }
 
 .navnavlink:hover .navnavtext {
-  color: green;
+    color: green;
 }

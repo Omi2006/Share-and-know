@@ -1,11 +1,11 @@
 import os
-import logging
-from django.http import request
 
 from django.shortcuts import HttpResponse
 from django.conf import settings
 from django.views.generic import View
 from django.contrib.auth import login, logout
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -15,9 +15,10 @@ from .serializers import CategorySerializer, CommentSerializer, LoginSerializer,
 from .models import Category, Post, Comment
 
 DEFAULT_PAGE = 1
-DEFAULT_PAGE_SIZE = 9
+DEFAULT_PAGE_SIZE = 6
 
-class PostPagination(PageNumberPagination):
+
+class ItemPagination(PageNumberPagination):
     page = DEFAULT_PAGE
     page_size = DEFAULT_PAGE_SIZE
     page_size_query_param = 'page_size'
@@ -29,21 +30,26 @@ class PostPagination(PageNumberPagination):
         })
 
 
+@method_decorator(cache_page(None), name='dispatch')
 class FrontendURL(View):
+    """
+    Render the frontend
+    """
+
     def get(self, request):
-        try:
-            with open(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html')) as f:
-                return HttpResponse(f.read())
-        except FileNotFoundError:
-            logging.exception('Production build of app not found')
-            return HttpResponse(
-                """
-                This URL is only used when you have built the production
-                version of the app. Visit http://localhost:3000/ instead, or
-                run `yarn run build` to test the production version.
-                """,
-                status=501,
-            )
+        with open(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html')) as f:
+            return HttpResponse(f.read())
+
+
+@method_decorator(cache_page(None), name='dispatch')
+class FileView(View):
+    """
+    Renders a file like the site.webmanifest to make the app progressive.
+    """
+
+    def get(self, request, file):
+        with open(os.path.join(settings.REACT_APP_DIR, 'build', file), 'rb') as f:
+            return HttpResponse(f.read())
 
 
 class Login(generics.GenericAPIView):
@@ -53,7 +59,7 @@ class Login(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = LoginSerializer
 
-    #Get logged in user
+    # Get logged in user
     def get(self, request):
         if not request.user.is_authenticated:
             return Response({'user': None})
@@ -61,12 +67,14 @@ class Login(generics.GenericAPIView):
             return Response({'user': request.user.username})
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer = self.serializer_class(
+            data=request.data, context={'request': request})
         if serializer.is_valid():
             user = serializer.validated_data['user']
             login(request, user)
             return Response({'username': user.username})
         return Response({'errors': serializer.errors})
+
 
 class Register(generics.GenericAPIView):
     """
@@ -76,7 +84,8 @@ class Register(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer = self.serializer_class(
+            data=request.data, context={'request': request})
         if serializer.is_valid():
             user = serializer.validated_data['user']
             login(request, user)
@@ -85,29 +94,14 @@ class Register(generics.GenericAPIView):
         return Response({'errors': serializer.errors})
 
 
-class Posts(generics.ListCreateAPIView):
+class NewPost(generics.CreateAPIView):
     """
-    Gets posts paginated, creates posts, and updates posts
+    Creates a new post
     """
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    pagination_class = PostPagination
-    
-    def get_queryset(self):
-        return Post.objects.order_by(self.request.query_params['sort'])
-    
-    def get(self, request):
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.serializer_class(page, many=True)
-            result = self.get_paginated_response(serializer.data)
-            data = result.data # pagination data
-        else:
-            serializer = self.get_serializer(queryset, many=True)
-            data = serializer.data
-        return Response(data)
-    
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Post.objects.all()
+
     def post(self, request):
         data = {**request.data, 'poster': request.user}
         serializer = self.serializer_class(data=data)
@@ -116,7 +110,23 @@ class Posts(generics.ListCreateAPIView):
             return Response({'message': 'posted successfully'})
         else:
             return Response({'errors': serializer.errors})
-    
+
+
+class CategoryItems(generics.ListAPIView):
+
+    pagination_class = ItemPagination
+    paginate_by = 6
+
+    def get_queryset(self):
+        type = Post
+        if self.request.query_params['type'] == 'categories':
+            type = Category
+        return type.objects.filter(category=self.kwargs['id'], title__icontains=self.request.query_params['search']).order_by(self.request.query_params['sort'])
+
+    def get_serializer_class(self):
+        return PostSerializer if self.request.query_params['type'] == 'posts' else CategorySerializer
+
+
 class OnePost(generics.RetrieveAPIView):
     """
     Get a specific post
@@ -127,12 +137,14 @@ class OnePost(generics.RetrieveAPIView):
 
     def put(self, request, uuid):
         post = Post.objects.get(uuid=uuid)
-        serializer = self.serializer_class(post, data={'likes': [{'username': request.user.username}]}, partial=True)
+        serializer = self.serializer_class(
+            post, data={'likes': [{'username': request.user.username}]}, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({'likes': UserSerializer(post.likes.all(), many=True).data})
         else:
             return Response({'errors': serializer.errors})
+
 
 class Comments(generics.UpdateAPIView):
     """
@@ -145,7 +157,7 @@ class Comments(generics.UpdateAPIView):
 
     def post(self, request):
         data = {
-            'commenter': request.user, 
+            'commenter': request.user,
             'post': str(request.data['post']),
             'content': request.data['content']
         }
@@ -160,7 +172,8 @@ class Comments(generics.UpdateAPIView):
         comment = Comment.objects.get(id=id)
         if comment.commenter != request.user:
             return Response({'errors': {'comment': 'You can not edit this post!'}})
-        serializer = self.serializer_class(comment, data=request.data, partial=True)
+        serializer = self.serializer_class(
+            comment, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({'message': 'Comment edited successfully'})
@@ -169,16 +182,19 @@ class Comments(generics.UpdateAPIView):
 
 
 class OneCategory(generics.RetrieveAPIView):
-
+    """
+    Get all details of a specific category
+    """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    lookup_field = 'name'
+    lookup_field = 'title'
 
 
 class Logout(generics.GenericAPIView):
     """
     Logout users
     """
+
     def get(self, request):
         logout(request)
         return Response({'message': 'success'})

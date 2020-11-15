@@ -1,5 +1,4 @@
 from json import loads
-from os import name
 
 from django.urls import reverse
 from rest_framework.test import APIClient, APITestCase
@@ -7,6 +6,7 @@ from rest_framework.test import APIClient, APITestCase
 from knowledge.models import User, Post, Category
 
 # Create your tests here.
+
 
 class PostTestCase(APITestCase):
 
@@ -20,25 +20,29 @@ class PostTestCase(APITestCase):
         user2.set_password('Pete')
         user2.save()
 
-        c1 = Category.objects.create(name='FIRST', parent=None)
+        c1 = Category.objects.create(title='FIRST', category=None)
 
-        Post.objects.create(title='Test1', content='Test1', poster=user1, uuid='ABCD', category=c1)
-        Post.objects.create(title='Test2', content='Test2', poster=user2, uuid='EFGH', category=c1)
+        Post.objects.create(title='Test1', content='Test1',
+                            poster=user1, uuid='ABCD', category=c1)
+        Post.objects.create(title='Test2', content='Test2',
+                            poster=user2, uuid='EFGH', category=c1)
 
     def test_get_all_posts(self):
         """
         Tests whether all posts returned are correctly.
         """
         c = APIClient()
-        url = '/knowledge/posts?sort=-date'
+        url = '/knowledge/category/items/1?sort=-date&type=posts&search='
 
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(response.data, { 
-            "total": 1, 
+        self.assertDictEqual(response.data, {
+            "total": 1,
             "results": [
-                {'id': 2, 'title': 'Test2', 'content': 'Test2', 'poster': {'username': 'Pete', 'email': 'Pete'}, 'uuid': 'EFGH', 'date': 'now', 'comments': [], 'likes': [], 'category': 'FIRST'},
-                {'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'}, 'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'category': 'FIRST'} 
+                {'id': 2, 'title': 'Test2', 'content': 'Test2', 'poster': {'username': 'Pete', 'email': 'Pete'},
+                    'uuid': 'EFGH', 'date': 'now', 'comments': [], 'likes': [], 'category': {'id': 1, 'title': 'FIRST', 'date': 'now'}},
+                {'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},
+                    'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'category': {'id': 1, 'title': 'FIRST', 'date': 'now'}}
             ]}
         )
 
@@ -48,11 +52,11 @@ class PostTestCase(APITestCase):
         """
         c = APIClient()
         url = '/knowledge/post/ABCD'
-
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, {
-            'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'}, 'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'category': 'FIRST'
+            'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},
+            'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'category': {'id': 1, 'title': 'FIRST', 'date': 'now'}
         })
 
     def test_create_new_post_valid(self):
@@ -63,7 +67,8 @@ class PostTestCase(APITestCase):
         c.login(username='Joe', password='Joe')
         url = reverse('new')
 
-        response = c.post(url, {'title': 'stuff','content': 'stuff'}, format='json')
+        response = c.post(
+            url, {'title': 'stuff', 'content': 'stuff'}, format='json')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {'message': 'posted successfully'})
@@ -73,7 +78,7 @@ class PostTestCase(APITestCase):
         self.assertEqual(post.poster, User.objects.get(username='Joe'))
         self.assertEqual(post.content, 'stuff')
         self.assertEqual(post.likes.exists(), False)
-    
+
     def test_create_new_post_no_title(self):
         """
         Tests whether an invalid post response is returned for no title
@@ -81,9 +86,11 @@ class PostTestCase(APITestCase):
         c = APIClient()
         c.login(username='Joe', password='Joe')
         url = reverse('new')
-        response = c.post(url, {'title': '', 'content': 'stuff'}, format='json')
+        response = c.post(
+            url, {'title': '', 'content': 'stuff'}, format='json')
 
-        self.assertDictEqual(loads(response.content), {'errors': {'title': ['This field may not be blank.']}})
+        self.assertDictEqual(loads(response.content), {'errors': {
+                             'title': ['This field may not be blank.']}})
 
     def test_create_new_post_no_content(self):
         """
@@ -92,10 +99,12 @@ class PostTestCase(APITestCase):
         c = APIClient()
         c.login(username='Joe', password='Joe')
         url = reverse('new')
-        response = c.post(url, {'title': 'stuff', 'content': ''}, format='json')
+        response = c.post(
+            url, {'title': 'stuff', 'content': ''}, format='json')
 
-        self.assertDictEqual(loads(response.content), {'errors': {'content': ['This field may not be blank.']}})
-    
+        self.assertDictEqual(loads(response.content), {'errors': {
+                             'content': ['This field may not be blank.']}})
+
     def test_create_new_post_long_title(self):
         """
         Tests whether a post with too long of a title is rejected
@@ -103,8 +112,10 @@ class PostTestCase(APITestCase):
         c = APIClient()
         c.login(username='Joe', password='Joe')
         url = reverse('new')
-        response = c.post(url, {'title': 'x' * 66, 'content': 'stuff'}, format='json')
-        self.assertDictEqual(loads(response.content), {'errors': {'title': ['Ensure this field has no more than 64 characters.']}})
+        response = c.post(
+            url, {'title': 'x' * 66, 'content': 'stuff'}, format='json')
+        self.assertDictEqual(loads(response.content), {'errors': {
+                             'title': ['Ensure this field has no more than 64 characters.']}})
 
     def test_like_a_post(self):
         """

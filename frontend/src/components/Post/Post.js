@@ -4,7 +4,7 @@ import { Alert, Badge, Spinner } from 'reactstrap';
 import Markdown from 'react-markdown';
 import CommentList from '../Comment/List';
 import CommentForm from '../Comment/New';
-import LoggedInContext from '../General/LoggedInContext';
+import LoggedInContext from '../Auth/LoggedInContext';
 import LikeButton from './Like';
 
 import '../../style/post.css';
@@ -14,7 +14,8 @@ export default function Post() {
     const [post, setPost] = useState({});
     const [likes, setLikes] = useState();
     const [comments, setComments] = useState(post.comments);
-    const { loggedIn } = useContext(LoggedInContext);
+    const loggedIn = useContext(LoggedInContext);
+
     useEffect(() => {
         //get the post and set the comments
         const getPost = async () => {
@@ -26,14 +27,20 @@ export default function Post() {
         };
         getPost();
     }, [uuid]);
+
     return !post.content ? (
         <Spinner color="primary" />
     ) : (
         <div style={{ padding: '10px' }}>
             <div>
                 <h4>{post.poster.username}</h4>
-                <Link to={`/category/${post.category}`}>
-                    <Badge color="primary">{post.category}</Badge>
+                <Link
+                    to={{
+                        pathname: `/category/${post.category.title}`,
+                        state: { id: post.category.id },
+                    }}
+                >
+                    <Badge color="primary">{post.category.title}</Badge>
                 </Link>
                 {likes && (
                     <LikeButton
@@ -42,9 +49,7 @@ export default function Post() {
                         uuid={post.uuid}
                     />
                 )}
-                <footer style={{ fontSize: '12px' }} className="text-muted">
-                    {post.date}
-                </footer>
+                <footer style={{ fontSize: '12px' }}>{post.date}</footer>
                 <h2 id="post-title">{post.title}</h2>
             </div>
             <hr />

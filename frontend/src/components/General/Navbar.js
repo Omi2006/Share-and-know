@@ -23,8 +23,9 @@ export default function SidebarNav(props) {
             open={!collapsed}
             onSetOpen={toggleNavbar}
             styles={{
-                sidebar: { backgroundColor: '#0bf1c0', zIndex: '101' },
-                overlay: { backgroundColor: 'rgb(0, 0, 0, 0.13)' },
+                sidebar: { backgroundColor: '#93eddc', zIndex: '101' },
+                overlay: { backgroundColor: 'rgb(0, 0, 0, 0)' },
+                content: !collapsed ? { filter: 'blur(1.5px)' } : {},
             }}
         >
             <div className="navnavbar">

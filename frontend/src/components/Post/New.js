@@ -1,15 +1,15 @@
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FormGroup, Form, Label, Alert } from 'reactstrap';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { fetchCsrf } from '../Auth/fetchCsrf';
 import TextArea from 'react-autosize-textarea';
 
 export default function PostForm() {
-    const [redirect, setRedirect] = useState(false);
     const submitButton = useRef();
     const { register, handleSubmit, errors } = useForm();
     const [message, setMessage] = useState({});
+    const { push } = useHistory();
 
     const onSubmit = async data => {
         submitButton.current.disabled = true;
@@ -24,12 +24,10 @@ export default function PostForm() {
             return false;
         }
         submitButton.current.disabled = true;
-        setRedirect(true);
+        push('/');
     };
 
-    return redirect ? (
-        <Redirect to="/" />
-    ) : (
+    return (
         <div>
             {message.content && (
                 <Alert color={message.type} toggle={() => setMessage({})}>

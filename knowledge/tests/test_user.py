@@ -5,6 +5,7 @@ from rest_framework.test import APIClient, APITestCase
 
 from knowledge.models import User
 
+
 class UserTestCAse(APITestCase):
 
     def setUp(self):
@@ -32,8 +33,9 @@ class UserTestCAse(APITestCase):
         url = reverse('login')
 
         response = c.post(url, {'username': 'Joe', 'password': 'joe'})
-        self.assertDictEqual(loads(response.content), {'errors': {'non_field_errors': ['Invalid credentials']}})
-    
+        self.assertDictEqual(loads(response.content), {'errors': {
+                             'non_field_errors': ['Invalid credentials']}})
+
     def test_login_no_fields(self):
         """
         Tests whether login works with empty fields
@@ -42,7 +44,8 @@ class UserTestCAse(APITestCase):
         url = reverse('login')
 
         response = c.post(url, {'username': '', 'password': ''})
-        self.assertDictEqual(loads(response.content), {'errors': {'password': ['This field may not be blank.'], 'username': ['This field may not be blank.']}})
+        self.assertDictEqual(loads(response.content), {'errors': {'password': [
+                             'This field may not be blank.'], 'username': ['This field may not be blank.']}})
 
     def test_login_returns_logged_in_user(self):
         """
@@ -59,7 +62,7 @@ class UserTestCAse(APITestCase):
     def test_login_returns_no_logged_in_user(self):
         """
         Tests whether login returns None if there is no logged in user
-        """        
+        """
         c = APIClient()
         url = reverse('login')
 
@@ -74,11 +77,13 @@ class UserTestCAse(APITestCase):
         c = APIClient()
         url = reverse('register')
 
-        response = c.post(url, {'username': 'omar', 'password': 'omar', 'confirm': 'omar', 'email': 'omar@omar.com'})
+        response = c.post(url, {'username': 'omar', 'password': 'omar',
+                                'confirm': 'omar', 'email': 'omar@omar.com'})
 
         self.assertDictEqual(loads(response.content), {'username': 'omar'})
-        self.assertEqual('omar', User.objects.get(email='omar@omar.com').username)
-    
+        self.assertEqual('omar', User.objects.get(
+            email='omar@omar.com').username)
+
     def test_register_already_existing_user(self):
         """
         Tests whether register works for creating an existing user
@@ -86,9 +91,11 @@ class UserTestCAse(APITestCase):
         c = APIClient()
         url = reverse('register')
 
-        response = c.post(url, {'username': 'Joe', 'password': 'omar', 'confirm': 'omar', 'email': 'omar@omar.com'})
+        response = c.post(url, {'username': 'Joe', 'password': 'omar',
+                                'confirm': 'omar', 'email': 'omar@omar.com'})
 
-        self.assertDictEqual(loads(response.content), {'errors': {'non_field_errors': ['Username is already taken!']}})
+        self.assertDictEqual(loads(response.content), {'errors': {
+                             'non_field_errors': ['Username is already taken!']}})
 
     def test_register_empty_fields(self):
         """
@@ -97,9 +104,11 @@ class UserTestCAse(APITestCase):
         c = APIClient()
         url = reverse('register')
 
-        response = c.post(url, {'username': '', 'password': '', 'confirm': '', 'email': ''})
+        response = c.post(
+            url, {'username': '', 'password': '', 'confirm': '', 'email': ''})
 
-        self.assertDictEqual(loads(response.content), {'errors': {field: ['This field may not be blank.'] for field in ['username', 'password', 'confirm', 'email']}})
+        self.assertDictEqual(loads(response.content), {'errors': {field: [
+                             'This field may not be blank.'] for field in ['username', 'password', 'confirm', 'email']}})
 
     def test_register_confirm_and_password_not_match(self):
         """
@@ -108,6 +117,8 @@ class UserTestCAse(APITestCase):
         c = APIClient()
         url = reverse('register')
 
-        response = c.post(url, {'username': 'Joe', 'password': 'omar', 'confirm': 'omarrr', 'email': 'omar@omar.com'})
+        response = c.post(url, {'username': 'Joe', 'password': 'omar',
+                                'confirm': 'omarrr', 'email': 'omar@omar.com'})
 
-        self.assertDictEqual(loads(response.content), {'errors': {'non_field_errors': ['Password and confirm must match!']}})
+        self.assertDictEqual(loads(response.content), {'errors': {
+                             'non_field_errors': ['Password and confirm must match!']}})
