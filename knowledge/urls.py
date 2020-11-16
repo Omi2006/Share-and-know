@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import FileView, Login, OneCategory, Register, OnePost, Comments, Logout, CategoryItems, NewPost
+from .views import FileView, Login, OneHub, Register, OnePost, Comments, Logout, HubItems, NewPost
 
 
 urlpatterns = [
@@ -10,7 +10,7 @@ urlpatterns = [
     path('post/<str:uuid>', OnePost.as_view(), name='post'),
     path('comment/<int:id>', Comments.as_view(), name='edit'),
     path('comment', Comments.as_view(), name='comment'),
-    path('category/details/<str:title>', OneCategory.as_view(), name='category'),
-    path('category/items/<int:id>', CategoryItems.as_view()),
+    path('hub/details/<str:title>', OneHub.as_view(), name='hub'),
+    path('hub/items/<int:id>', HubItems.as_view()),
     path('logout', Logout.as_view(), name='logout'),
 ]

@@ -3,7 +3,7 @@ from json import loads
 from django.urls import reverse
 from rest_framework.test import APIClient, APITestCase
 
-from knowledge.models import User, Post, Category
+from knowledge.models import User, Post, Hub
 
 # Create your tests here.
 
@@ -20,19 +20,19 @@ class PostTestCase(APITestCase):
         user2.set_password('Pete')
         user2.save()
 
-        c1 = Category.objects.create(title='FIRST', category=None)
+        h1 = Hub.objects.create(title='FIRST', hub=None)
 
         Post.objects.create(title='Test1', content='Test1',
-                            poster=user1, uuid='ABCD', category=c1)
+                            poster=user1, uuid='ABCD', hub=h1)
         Post.objects.create(title='Test2', content='Test2',
-                            poster=user2, uuid='EFGH', category=c1)
+                            poster=user2, uuid='EFGH', hub=h1)
 
     def test_get_all_posts(self):
         """
         Tests whether all posts returned are correctly.
         """
         c = APIClient()
-        url = '/knowledge/category/items/1?sort=-date&type=posts&search='
+        url = '/knowledge/hub/items/1?sort=-date&type=posts&search='
 
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
@@ -40,9 +40,9 @@ class PostTestCase(APITestCase):
             "total": 1,
             "results": [
                 {'id': 2, 'title': 'Test2', 'content': 'Test2', 'poster': {'username': 'Pete', 'email': 'Pete'},
-                    'uuid': 'EFGH', 'date': 'now', 'comments': [], 'likes': [], 'category': {'id': 1, 'title': 'FIRST', 'date': 'now'}},
+                    'uuid': 'EFGH', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now'}},
                 {'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},
-                    'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'category': {'id': 1, 'title': 'FIRST', 'date': 'now'}}
+                    'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now'}}
             ]}
         )
 
@@ -56,7 +56,7 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, {
             'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},
-            'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'category': {'id': 1, 'title': 'FIRST', 'date': 'now'}
+            'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now'}
         })
 
     def test_create_new_post_valid(self):

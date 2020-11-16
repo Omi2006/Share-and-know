@@ -18,7 +18,7 @@ global.fetch = jest.fn(() =>
                 likes: [],
                 uuid: 'ABCDEFG',
                 date: '10 days ago',
-                category: {
+                hub: {
                     title: 'test',
                     id: 1,
                 },

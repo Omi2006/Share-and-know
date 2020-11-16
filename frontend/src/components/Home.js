@@ -15,7 +15,7 @@ export default function Home() {
         setPosts({});
         const getPosts = async () => {
             const response = await fetch(
-                `knowledge/category/items/1?page=${currentPage}&sort=${sortBy[0]}&type=posts&search=`
+                `knowledge/hub/items/1?page=${currentPage}&sort=${sortBy[0]}&type=posts&search=`
             );
             const result = await response.json();
             setPosts(result);

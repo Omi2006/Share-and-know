@@ -3,7 +3,7 @@ from json import loads
 from django.urls import reverse
 from rest_framework.test import APIClient, APITestCase
 
-from knowledge.models import User, Comment, Post, Category
+from knowledge.models import User, Comment, Post, Hub
 
 
 class CommentTestCase(APITestCase):
@@ -18,12 +18,12 @@ class CommentTestCase(APITestCase):
             username='Dan', password='Dan', email='Dan@dan.com')
         User.objects.create_user(
             username='Carl', password='Carl', email='Carl@Carl.com')
-        c1 = Category.objects.create(title='FIRST')
+        h1 = Hub.objects.create(title='FIRST')
 
         p1 = Post.objects.create(
-            title='Test1', content='Test1', poster=u1, uuid='ABCD', category=c1)
+            title='Test1', content='Test1', poster=u1, uuid='ABCD', hub=h1)
         Post.objects.create(title='Test2', content='Test2',
-                            poster=u2, uuid='EFGH', category=c1)
+                            poster=u2, uuid='EFGH', hub=h1)
 
         Comment.objects.create(content='Test1', post=p1, commenter=u1)
         Comment.objects.create(content='Test2', post=p1, commenter=u2)

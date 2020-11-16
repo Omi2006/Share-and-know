@@ -3,13 +3,13 @@ import { useLocation, useParams } from 'react-router-dom';
 import { Button, Spinner } from 'reactstrap';
 import PostList from './Post/List';
 
-import '../style/category.css';
+import '../style/hub.css';
 import Paginate from './Pagination';
 import Search from './General/Search';
 import Dropdown from './General/Dropdown';
 
 export default function Category() {
-    const [category, setCategory] = useState(useLocation().state?.id);
+    const [hub, setHub] = useState(useLocation().state?.id);
     const [sortBy, setSortBy] = useState(['-date', 'Newest']);
     const [items, setItems] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,11 +18,11 @@ export default function Category() {
     const { title } = useParams();
 
     useEffect(() => {
-        if (category) return () => {};
+        if (hub) return () => {};
         const getCategory = async () => {
-            const response = await fetch(`knowledge/category/details/${title}`);
+            const response = await fetch(`knowledge/hub/details/${title}`);
             const result = await response.json();
-            setCategory(result.id);
+            setHub(result.id);
         };
         getCategory();
     }, [title]);
@@ -30,16 +30,16 @@ export default function Category() {
     //Get items for given category and skip if category isn't ready
     useEffect(() => {
         setItems({});
-        if (!category) return () => {};
+        if (!hub) return () => {};
         const getItems = async () => {
             const response = await fetch(
-                `knowledge/category/items/${category}?sort=${sortBy[0]}&page=${currentPage}&type=${type}&search=${search}`
+                `knowledge/hub/items/${hub}?sort=${sortBy[0]}&page=${currentPage}&type=${type}&search=${search}`
             );
             const result = await response.json();
             setItems(result);
         };
         getItems();
-    }, [category, currentPage, type, search, sortBy]);
+    }, [hub, currentPage, type, search, sortBy]);
 
     const options = [
         ['-date', 'Newest'],
@@ -48,19 +48,17 @@ export default function Category() {
         ['likes', 'Least liked'],
     ];
 
-    return !category ? (
+    return !hub ? (
         <Spinner color="primary" />
     ) : (
         <div style={{ overflow: 'hidden' }}>
             <h3 style={{ textAlign: 'center' }}>
-                {type.charAt(0).toUpperCase() + type.slice(1)} in category{' '}
-                <span className="category-name">{title}</span>
+                {type.charAt(0).toUpperCase() + type.slice(1)} in hub{' '}
+                <span className="hub-name">{title}</span>
             </h3>
             <Button
                 color="primary"
-                onClick={() =>
-                    setType(type === 'posts' ? 'categories' : 'posts')
-                }
+                onClick={() => setType(type === 'posts' ? 'hubs' : 'posts')}
             >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
             </Button>

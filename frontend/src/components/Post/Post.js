@@ -36,11 +36,11 @@ export default function Post() {
                 <h4>{post.poster.username}</h4>
                 <Link
                     to={{
-                        pathname: `/category/${post.category.title}`,
-                        state: { id: post.category.id },
+                        pathname: `/hubs/${post.hub.title}`,
+                        state: { id: post.hub.id },
                     }}
                 >
-                    <Badge color="primary">{post.category.title}</Badge>
+                    <Badge color="primary">{post.hub.title}</Badge>
                 </Link>
                 {likes && (
                     <LikeButton

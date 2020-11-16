@@ -11,8 +11,8 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .serializers import CategorySerializer, CommentSerializer, LoginSerializer, RegisterSerializer, PostSerializer, UserSerializer
-from .models import Category, Post, Comment
+from .serializers import HubSerializer, CommentSerializer, LoginSerializer, RegisterSerializer, PostSerializer, UserSerializer
+from .models import Hub, Post, Comment
 
 DEFAULT_PAGE = 1
 DEFAULT_PAGE_SIZE = 6
@@ -112,19 +112,19 @@ class NewPost(generics.CreateAPIView):
             return Response({'errors': serializer.errors})
 
 
-class CategoryItems(generics.ListAPIView):
+class HubItems(generics.ListAPIView):
 
     pagination_class = ItemPagination
     paginate_by = 6
 
     def get_queryset(self):
         type = Post
-        if self.request.query_params['type'] == 'categories':
-            type = Category
-        return type.objects.filter(category=self.kwargs['id'], title__icontains=self.request.query_params['search']).order_by(self.request.query_params['sort'])
+        if self.request.query_params['type'] == 'hubs':
+            type = Hub
+        return type.objects.filter(hub=self.kwargs['id'], title__icontains=self.request.query_params['search']).order_by(self.request.query_params['sort'])
 
     def get_serializer_class(self):
-        return PostSerializer if self.request.query_params['type'] == 'posts' else CategorySerializer
+        return PostSerializer if self.request.query_params['type'] == 'posts' else HubSerializer
 
 
 class OnePost(generics.RetrieveAPIView):
@@ -181,12 +181,12 @@ class Comments(generics.UpdateAPIView):
             return Response({'errors': serializer.errors})
 
 
-class OneCategory(generics.RetrieveAPIView):
+class OneHub(generics.RetrieveAPIView):
     """
-    Get all details of a specific category
+    Get all details of a specific hub
     """
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = Hub.objects.all()
+    serializer_class = HubSerializer
     lookup_field = 'title'
 
 

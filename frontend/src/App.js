@@ -6,7 +6,7 @@ import Sidebar from './components/General/Navbar';
 import Post from './components/Post/Post';
 import PostForm from './components/Post/New';
 import Home from './components/Home';
-import Category from './components/Category';
+import Hub from './components/Hub';
 import { LoggedinProvider } from './components/Auth/LoggedInContext';
 import { ToggleLoggedinProvider } from './components/Auth/ToggleLoginContext';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -62,11 +62,7 @@ export default function App() {
                                 }
                             />
                             <Route path="/posts/:uuid" exact component={Post} />
-                            <Route
-                                path="/category/:title"
-                                exact
-                                component={Category}
-                            />
+                            <Route path="/hubs/:title" exact component={Hub} />
                         </div>
                     </Sidebar>
                 </ToggleLoggedinProvider>

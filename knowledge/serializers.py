@@ -1,9 +1,9 @@
-from django.db import models
-from rest_framework import serializers
-from .models import User, Post, Comment, Category
 from django.db import IntegrityError
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
+
+from .models import Hub, User, Post, Comment
 
 
 class LoginSerializer(serializers.Serializer):
@@ -78,17 +78,17 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id', 'title', 'content', 'poster', 'uuid',
-                  'date', 'comments', 'likes', 'category')
+                  'date', 'comments', 'likes', 'hub')
 
     def get_fields(self):
         fields = super(PostSerializer, self).get_fields()
         fields['comments'] = CommentSerializer(many=True, required=False)
-        fields['category'] = CategorySerializer(read_only=True)
+        fields['hub'] = HubSerializer(read_only=True)
         return fields
 
     def create(self, validated_data):
         return Post.objects.create(
-            **validated_data, category=Category.objects.get(id=1))
+            **validated_data, hub=Hub.objects.get(id=1))
 
     def update(self, instance, validated_data):
         liker = User.objects.get(
@@ -119,13 +119,13 @@ class CommentSerializer(serializers.ModelSerializer):
         return instance
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class HubSerializer(serializers.ModelSerializer):
 
     date = serializers.ReadOnlyField(source="get_date")
 
     class Meta:
-        model = Category
+        model = Hub
         fields = ('id', 'title', 'date')
 
     def create(self, validated_data):
-        return Category.objects.create(**validated_data)
+        return Hub.objects.create(**validated_data)

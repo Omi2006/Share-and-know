@@ -18,8 +18,8 @@ class Post(models.Model):
     ).hex[:9].upper(), unique=True, max_length=9)
     date = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='posts_liked')
-    category = models.ForeignKey(
-        'Category', on_delete=models.CASCADE, related_name='posts')
+    hub = models.ForeignKey(
+        'Hub', on_delete=models.CASCADE, related_name='posts')
 
     def get_date(self):
 
@@ -39,11 +39,11 @@ class Comment(models.Model):
         return naturaltime(self.date)
 
 
-class Category(models.Model):
+class Hub(models.Model):
     title = models.CharField(max_length=20)
     date = models.DateTimeField(auto_now_add=True)
-    category = models.ForeignKey(
-        'Category', on_delete=models.CASCADE, related_name='sub_categories', null=True)
+    hub = models.ForeignKey(
+        'Hub', on_delete=models.CASCADE, related_name='sub_hubs', null=True)
 
     def get_date(self):
 
