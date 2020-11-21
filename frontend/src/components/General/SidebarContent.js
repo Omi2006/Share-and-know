@@ -51,7 +51,7 @@ export default function SidebarContent({ toggleSidebar, style }) {
               {
                   onClick: () => navigate('/new/post'),
                   icon: faPlus,
-                  name: 'New Post',
+                  name: 'New post',
               },
               {
                   onClick: logout,
@@ -77,7 +77,7 @@ export default function SidebarContent({ toggleSidebar, style }) {
             <h3>Share</h3>
             <hr />
             {routes.map(route => (
-                <NavItem>
+                <NavItem key={route.name}>
                     <button
                         onClick={route.onClick}
                         className="navnavbutton navnavlink"

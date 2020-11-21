@@ -22,7 +22,7 @@ function TestWrapper(props) {
         <LoggedinProvider value={loggedIn}>
             <ToggleLoggedinProvider value={setLoggedIn}>
                 <HashRouter>
-                    <SidebarContent />
+                    <SidebarContent style={{}} toggleSidebar={() => {}} />
                     <h1>{loggedIn}</h1>
                 </HashRouter>
             </ToggleLoggedinProvider>

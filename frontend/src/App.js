@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { HashRouter as Router, Redirect, Route } from 'react-router-dom';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
-import Sidebar from './components/General/Navbar';
+import Sidebar from './components/General/Sidebar';
 import Post from './components/Post/Post';
 import PostForm from './components/Post/New';
 import Home from './components/Home';
