@@ -24,7 +24,7 @@ describe('tests whether the search feature works', () => {
         render(<TestWrapper type="posts" page={1} />);
         expect(screen.getByText('Find specific posts')).toBeInTheDocument();
         expect(
-            screen.getByPlaceholderText('What do you want to search for?...')
+            screen.getByPlaceholderText('What do you want to search for?')
         ).toBeInTheDocument();
         expect(screen.getByDisplayValue('Search')).toBeInTheDocument();
     });
@@ -32,7 +32,7 @@ describe('tests whether the search feature works', () => {
     test('Typing registers and does not change search immediately', () => {
         render(<TestWrapper type="posts" page={1} />);
         const inputbox = screen.getByPlaceholderText(
-            'What do you want to search for?...'
+            'What do you want to search for?'
         );
         userEvent.type(inputbox, 'Hello there');
         expect(
@@ -44,7 +44,7 @@ describe('tests whether the search feature works', () => {
     test('Clicking the search button does change search and current page to 1', async () => {
         render(<TestWrapper type="posts" page={2} />);
         const inputbox = screen.getByPlaceholderText(
-            'What do you want to search for?...'
+            'What do you want to search for?'
         );
         const searchButton = screen.getByDisplayValue('Search');
         userEvent.type(inputbox, 'Hello there');
