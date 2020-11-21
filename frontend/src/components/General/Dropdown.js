@@ -15,6 +15,7 @@ export default function Radio({ options, setSortBy, selected }) {
             : 'translate3D(0,-40px,50px)',
         opacity: isToggled ? 1 : 0,
         zIndex: 2,
+        config: config.gentle,
         immediate: key => key === 'zIndex',
     });
 
@@ -25,17 +26,11 @@ export default function Radio({ options, setSortBy, selected }) {
     };
 
     return (
-        <div
-            style={{
-                position: 'relative',
-                width: '250px',
-                margin: '0 auto',
-            }}
-        >
+        <div className="radio-container">
             <animated.button
                 style={menubg}
                 data-testid="toggle"
-                className="radiowrapper"
+                className="radio-wrapper"
                 onClick={() => setToggle(!isToggled)}
             >
                 <div className="radio">
@@ -52,7 +47,7 @@ export default function Radio({ options, setSortBy, selected }) {
             </animated.button>
             <animated.div style={menuAppear} config={config.wobbly}>
                 {isToggled && (
-                    <div className="radiocontent">
+                    <div className="radio-content">
                         {options.map(option => (
                             <div
                                 onClick={() => handleSetOption(option)}

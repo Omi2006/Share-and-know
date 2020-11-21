@@ -125,7 +125,7 @@ class HubSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hub
-        fields = ('id', 'title', 'date')
+        fields = ('id', 'title', 'date', 'description')
 
     def create(self, validated_data):
         return Hub.objects.create(**validated_data)

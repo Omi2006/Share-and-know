@@ -16,12 +16,12 @@ export default function PostList({ posts }) {
             transform: 'translateX(0px)',
         },
     });
-
-    return (
+    //Handle no posts, temporal fix as for the poster, handle the type rerender before the itemss update
+    return posts[0]?.poster ? (
         <AnimatedDeck style={styles} className="post-list">
             {posts.map(post => {
                 return <Row post={post} key={post.id} />;
             })}
         </AnimatedDeck>
-    );
+    ) : null;
 }

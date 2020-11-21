@@ -14,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ToggleLoggedinContext from '../Auth/ToggleLoginContext';
 
-export default function SidebarContent() {
+export default function SidebarContent({ toggleNavbar }) {
     const loggedIn = useContext(LoggedInContext);
     const handleLogin = useContext(ToggleLoggedinContext);
 
@@ -25,6 +25,7 @@ export default function SidebarContent() {
             alert('An error has occured');
             return;
         }
+        alert('Logged out successfully!');
         handleLogin(null);
     };
 
@@ -32,7 +33,7 @@ export default function SidebarContent() {
         <Nav vertical className="navnav">
             <h3>Share</h3>
             <hr />
-            <NavItem>
+            <NavItem onClick={toggleNavbar}>
                 <Link to="/" className="nav-link navnavlink">
                     <FontAwesomeIcon icon={faHome} className="navnavitem" />
                     <p className="navnavtext">Home</p>
@@ -40,7 +41,7 @@ export default function SidebarContent() {
             </NavItem>
             {loggedIn ? (
                 <>
-                    <NavItem>
+                    <NavItem onClick={toggleNavbar}>
                         <Link to="/new/post" className="nav-link navnavlink">
                             <FontAwesomeIcon
                                 icon={faPlus}
@@ -49,7 +50,7 @@ export default function SidebarContent() {
                             <p className="navnavtext">New post</p>
                         </Link>
                     </NavItem>
-                    <NavItem>
+                    <NavItem onClick={toggleNavbar}>
                         <button
                             onClick={logout}
                             className="navnavbutton navnavlink"
@@ -65,7 +66,7 @@ export default function SidebarContent() {
                 </>
             ) : (
                 <>
-                    <NavItem>
+                    <NavItem onClick={toggleNavbar}>
                         <Link to="/login" className="nav-link navnavlink">
                             <FontAwesomeIcon
                                 icon={faSignInAlt}
@@ -74,7 +75,7 @@ export default function SidebarContent() {
                             <p className="navnavtext">Login</p>
                         </Link>
                     </NavItem>
-                    <NavItem>
+                    <NavItem onClick={toggleNavbar}>
                         <Link to="/register" className="nav-link navnavlink">
                             <FontAwesomeIcon
                                 icon={faUser}

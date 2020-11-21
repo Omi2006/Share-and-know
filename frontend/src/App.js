@@ -6,7 +6,7 @@ import Sidebar from './components/General/Navbar';
 import Post from './components/Post/Post';
 import PostForm from './components/Post/New';
 import Home from './components/Home';
-import Hub from './components/Hub';
+import Hub from './components/Hub/Hub';
 import { LoggedinProvider } from './components/Auth/LoggedInContext';
 import { ToggleLoggedinProvider } from './components/Auth/ToggleLoginContext';
 import 'bootstrap/dist/css/bootstrap.css';

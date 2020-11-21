@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { Button, Spinner } from 'reactstrap';
-import PostList from './Post/List';
-
-import '../style/hub.css';
-import Paginate from './Pagination';
-import Search from './General/Search';
-import Dropdown from './General/Dropdown';
+import { Jumbotron, Spinner } from 'reactstrap';
+import PostList from '../Post/List';
+import HubList from './HubList';
+import Paginate from '../Pagination';
+import Search from '../General/Search';
+import Dropdown from '../General/Dropdown';
+import ToggleButton from './ToggleButton';
+import '../../style/hub.css';
 
 export default function Category() {
-    const [hub, setHub] = useState(useLocation().state?.id);
+    const [hub, setHub] = useState(useLocation().state?.hub);
     const [sortBy, setSortBy] = useState(['-date', 'Newest']);
     const [items, setItems] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
@@ -19,13 +20,13 @@ export default function Category() {
 
     useEffect(() => {
         if (hub) return () => {};
-        const getCategory = async () => {
+        const getHub = async () => {
             const response = await fetch(`knowledge/hub/details/${title}`);
             const result = await response.json();
-            setHub(result.id);
+            setHub(result);
         };
-        getCategory();
-    }, [title]);
+        getHub();
+    }, [title, hub]);
 
     //Get items for given category and skip if category isn't ready
     useEffect(() => {
@@ -33,43 +34,53 @@ export default function Category() {
         if (!hub) return () => {};
         const getItems = async () => {
             const response = await fetch(
-                `knowledge/hub/items/${hub}?sort=${sortBy[0]}&page=${currentPage}&type=${type}&search=${search}`
+                `knowledge/hub/items/${hub.id}?sort=${sortBy[0]}&page=${currentPage}&type=${type}&search=${search}`
             );
             const result = await response.json();
             setItems(result);
+            console.log(result);
         };
         getItems();
     }, [hub, currentPage, type, search, sortBy]);
 
+    const handleTypeChange = () => {
+        setType(type === 'posts' ? 'hubs' : 'posts');
+        //Set the sort by to newest to avoid invalid sort by in the hubs
+        setSortBy(['-date', 'Newest']);
+        //Set the current page to avoid errors if the pages count is less than the current page
+        setCurrentPage(1);
+    };
+
     const options = [
         ['-date', 'Newest'],
         ['date', 'Oldest'],
-        ['-likes', 'Most Liked'],
-        ['likes', 'Least liked'],
     ];
+    //Posts only sort by options
+    if (type === 'posts')
+        options.push(['-likes', 'Most Liked'], ['likes', 'Least liked']);
 
     return !hub ? (
         <Spinner color="primary" />
     ) : (
         <div style={{ overflow: 'hidden' }}>
-            <h3 style={{ textAlign: 'center' }}>
-                {type.charAt(0).toUpperCase() + type.slice(1)} in hub{' '}
-                <span className="hub-name">{title}</span>
-            </h3>
-            <Button
-                color="primary"
-                onClick={() => setType(type === 'posts' ? 'hubs' : 'posts')}
-            >
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-            </Button>
-            <Search setSearch={setSearch} type={type} />
+            <Jumbotron>
+                <h2 className="display-3 hub-name">{title}</h2>
+                <p className="lead">{hub.description}</p>
+                <hr className="my-2" />
+                <ToggleButton type={type} handleTypeChange={handleTypeChange} />
+            </Jumbotron>
+            <Search
+                setSearch={setSearch}
+                type={type}
+                setCurrentPage={setCurrentPage}
+            />
             <Dropdown
                 options={options}
                 setSortBy={setSortBy}
                 selected={sortBy[1]}
             />
             {items.results ? (
-                type === 'posts' && (
+                type === 'posts' ? (
                     <>
                         <PostList posts={items.results} />
                         <Paginate
@@ -78,6 +89,8 @@ export default function Category() {
                             setCurrentPage={setCurrentPage}
                         />
                     </>
+                ) : (
+                    <HubList hubs={items.results} />
                 )
             ) : (
                 <Spinner color="primary" />

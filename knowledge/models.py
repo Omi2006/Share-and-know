@@ -14,8 +14,8 @@ class Post(models.Model):
     content = models.TextField()
     poster = models.ForeignKey(
         User, related_name='posts', on_delete=models.SET_NULL, null=True)
-    uuid = models.CharField(default=uuid.uuid4(
-    ).hex[:9].upper(), unique=True, max_length=9)
+    uuid = models.CharField(default=str(uuid.uuid4(
+    )).replace('-', '')[:9].upper(), unique=True, max_length=9)
     date = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='posts_liked')
     hub = models.ForeignKey(
@@ -44,6 +44,7 @@ class Hub(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     hub = models.ForeignKey(
         'Hub', on_delete=models.CASCADE, related_name='sub_hubs', null=True)
+    description = models.CharField(max_length=60)
 
     def get_date(self):
 

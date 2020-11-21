@@ -1,5 +1,6 @@
 import os
 
+from django.http.response import Http404
 from django.shortcuts import HttpResponse
 from django.conf import settings
 from django.views.generic import View
@@ -144,6 +145,12 @@ class OnePost(generics.RetrieveAPIView):
             return Response({'likes': UserSerializer(post.likes.all(), many=True).data})
         else:
             return Response({'errors': serializer.errors})
+
+    def handle_exception(self, exc):
+        if isinstance(exc, Http404):
+            return Response({'error': 'This post does not exist.'},)
+
+        return super(OnePost, self).handle_exception(exc)
 
 
 class Comments(generics.UpdateAPIView):

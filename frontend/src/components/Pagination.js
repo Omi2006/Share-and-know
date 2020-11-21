@@ -1,39 +1,34 @@
 import React from 'react';
 import { PaginationItem, PaginationLink, Pagination } from 'reactstrap';
 
-export default function Paginate(props) {
+export default function Paginate({ setCurrentPage, currentPage, last }) {
     return (
         <Pagination style={{ justifyContent: 'center' }}>
             {/* Make sure current page isn't the first to disable it */}
-            <PaginationItem disabled={props.currentPage === 1} key="prev">
+            <PaginationItem disabled={currentPage === 1} key="prev">
                 <PaginationLink
                     previous
-                    onClick={() => props.setCurrentPage(props.currentPage - 1)}
+                    onClick={() => setCurrentPage(currentPage - 1)}
                 />
             </PaginationItem>
-
-            {[...new Set([1, props.currentPage, props.last])].map(number => {
+            {/*Make the list of pages uniqui in case the active one is first or last by making the list a set and then a list again*/}
+            {[...new Set([1, currentPage, last])].map(number => {
                 return (
                     <PaginationItem
-                        active={number === props.currentPage}
+                        active={number === currentPage}
                         key={number.toString()}
                     >
-                        <PaginationLink
-                            onClick={() => props.setCurrentPage(number)}
-                        >
+                        <PaginationLink onClick={() => setCurrentPage(number)}>
                             {number}
                         </PaginationLink>
                     </PaginationItem>
                 );
             })}
             {/* Make sure current page isn't the last to disable it */}
-            <PaginationItem
-                disabled={props.currentPage === props.last}
-                key="next"
-            >
+            <PaginationItem disabled={currentPage === last} key="next">
                 <PaginationLink
                     next
-                    onClick={() => props.setCurrentPage(props.currentPage + 1)}
+                    onClick={() => setCurrentPage(currentPage + 1)}
                 />
             </PaginationItem>
         </Pagination>

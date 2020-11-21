@@ -20,7 +20,7 @@ class PostTestCase(APITestCase):
         user2.set_password('Pete')
         user2.save()
 
-        h1 = Hub.objects.create(title='FIRST', hub=None)
+        h1 = Hub.objects.create(title='FIRST', hub=None, description='FIRST')
 
         Post.objects.create(title='Test1', content='Test1',
                             poster=user1, uuid='ABCD', hub=h1)
@@ -36,13 +36,13 @@ class PostTestCase(APITestCase):
 
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(response.data, {
+        self.assertDictEqual(loads(response.content), {
             "total": 1,
             "results": [
                 {'id': 2, 'title': 'Test2', 'content': 'Test2', 'poster': {'username': 'Pete', 'email': 'Pete'},
-                    'uuid': 'EFGH', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now'}},
+                    'uuid': 'EFGH', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST'}},
                 {'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},
-                    'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now'}}
+                    'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST'}}
             ]}
         )
 
@@ -54,9 +54,9 @@ class PostTestCase(APITestCase):
         url = '/knowledge/post/ABCD'
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(response.data, {
+        self.assertDictEqual(loads(response.content), {
             'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},
-            'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now'}
+            'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST'}
         })
 
     def test_create_new_post_valid(self):
@@ -71,7 +71,8 @@ class PostTestCase(APITestCase):
             url, {'title': 'stuff', 'content': 'stuff'}, format='json')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {'message': 'posted successfully'})
+        self.assertEqual(loads(response.content), {
+                         'message': 'posted successfully'})
 
         post = Post.objects.get(title='stuff')
         self.assertEqual(post.title, 'stuff')

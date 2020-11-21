@@ -6,7 +6,7 @@ import { faSun, faMoon, faBars } from '@fortawesome/free-solid-svg-icons';
 
 import './../../style/navbar.css';
 
-export default function SidebarNav(props) {
+export default function SidebarNav({ children }) {
     const [collapsed, setCollapsed] = useState(true);
     const [theme, setTheme] = useState(localStorage.getItem('theme'));
 
@@ -19,7 +19,7 @@ export default function SidebarNav(props) {
 
     return (
         <Sidebar
-            sidebar={<SideBarContent />}
+            sidebar={<SideBarContent toggleNavbar={toggleNavbar} />}
             open={!collapsed}
             onSetOpen={toggleNavbar}
             styles={{
@@ -49,7 +49,7 @@ export default function SidebarNav(props) {
                     />
                 </button>
             </div>
-            {props.children}
+            {children}
         </Sidebar>
     );
 }

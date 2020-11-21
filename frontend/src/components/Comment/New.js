@@ -4,7 +4,7 @@ import { Form, FormGroup, Label, UncontrolledAlert, Alert } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import TextArea from 'react-autosize-textarea';
 
-export default function New(props) {
+export default function New({ setComments, post }) {
     const { register, handleSubmit, reset, errors } = useForm();
     const [message, setMessage] = useState({});
     const submitButton = useRef();
@@ -23,7 +23,7 @@ export default function New(props) {
         }
         const formData = {
             content: data.content,
-            post: props.post,
+            post: post,
         };
         const result = await fetchCsrf('/knowledge/comment', formData, 'POST');
         //Check for server errors
@@ -42,10 +42,7 @@ export default function New(props) {
         submitButton.current.disabled = false;
         //Add comment to comment lists
         try {
-            props.setComments(prevComments => [
-                result.comment,
-                ...prevComments,
-            ]);
+            setComments(prevComments => [result.comment, ...prevComments]);
         } catch (error) {
             console.log(error);
         }

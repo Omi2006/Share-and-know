@@ -6,20 +6,16 @@ import { Badge } from 'reactstrap';
 import LoggedinContext from '../Auth/LoggedInContext';
 import '../../style/post.css';
 
-export default function LikeButton(props) {
+export default function LikeButton({ likes, uuid, setLikes }) {
     const loggedIn = useContext(LoggedinContext);
-    const usernames = props.likes.map(user => user.username);
+    const usernames = likes.map(user => user.username);
 
     const handleLike = async () => {
-        const result = await fetchCsrf(
-            `knowledge/post/${props.uuid}`,
-            {},
-            'PUT'
-        );
+        const result = await fetchCsrf(`knowledge/post/${uuid}`, {}, 'PUT');
         if (result.errors) {
             alert('An error has occured. Try again later.');
         } else {
-            props.setLikes(result.likes);
+            setLikes(result.likes);
         }
     };
 
@@ -43,7 +39,7 @@ export default function LikeButton(props) {
                 </button>
             )}
             <Badge pill color="info">
-                {props.likes.length}
+                {likes.length}
             </Badge>
         </div>
     );

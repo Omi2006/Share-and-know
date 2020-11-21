@@ -29,15 +29,19 @@ export default function Post() {
     }, [uuid]);
 
     return !post.content ? (
-        <Spinner color="primary" />
+        !post.error ? (
+            <Spinner color="primary" />
+        ) : (
+            <h2>This post couldn't be found</h2>
+        )
     ) : (
-        <div style={{ padding: '10px' }}>
+        <div style={{ padding: '25px' }}>
             <div>
                 <h4>{post.poster.username}</h4>
                 <Link
                     to={{
                         pathname: `/hubs/${post.hub.title}`,
-                        state: { id: post.hub.id },
+                        state: { hub: post.hub },
                     }}
                 >
                     <Badge color="primary">{post.hub.title}</Badge>
