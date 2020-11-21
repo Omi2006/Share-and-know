@@ -2,8 +2,8 @@
     position: fixed;
     width: 100%;
     background-blend-mode: soft-light;
-    z-index: 100;
     background-color: #3bb2f1;
+    z-index: 3;
     top: 0;
     padding: 16px;
     display: inline-flex;
@@ -19,7 +19,13 @@
 }
 
 .navnav {
-    position: relative;
+    position: fixed;
+    height: 100vw;
+    background-color: #53bcf5;
+    top: 0;
+    left: 0;
+    margin-top: -1px;
+    z-index: 10;
 }
 
 .navnavlink:hover {
@@ -31,13 +37,22 @@
     margin-right: 20px;
 }
 
-.navnavbutton {
+.nav-item {
+    overflow: hidden;
+}
+
+.navnavbutton,
+.navnavicon {
     all: unset;
     color: #154579;
     text-decoration: none;
     background-color: transparent;
     display: block;
     padding: 0.5rem 1rem;
+}
+
+.navnavbutton {
+    width: 100%;
 }
 
 .navnavlink:hover .navnavitem {
