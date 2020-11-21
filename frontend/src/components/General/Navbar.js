@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import Sidebar from 'react-sidebar';
-import SideBarContent from './SidebarContent';
+import SidebarContent from './SidebarContent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon, faBars } from '@fortawesome/free-solid-svg-icons';
 
 import './../../style/navbar.css';
+import { useSpring } from 'react-spring';
 
-export default function SidebarNav({ children }) {
+export default function Sidebar({ children }) {
     const [collapsed, setCollapsed] = useState(true);
     const [theme, setTheme] = useState(localStorage.getItem('theme'));
+    const content = useSpring({
+        opacity: !collapsed ? 1 : 0,
+        transform: !collapsed ? 'translateX(0%)' : 'translateX(-110%)',
+    });
 
-    const toggleNavbar = () => setCollapsed(!collapsed);
+    const toggleSidebar = () => setCollapsed(!collapsed);
 
     useEffect(() => {
         localStorage.setItem('theme', theme);
@@ -18,26 +22,17 @@ export default function SidebarNav({ children }) {
     }, [theme]);
 
     return (
-        <Sidebar
-            sidebar={<SideBarContent toggleNavbar={toggleNavbar} />}
-            open={!collapsed}
-            onSetOpen={toggleNavbar}
-            styles={{
-                sidebar: { backgroundColor: '#93eddc', zIndex: '101' },
-                overlay: { backgroundColor: 'rgb(0, 0, 0, 0)' },
-                content: !collapsed ? { filter: 'blur(1.5px)' } : {},
-            }}
-        >
+        <>
             <div className="navnavbar">
                 <button
                     style={{ padding: '0px ' }}
-                    onClick={() => setCollapsed(false)}
-                    className="navnavbutton"
+                    onClick={toggleSidebar}
+                    className="navnavicon"
                 >
                     <FontAwesomeIcon icon={faBars} />
                 </button>
                 <button
-                    className="theme navnavbutton"
+                    className="theme navnavicon"
                     style={{ padding: '0px ' }}
                     onClick={() =>
                         setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -49,7 +44,13 @@ export default function SidebarNav({ children }) {
                     />
                 </button>
             </div>
-            {children}
-        </Sidebar>
+            <SidebarContent toggleSidebar={toggleSidebar} style={content} />
+            <div
+                style={{ filter: !collapsed && 'blur(5px)' }}
+                onClick={!collapsed ? () => setCollapsed(true) : () => {}}
+            >
+                {children}
+            </div>
+        </>
     );
 }

@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 import LoggedInContext from '../Auth/LoggedInContext';
 import { Nav, NavItem } from 'reactstrap';
-import { Link } from 'react-router-dom';
-
-import '../../style/navbar.css';
+import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome,
@@ -13,10 +11,15 @@ import {
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import ToggleLoggedinContext from '../Auth/ToggleLoginContext';
+import { animated } from 'react-spring';
+import '../../style/navbar.css';
 
-export default function SidebarContent({ toggleNavbar }) {
+const AnimatedNav = animated(Nav);
+
+export default function SidebarContent({ toggleSidebar, style }) {
     const loggedIn = useContext(LoggedInContext);
     const handleLogin = useContext(ToggleLoggedinContext);
+    const { push } = useHistory();
 
     const logout = async () => {
         const response = await fetch('/knowledge/logout');
@@ -27,65 +30,66 @@ export default function SidebarContent({ toggleNavbar }) {
         }
         alert('Logged out successfully!');
         handleLogin(null);
+        toggleSidebar();
     };
 
+    const navigate = route => {
+        push(route);
+        toggleSidebar();
+    };
+
+    //Generate the routes based on whether the user is logged in or not
+    const routes = [
+        {
+            onClick: () => navigate('/'),
+            icon: faHome,
+            name: 'Home',
+        },
+    ];
+    loggedIn
+        ? routes.push(
+              {
+                  onClick: () => navigate('/new/post'),
+                  icon: faPlus,
+                  name: 'New Post',
+              },
+              {
+                  onClick: logout,
+                  icon: faSignOutAlt,
+                  name: 'Logout',
+              }
+          )
+        : routes.push(
+              {
+                  onClick: () => navigate('/login'),
+                  icon: faSignInAlt,
+                  name: 'Login',
+              },
+              {
+                  onClick: () => navigate('/register'),
+                  icon: faUser,
+                  name: 'Register',
+              }
+          );
+
     return (
-        <Nav vertical className="navnav">
+        <AnimatedNav vertical style={style} className="navnav">
             <h3>Share</h3>
             <hr />
-            <NavItem onClick={toggleNavbar}>
-                <Link to="/" className="nav-link navnavlink">
-                    <FontAwesomeIcon icon={faHome} className="navnavitem" />
-                    <p className="navnavtext">Home</p>
-                </Link>
-            </NavItem>
-            {loggedIn ? (
-                <>
-                    <NavItem onClick={toggleNavbar}>
-                        <Link to="/new/post" className="nav-link navnavlink">
-                            <FontAwesomeIcon
-                                icon={faPlus}
-                                className="navnavitem"
-                            />
-                            <p className="navnavtext">New post</p>
-                        </Link>
-                    </NavItem>
-                    <NavItem onClick={toggleNavbar}>
-                        <button
-                            onClick={logout}
-                            className="navnavbutton navnavlink"
-                            style={{ margin: '0px', width: '140.547px' }}
-                        >
-                            <FontAwesomeIcon
-                                icon={faSignOutAlt}
-                                className="navnavitem"
-                            />
-                            <p className="navnavtext">Logout</p>
-                        </button>
-                    </NavItem>
-                </>
-            ) : (
-                <>
-                    <NavItem onClick={toggleNavbar}>
-                        <Link to="/login" className="nav-link navnavlink">
-                            <FontAwesomeIcon
-                                icon={faSignInAlt}
-                                className="navnavitem"
-                            />
-                            <p className="navnavtext">Login</p>
-                        </Link>
-                    </NavItem>
-                    <NavItem onClick={toggleNavbar}>
-                        <Link to="/register" className="nav-link navnavlink">
-                            <FontAwesomeIcon
-                                icon={faUser}
-                                className="navnavitem"
-                            />
-                            <p className="navnavtext">Register</p>
-                        </Link>
-                    </NavItem>
-                </>
-            )}
-        </Nav>
+            {routes.map(route => (
+                <NavItem>
+                    <button
+                        onClick={route.onClick}
+                        className="navnavbutton navnavlink"
+                    >
+                        <FontAwesomeIcon
+                            icon={route.icon}
+                            className="navnavitem"
+                        />
+                        <p className="navnavtext">{route.name}</p>
+                    </button>
+                </NavItem>
+            ))}
+        </AnimatedNav>
     );
 }
