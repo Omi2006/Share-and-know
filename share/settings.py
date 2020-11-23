@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.2.19', '127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.2.8']
 
 
 # Application definition

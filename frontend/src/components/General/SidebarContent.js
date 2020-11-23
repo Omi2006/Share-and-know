@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import LoggedInContext from '../Auth/LoggedInContext';
 import { Nav, NavItem } from 'reactstrap';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome,
@@ -19,7 +19,7 @@ const AnimatedNav = animated(Nav);
 export default function SidebarContent({ toggleSidebar, style }) {
     const loggedIn = useContext(LoggedInContext);
     const handleLogin = useContext(ToggleLoggedinContext);
-    const { push } = useHistory();
+    const navigate = useNavigate();
 
     const logout = async () => {
         const response = await fetch('/knowledge/logout');
@@ -33,15 +33,15 @@ export default function SidebarContent({ toggleSidebar, style }) {
         toggleSidebar();
     };
 
-    const navigate = route => {
-        push(route);
+    const goToRoute = route => {
+        navigate(route);
         toggleSidebar();
     };
 
     //Generate the routes based on whether the user is logged in or not
     const routes = [
         {
-            onClick: () => navigate('/'),
+            onClick: () => goToRoute('/'),
             icon: faHome,
             name: 'Home',
         },
@@ -49,7 +49,7 @@ export default function SidebarContent({ toggleSidebar, style }) {
     loggedIn
         ? routes.push(
               {
-                  onClick: () => navigate('/new/post'),
+                  onClick: () => goToRoute('/new/post'),
                   icon: faPlus,
                   name: 'New post',
               },
@@ -61,12 +61,12 @@ export default function SidebarContent({ toggleSidebar, style }) {
           )
         : routes.push(
               {
-                  onClick: () => navigate('/login'),
+                  onClick: () => goToRoute('/login'),
                   icon: faSignInAlt,
                   name: 'Login',
               },
               {
-                  onClick: () => navigate('/register'),
+                  onClick: () => goToRoute('/register'),
                   icon: faUser,
                   name: 'Register',
               }

@@ -10,9 +10,7 @@ export default function Radio({ options, setSortBy, selected }) {
         y: isToggled ? 180 : 0,
     });
     const menuAppear = useSpring({
-        transform: isToggled
-            ? 'translate3D(0,0,0)'
-            : 'translate3D(0,-40px,50px)',
+        transform: isToggled ? 'translateY(0)' : 'translateY(-40px)',
         opacity: isToggled ? 1 : 0,
         zIndex: 2,
         config: config.gentle,

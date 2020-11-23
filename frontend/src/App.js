@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { HashRouter as Router, Redirect, Route } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import Sidebar from './components/General/Sidebar';
@@ -31,38 +31,25 @@ export default function App() {
                 <ToggleLoggedinProvider value={setLoggedIn}>
                     <Sidebar>
                         <div className="App" style={{ marginTop: '65px' }}>
-                            <Route path="/" exact component={Home} />
-                            <Route
-                                path="/register"
-                                exact
-                                component={() =>
-                                    loggedIn ? (
-                                        <Redirect to="/" />
-                                    ) : (
-                                        <Register />
-                                    )
-                                }
-                            />
-                            <Route
-                                path="/login"
-                                exact
-                                component={() =>
-                                    loggedIn ? <Redirect to="/" /> : <Login />
-                                }
-                            />
-                            <Route
-                                path="/new/post"
-                                exact
-                                component={() =>
-                                    loggedIn ? (
-                                        <PostForm />
-                                    ) : (
-                                        <Redirect to="/login" />
-                                    )
-                                }
-                            />
-                            <Route path="/posts/:uuid" exact component={Post} />
-                            <Route path="/hubs/:title" exact component={Hub} />
+                            <Routes>
+                                <Route path="/" element={<Home />} />
+                                <Route
+                                    path="/register"
+                                    element={loggedIn ? <Home /> : <Register />}
+                                />
+                                <Route
+                                    path="/login"
+                                    element={loggedIn ? <Home /> : <Login />}
+                                />
+                                <Route
+                                    path="/new/post"
+                                    element={
+                                        loggedIn ? <PostForm /> : <Login />
+                                    }
+                                />
+                                <Route path="/posts/:uuid" element={<Post />} />
+                                <Route path="/hubs/:title" element={<Hub />} />
+                            </Routes>
                         </div>
                     </Sidebar>
                 </ToggleLoggedinProvider>

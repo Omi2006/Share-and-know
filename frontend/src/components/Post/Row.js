@@ -10,13 +10,13 @@ import {
     CardFooter,
     Spinner,
 } from 'reactstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 import '../../style/post.css';
 
 export default function Row({ post }) {
-    const { push } = useHistory();
+    const navigate = useNavigate();
 
     return !post ? (
         <Spinner color="primary" />
@@ -24,7 +24,7 @@ export default function Row({ post }) {
         <Col lg="6" xl="4" style={{ marginBottom: '30px' }}>
             <Card
                 className="post-card"
-                onClick={() => push(`/posts/${post.uuid}`)}
+                onClick={() => navigate(`/posts/${post.uuid}`)}
                 title="See more"
             >
                 <CardHeader style={{ backgroundColor: '#68d8ee' }}>

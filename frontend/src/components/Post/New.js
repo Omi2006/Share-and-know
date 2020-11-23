@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FormGroup, Form, Label, Alert } from 'reactstrap';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchCsrf } from '../Auth/fetchCsrf';
 import TextArea from 'react-autosize-textarea';
 
@@ -9,7 +9,7 @@ export default function PostForm() {
     const submitButton = useRef();
     const { register, handleSubmit, errors } = useForm();
     const [message, setMessage] = useState({});
-    const { push } = useHistory();
+    const navigate = useNavigate();
 
     const onSubmit = async data => {
         submitButton.current.disabled = true;
@@ -24,7 +24,7 @@ export default function PostForm() {
             return false;
         }
         submitButton.current.disabled = true;
-        push('/');
+        navigate('/');
     };
 
     return (

@@ -14,7 +14,9 @@ export default function Sidebar({ children }) {
         transform: !collapsed ? 'translateX(0%)' : 'translateX(-110%)',
     });
 
-    const toggleSidebar = () => setCollapsed(!collapsed);
+    const toggleSidebar = () => {
+        setCollapsed(!collapsed);
+    };
 
     useEffect(() => {
         localStorage.setItem('theme', theme);
@@ -47,7 +49,7 @@ export default function Sidebar({ children }) {
             <SidebarContent toggleSidebar={toggleSidebar} style={content} />
             <div
                 style={{ filter: !collapsed && 'blur(5px)' }}
-                onClick={!collapsed ? () => setCollapsed(true) : () => {}}
+                onClick={!collapsed ? toggleSidebar : () => {}}
             >
                 {children}
             </div>
