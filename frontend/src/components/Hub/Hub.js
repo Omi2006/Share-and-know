@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { Route, useParams, useLocation } from 'react-router-dom';
 import { Jumbotron, Spinner } from 'reactstrap';
 import PostList from '../Post/List';
 import HubList from './HubList';
@@ -9,7 +9,7 @@ import Dropdown from '../General/Dropdown';
 import ToggleButton from './ToggleButton';
 import '../../style/hub.css';
 
-export default function Category() {
+export default function Hub() {
     const [hub, setHub] = useState(useLocation().state?.hub);
     const [sortBy, setSortBy] = useState(['-date', 'Newest']);
     const [items, setItems] = useState({});
@@ -19,7 +19,7 @@ export default function Category() {
     const { title } = useParams();
 
     useEffect(() => {
-        if (hub) return () => {};
+        if (hub?.title === title) return () => {};
         const getHub = async () => {
             const response = await fetch(`knowledge/hub/details/${title}`);
             const result = await response.json();
@@ -38,7 +38,6 @@ export default function Category() {
             );
             const result = await response.json();
             setItems(result);
-            console.log(result);
         };
         getItems();
     }, [hub, currentPage, type, search, sortBy]);

@@ -5,8 +5,12 @@ import {
     CardText,
     CardHeader,
     CardBody,
+    CardFooter,
     CardSubtitle,
 } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 
 export default function Row({ hub }) {
     return (
@@ -22,6 +26,14 @@ export default function Row({ hub }) {
             <CardBody style={{ backgroundColor: '#a2ffaf' }}>
                 <CardText>{hub.description}</CardText>
             </CardBody>
+            <CardFooter className="footer back-blue">
+                <p className="card-link">
+                    <Link to={`${hub.title}`} aria-label="see more">
+                        <FontAwesomeIcon icon={faArrowCircleRight} />
+                        <span className="visually-hidden">See more</span>
+                    </Link>
+                </p>
+            </CardFooter>
         </Card>
     );
 }

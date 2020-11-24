@@ -24,7 +24,9 @@ export default function Row({ post }) {
         <Col lg="6" xl="4" style={{ marginBottom: '30px' }}>
             <Card
                 className="post-card"
-                onClick={() => navigate(`/posts/${post.uuid}`)}
+                onClick={() =>
+                    navigate(`/hub/${post.hub.title}/posts/${post.uuid}`)
+                }
                 title="See more"
             >
                 <CardHeader style={{ backgroundColor: '#68d8ee' }}>

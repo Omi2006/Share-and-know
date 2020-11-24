@@ -40,7 +40,7 @@ export default function Post() {
                 <h4>{post.poster.username}</h4>
                 <Link
                     to={{
-                        pathname: `/hubs/${post.hub.title}`,
+                        pathname: `/hub/${post.hub.title}`,
                         state: { hub: post.hub },
                     }}
                 >
