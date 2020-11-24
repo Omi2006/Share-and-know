@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, render, waitFor, act } from '@testing-library/react';
 import Post from '../../components/Post/Post';
-import { MemoryRouter, Route } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { LoggedinProvider } from '../../components/Auth/LoggedInContext';
 
 global.fetch = jest.fn(() =>
@@ -32,11 +32,13 @@ beforeEach(() => {
 
 function renderComponent(loggedIn) {
     render(
-        <MemoryRouter initialEntries={['/posts/ABCDEFG']}>
+        <MemoryRouter initialEntries={['/posts/A']}>
             <LoggedinProvider value={loggedIn}>
-                <Route path="/posts/:uuid">
-                    <Post />
-                </Route>
+                <Routes>
+                    <Route path="/posts/:uuid">
+                        <Post />
+                    </Route>
+                </Routes>
             </LoggedinProvider>
         </MemoryRouter>
     );
