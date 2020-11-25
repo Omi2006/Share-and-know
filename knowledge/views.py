@@ -196,6 +196,9 @@ class OneHub(generics.RetrieveAPIView):
     serializer_class = HubSerializer
     lookup_field = 'title'
 
+    def get_object(self):
+        return get_hub_from_path(self.request.query_params['list'])
+
 
 class Logout(generics.GenericAPIView):
     """
@@ -205,3 +208,19 @@ class Logout(generics.GenericAPIView):
     def get(self, request):
         logout(request)
         return Response({'message': 'success'})
+
+
+def get_hub_from_path(hubs: str) -> Hub:
+    """
+    Go through the hubs path to find the hub at the end with
+    the specified title to ensure we get the right hub
+    """
+    # Remove the first 2 items since they are '' and 'hub'
+    hubs_list = hubs.split(',')[2:]
+    # Remove last 2 items if there is a posts there because it will be a path like posts/new or posts/ABCDEFGH
+    if 'posts' in hubs_list:
+        del hubs_list[-2:]
+    current_hub = Hub.objects.get(title=hubs_list.pop(0))
+    for hub in hubs_list:
+        current_hub = current_hub.sub_hubs.get(title=hub)
+    return current_hub

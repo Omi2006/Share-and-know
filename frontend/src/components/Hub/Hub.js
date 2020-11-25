@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useSearchParams } from 'react-router-dom';
 import { Jumbotron, Spinner } from 'reactstrap';
 import PostList from '../Post/List';
 import HubList from './HubList';
@@ -17,11 +17,14 @@ export default function Hub() {
     const [type, setType] = useState('posts');
     const [search, setSearch] = useState('');
     const { title } = useParams();
+    const pathlist = useLocation().pathname.split('/');
 
     useEffect(() => {
-        if (hub?.title === title) return () => {};
+        if (hub) return () => {};
         const getHub = async () => {
-            const response = await fetch(`knowledge/hub/details/${title}`);
+            const response = await fetch(
+                `knowledge/hub/details/${title}?list=${pathlist}`
+            );
             const result = await response.json();
             setHub(result);
         };
