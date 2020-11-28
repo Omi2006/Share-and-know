@@ -12,14 +12,17 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 import environ
 
-env = environ.Env()
-environ.Env.read_env()
-
-SECRET_KEY = os.getenv('SECRET_KEY')
-if SECRET_KEY is None:
+#Testing config
+if sys.argv[1] != "test" and len(sys.argv) != 2:
+    env = environ.Env()
+    environ.Env.read_env()
     SECRET_KEY = env('SECRET_KEY')
+
+else:
+    SECRET_KEY = os.getenv('SECRET_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
