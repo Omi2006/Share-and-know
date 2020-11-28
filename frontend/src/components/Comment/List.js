@@ -1,8 +1,11 @@
 import React from 'react';
 import Comment from './Comment';
 import { useTransition, animated, config } from 'react-spring';
+import usePrefersReducedMotion from '../General/usePrefersReducedMotion';
 
 export default function List({ comments }) {
+    const prefersReducedMotion = usePrefersReducedMotion();
+
     const transition = useTransition(comments, comment => comment.id, {
         from: {
             opacity: 0,
@@ -10,6 +13,7 @@ export default function List({ comments }) {
         },
         enter: { opacity: 1, transform: 'translateX(0px)' },
         config: config.wobbly,
+        immediate: prefersReducedMotion,
     });
 
     return (

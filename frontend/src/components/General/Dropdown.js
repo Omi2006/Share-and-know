@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 import { useSpring, animated, config } from 'react-spring';
 
 import '../../style/dropdown.css';
+import usePrefersReducedMotion from './usePrefersReducedMotion';
 
 export default function Radio({ options, setSortBy, selected }) {
     const [isToggled, setToggle] = useState(false);
+    const prefersReducedMotion = usePrefersReducedMotion();
+
     const menubg = useSpring({ background: isToggled ? '#68d8ee' : '#8ee4f5' });
     const { y } = useSpring({
         y: isToggled ? 180 : 0,
+        immediate: prefersReducedMotion,
     });
     const menuAppear = useSpring({
         transform: isToggled ? 'translateY(0)' : 'translateY(-40px)',
         opacity: isToggled ? 1 : 0,
-        zIndex: 2,
         config: config.gentle,
-        immediate: key => key === 'zIndex',
+        immediate: prefersReducedMotion,
     });
 
     const handleSetOption = option => {

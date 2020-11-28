@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import SidebarContent from './SidebarContent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon, faBars } from '@fortawesome/free-solid-svg-icons';
-
-import './../../style/navbar.css';
 import { useSpring } from 'react-spring';
+import usePrefersReducedMotion from './usePrefersReducedMotion';
+import './../../style/navbar.css';
 
 export default function Sidebar({ children }) {
     const [collapsed, setCollapsed] = useState(true);
     const [theme, setTheme] = useState(localStorage.getItem('theme'));
+    const prefersReducedMotion = usePrefersReducedMotion();
+
     const content = useSpring({
         opacity: !collapsed ? 1 : 0,
         transform: !collapsed ? 'translateX(0%)' : 'translateX(-110%)',
+        immediate: prefersReducedMotion,
     });
 
     const toggleSidebar = () => {
