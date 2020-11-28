@@ -105,7 +105,6 @@ class NewPost(generics.CreateAPIView):
 
     def post(self, request):
         data = request.data
-        print(data)
         data['hub'] = HubSerializer(
             get_hub_from_path(request.data['hubs'])).data
         del data['hubs']
@@ -115,7 +114,6 @@ class NewPost(generics.CreateAPIView):
             serializer.create(data)
             return Response({'message': 'posted successfully'})
         else:
-            print(serializer.errors)
             return Response({'errors': serializer.errors})
 
 

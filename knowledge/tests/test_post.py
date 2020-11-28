@@ -32,7 +32,7 @@ class PostTestCase(APITestCase):
         Tests whether all posts returned are correctly.
         """
         c = APIClient()
-        url = '/knowledge/hub/items/1?sort=-date&type=posts&search='
+        url = '/knowledge/hub/items/1?sort=-date&type=posts&search=&hubs=,hubs,FIRST'
 
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
@@ -40,9 +40,9 @@ class PostTestCase(APITestCase):
             "total": 1,
             "results": [
                 {'id': 2, 'title': 'Test2', 'content': 'Test2', 'poster': {'username': 'Pete', 'email': 'Pete'},
-                    'uuid': 'EFGH', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST'}},
+                    'uuid': 'EFGH', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST', 'full_path': 'FIRST'}},
                 {'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},
-                    'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST'}}
+                    'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST', 'full_path': 'FIRST'}}
             ]}
         )
 
@@ -56,7 +56,7 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(loads(response.content), {
             'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},
-            'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST'}
+            'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST', 'full_path': 'FIRST'}
         })
 
     def test_create_new_post_valid(self):
@@ -68,7 +68,7 @@ class PostTestCase(APITestCase):
         url = reverse('new')
 
         response = c.post(
-            url, {'title': 'stuff', 'content': 'stuff'}, format='json')
+            url, {'title': 'stuff', 'content': 'stuff', 'hubs': ['', 'hubs', 'FIRST']}, format='json')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(loads(response.content), {
@@ -88,7 +88,7 @@ class PostTestCase(APITestCase):
         c.login(username='Joe', password='Joe')
         url = reverse('new')
         response = c.post(
-            url, {'title': '', 'content': 'stuff'}, format='json')
+            url, {'title': '', 'content': 'stuff', 'hubs': ['', 'hubs', 'FIRST']}, format='json')
 
         self.assertDictEqual(loads(response.content), {'errors': {
                              'title': ['This field may not be blank.']}})
@@ -101,7 +101,7 @@ class PostTestCase(APITestCase):
         c.login(username='Joe', password='Joe')
         url = reverse('new')
         response = c.post(
-            url, {'title': 'stuff', 'content': ''}, format='json')
+            url, {'title': 'stuff', 'content': '', 'hubs': ['', 'hubs', 'FIRST']}, format='json')
 
         self.assertDictEqual(loads(response.content), {'errors': {
                              'content': ['This field may not be blank.']}})
@@ -114,7 +114,7 @@ class PostTestCase(APITestCase):
         c.login(username='Joe', password='Joe')
         url = reverse('new')
         response = c.post(
-            url, {'title': 'x' * 66, 'content': 'stuff'}, format='json')
+            url, {'title': 'x' * 66, 'content': 'stuff', 'hubs': ['', 'hubs', 'FIRST']}, format='json')
         self.assertDictEqual(loads(response.content), {'errors': {
                              'title': ['Ensure this field has no more than 64 characters.']}})
 
