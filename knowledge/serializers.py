@@ -1,5 +1,7 @@
+from typing import SupportsAbs
 from django.db import IntegrityError
 from django.contrib.auth import authenticate
+from django.http import request
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
@@ -83,12 +85,12 @@ class PostSerializer(serializers.ModelSerializer):
     def get_fields(self):
         fields = super(PostSerializer, self).get_fields()
         fields['comments'] = CommentSerializer(many=True, required=False)
-        fields['hub'] = HubSerializer(read_only=True)
+        fields['hub'] = HubSerializer()
         return fields
 
     def create(self, validated_data):
-        return Post.objects.create(
-            **validated_data, hub=Hub.objects.get(id=1))
+        validated_data['hub'] = Hub.objects.get(pk=validated_data['hub']['id'])
+        return Post.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         liker = User.objects.get(
@@ -122,10 +124,11 @@ class CommentSerializer(serializers.ModelSerializer):
 class HubSerializer(serializers.ModelSerializer):
 
     date = serializers.ReadOnlyField(source="get_date")
+    full_path = serializers.ReadOnlyField(source="get_full_path")
 
     class Meta:
         model = Hub
-        fields = ('id', 'title', 'date', 'description')
+        fields = ('id', 'title', 'date', 'description', 'full_path')
 
     def create(self, validated_data):
         return Hub.objects.create(**validated_data)

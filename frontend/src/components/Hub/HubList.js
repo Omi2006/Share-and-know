@@ -1,25 +1,25 @@
 import React from 'react';
-import { useTransition, animated } from 'react-spring';
-import { CardColumns } from 'reactstrap';
+import { animated, useSpring } from 'react-spring';
+import { CardDeck } from 'reactstrap';
 import Row from './Row';
 
+const AnimatedDeck = animated(CardDeck);
+
 export default function HubList({ hubs }) {
-    const transitions = useTransition(hubs, hub => hub.id, {
+    const deckStyles = useSpring({
         from: {
-            transform: 'translate3D(0px, 100px, 0px)',
+            transform: 'translateY(100px)',
         },
-        enter: {
-            transform: 'translate3D(0px, 0px, 0px',
+        to: {
+            transform: 'translateY(0px)',
         },
     });
 
     return (
-        <CardColumns>
-            {transitions.map(({ item, key, props }) => (
-                <animated.div style={props} key={key}>
-                    <Row hub={item} />
-                </animated.div>
+        <AnimatedDeck style={deckStyles} className="deck">
+            {hubs.map(hub => (
+                <Row hub={hub} />
             ))}
-        </CardColumns>
+        </AnimatedDeck>
     );
 }

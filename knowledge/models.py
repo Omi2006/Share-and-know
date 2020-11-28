@@ -21,7 +21,7 @@ class Post(models.Model):
     hub = models.ForeignKey(
         'Hub', on_delete=models.CASCADE, related_name='posts')
 
-    def get_date(self):
+    def get_date(self) -> str:
 
         return naturaltime(self.date)
 
@@ -34,7 +34,7 @@ class Comment(models.Model):
         User, related_name='comments', on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
-    def get_date(self):
+    def get_date(self) -> str:
 
         return naturaltime(self.date)
 
@@ -46,6 +46,27 @@ class Hub(models.Model):
         'Hub', on_delete=models.CASCADE, related_name='sub_hubs', null=True)
     description = models.CharField(max_length=60)
 
-    def get_date(self):
+    def get_date(self) -> str:
 
         return naturaltime(self.date)
+
+    def get_full_path(self) -> str:
+        """
+        Goes through the parent hubs to get the full hub path with titles
+        """
+        # Start with an empty hub
+        hub_path = []
+        # Make the current hub the initial one
+        hub = self
+        # Keep going until we reach a main hub
+        while hub.hub is not None:
+            hub_path.append(hub.title)
+            hub = hub.hub
+        # Add the "source" hub as it will be skipped
+        hub_path.append(hub.title)
+        hub_path.reverse()
+        # Return the hub path separated by /
+        return '/'.join(hub_path)
+
+    def __str__(self) -> str:
+        return self.title

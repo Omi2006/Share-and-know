@@ -6,7 +6,7 @@ import { animated, useSpring } from 'react-spring';
 const AnimatedDeck = animated(CardDeck);
 
 export default function PostList({ posts }) {
-    const styles = useSpring({
+    const deckStyles = useSpring({
         from: {
             opacity: 0,
             transform: 'translateX(100px)',
@@ -16,12 +16,12 @@ export default function PostList({ posts }) {
             transform: 'translateX(0px)',
         },
     });
-    //Handle no posts, temporal fix as for the poster, handle the type rerender before the itemss update
-    return posts[0]?.poster ? (
-        <AnimatedDeck style={styles} className="post-list">
-            {posts.map(post => {
-                return <Row post={post} key={post.id} />;
-            })}
+    //Handle no posts, temporal fix as for the poster, handle the type rerender before the items update
+    return (
+        <AnimatedDeck style={deckStyles} className="deck">
+            {posts.map(post => (
+                <Row post={post} key={post.id} />
+            ))}
         </AnimatedDeck>
-    ) : null;
+    );
 }

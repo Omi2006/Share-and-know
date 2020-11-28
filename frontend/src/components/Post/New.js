@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FormGroup, Form, Label, Alert } from 'reactstrap';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchCsrf } from '../Auth/fetchCsrf';
 import TextArea from 'react-autosize-textarea';
 
@@ -9,10 +9,12 @@ export default function PostForm() {
     const submitButton = useRef();
     const { register, handleSubmit, errors } = useForm();
     const [message, setMessage] = useState({});
+    const { pathname } = useLocation();
     const navigate = useNavigate();
 
     const onSubmit = async data => {
         submitButton.current.disabled = true;
+        data.hubs = pathname.split('/');
         const result = await fetchCsrf('/knowledge/new/post', data, 'POST');
         //Check for server errors
         if (result.errors) {
@@ -24,7 +26,7 @@ export default function PostForm() {
             return false;
         }
         submitButton.current.disabled = true;
-        navigate('/');
+        navigate(-1);
     };
 
     return (

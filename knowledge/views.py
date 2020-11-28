@@ -104,12 +104,18 @@ class NewPost(generics.CreateAPIView):
     queryset = Post.objects.all()
 
     def post(self, request):
-        data = {**request.data, 'poster': request.user}
+        data = request.data
+        print(data)
+        data['hub'] = HubSerializer(
+            get_hub_from_path(request.data['hubs'])).data
+        del data['hubs']
+        data['poster'] = request.user
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             serializer.create(data)
             return Response({'message': 'posted successfully'})
         else:
+            print(serializer.errors)
             return Response({'errors': serializer.errors})
 
 
@@ -197,7 +203,7 @@ class OneHub(generics.RetrieveAPIView):
     lookup_field = 'title'
 
     def get_object(self):
-        return get_hub_from_path(self.request.query_params['list'])
+        return get_hub_from_path(self.request.query_params['list'].split(','))
 
 
 class Logout(generics.GenericAPIView):
@@ -216,11 +222,17 @@ def get_hub_from_path(hubs: str) -> Hub:
     the specified title to ensure we get the right hub
     """
     # Remove the first 2 items since they are '' and 'hub'
-    hubs_list = hubs.split(',')[2:]
+    hubs_list = hubs[2:]
     # Remove last 2 items if there is a posts there because it will be a path like posts/new or posts/ABCDEFGH
     if 'posts' in hubs_list:
         del hubs_list[-2:]
-    current_hub = Hub.objects.get(title=hubs_list.pop(0))
-    for hub in hubs_list:
-        current_hub = current_hub.sub_hubs.get(title=hub)
+    # Try to see if there is only one hub with the title
+    try:
+        current_hub = Hub.objects.get(title=hubs_list[-1])
+    # If there is an error there are many with the same title
+    except:
+        # Go through the path list until we reach the last one
+        current_hub = Hub.objects.get(title=hubs_list.pop(0))
+        for hub in hubs_list:
+            current_hub = current_hub.sub_hubs.get(title=hub)
     return current_hub

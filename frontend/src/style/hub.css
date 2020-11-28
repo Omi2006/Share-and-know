@@ -10,7 +10,6 @@
     top: 0;
     left: 0;
     z-index: 1;
-    transform: translateY(50%);
 }
 
 .type-toggle-button {
@@ -24,6 +23,18 @@
     position: relative;
 }
 
+.type-toggle-button:hover {
+    transform: scale(1.05);
+}
+
+.type-toggle-div:hover {
+    transform: scale(1.05);
+}
+
 .display-3 {
     font-size: 3.3rem !important;
+}
+
+.back-green {
+    background-color: #91ffa0;
 }

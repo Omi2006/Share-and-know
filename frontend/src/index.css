@@ -7,7 +7,11 @@ body {
 }
 
 a {
-    color: #154579;
+    color: #b917b1;
+}
+
+a:hover {
+    color: #690a65;
 }
 
 code {
@@ -36,4 +40,25 @@ code {
     clip: rect(1px, 1px, 1px, 1px);
     clip-path: inset(50%);
     white-space: nowrap;
+}
+
+.footer {
+    justify-content: space-between;
+    width: 100%;
+    display: inline-flex;
+}
+
+.deck {
+    padding: 10px 1.6rem;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.hover-card:hover {
+    transform: scale(1.01);
+}
+
+.hover-card {
+    margin: 0px;
+    cursor: pointer;
 }

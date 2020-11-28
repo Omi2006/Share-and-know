@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation, useSearchParams } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import { Jumbotron, Spinner } from 'reactstrap';
 import PostList from '../Post/List';
 import HubList from './HubList';
@@ -12,7 +12,7 @@ import '../../style/hub.css';
 export default function Hub() {
     const [hub, setHub] = useState(useLocation().state?.hub);
     const [sortBy, setSortBy] = useState(['-date', 'Newest']);
-    const [items, setItems] = useState({});
+    const [items, setItems] = useState(undefined);
     const [currentPage, setCurrentPage] = useState(1);
     const [type, setType] = useState('posts');
     const [search, setSearch] = useState('');
@@ -20,29 +20,33 @@ export default function Hub() {
     const pathlist = useLocation().pathname.split('/');
 
     useEffect(() => {
-        if (hub) return () => {};
-        const getHub = async () => {
-            const response = await fetch(
-                `knowledge/hub/details/${title}?list=${pathlist}`
-            );
-            const result = await response.json();
-            setHub(result);
-        };
-        getHub();
-    }, [title, hub]);
+        if (!hub) {
+            const getHub = async () => {
+                const response = await fetch(
+                    `knowledge/hub/details/${title}?list=${pathlist}`
+                );
+                const result = await response.json();
+                setHub(result);
+            };
+            getHub();
+        }
+    }, [title, hub, pathlist]);
 
     //Get items for given category and skip if category isn't ready
     useEffect(() => {
-        setItems({});
-        if (!hub) return () => {};
-        const getItems = async () => {
-            const response = await fetch(
-                `knowledge/hub/items/${hub.id}?sort=${sortBy[0]}&page=${currentPage}&type=${type}&search=${search}`
-            );
-            const result = await response.json();
-            setItems(result);
-        };
-        getItems();
+        //Reset the items to make the loading effect
+        setItems(undefined);
+        //Only fetch if items aren't set and the hub isn't undefined
+        if (hub !== undefined) {
+            const getItems = async () => {
+                const response = await fetch(
+                    `knowledge/hub/items/${hub.id}?sort=${sortBy[0]}&page=${currentPage}&type=${type}&search=${search}`
+                );
+                const result = await response.json();
+                setItems(result);
+            };
+            getItems();
+        }
     }, [hub, currentPage, type, search, sortBy]);
 
     const handleTypeChange = () => {
@@ -67,9 +71,18 @@ export default function Hub() {
         <div style={{ overflow: 'hidden' }}>
             <Jumbotron>
                 <h2 className="display-3 hub-name">{title}</h2>
-                <p className="lead">{hub.description}</p>
+                <p className="lead text-md-left">{hub.description}</p>
                 <hr className="my-2" />
-                <ToggleButton type={type} handleTypeChange={handleTypeChange} />
+                <div className="d-flex justify-content-between">
+                    <ToggleButton
+                        type={type}
+                        handleTypeChange={handleTypeChange}
+                    />
+                    {/*Ensure this isn't a source hub */}
+                    {hub.full_path.includes('/') && (
+                        <Link to="posts/new">+ New post</Link>
+                    )}
+                </div>
             </Jumbotron>
             <Search
                 setSearch={setSearch}
@@ -81,7 +94,7 @@ export default function Hub() {
                 setSortBy={setSortBy}
                 selected={sortBy[1]}
             />
-            {items.results ? (
+            {items ? (
                 type === 'posts' ? (
                     <>
                         <PostList posts={items.results} />

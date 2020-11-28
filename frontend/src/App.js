@@ -4,7 +4,7 @@ import {
     Route,
     Routes,
     Outlet,
-    useParams,
+    Navigate,
 } from 'react-router-dom';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
@@ -47,17 +47,12 @@ export default function App() {
                                     path="/login"
                                     element={loggedIn ? <Home /> : <Login />}
                                 />
-                                <Route path="/hub/:title*" element={<Hubs />}>
+                                <Route path="posts/:uuid" element={<Post />} />
+                                <Route path="/hubs/:title*" element={<Hubs />}>
                                     <Route path="/" element={<Hub />} />
                                     <Route
                                         path="posts/:uuid"
                                         element={<Post />}
-                                    />
-                                    <Route
-                                        path="new/post"
-                                        element={
-                                            loggedIn ? <PostForm /> : <Login />
-                                        }
                                     />
                                     <Route
                                         path=":title*"
@@ -95,11 +90,11 @@ function HubRoutes({ loggedIn }) {
         <>
             <Routes>
                 <Route path="/" element={<Hub />} />
-                <Route path="posts/:uuid" element={<Post />} />
                 <Route
-                    path="new/post"
-                    element={loggedIn ? <PostForm /> : <Login />}
+                    path="posts/new"
+                    element={loggedIn ? <PostForm /> : <Navigate to="/login" />}
                 />
+                <Route path="posts/:uuid" element={<Post />} />
                 <Route
                     path=":title*"
                     element={<HubRoutes loggedIn={loggedIn} />}

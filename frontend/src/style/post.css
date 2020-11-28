@@ -28,17 +28,6 @@
     background-color: #a5e6f3;
 }
 
-.post-list {
-    padding: 10px 2rem;
-    width: 100%;
-    justify-content: flex-start;
-}
-
-.footer {
-    justify-content: space-between;
-    display: inline-flex;
-}
-
 .edit-comment {
     width: 100%;
     background: transparent;
@@ -69,13 +58,4 @@
 
 .dislike-icon {
     color: red;
-}
-
-.post-card:hover {
-    transform: scale(1.01);
-}
-
-.post-card {
-    margin: 0px;
-    cursor: pointer;
 }
