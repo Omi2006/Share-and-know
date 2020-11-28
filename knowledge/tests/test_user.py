@@ -3,7 +3,7 @@ from json import loads
 from django.urls import reverse
 from rest_framework.test import APIClient, APITestCase
 
-from knowledge.models import User
+from ..models import User
 
 
 class UserTestCAse(APITestCase):

@@ -3,7 +3,7 @@ from json import loads
 from django.urls import reverse
 from rest_framework.test import APIClient, APITestCase
 
-from knowledge.models import User, Post, Hub
+from..models import User, Post, Hub
 
 # Create your tests here.
 
@@ -37,8 +37,8 @@ class PostTestCase(APITestCase):
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(loads(response.content), {
-            "total": 1,
-            "results": [
+            'total': 1,
+            'results': [
                 {'id': 2, 'title': 'Test2', 'content': 'Test2', 'poster': {'username': 'Pete', 'email': 'Pete'},
                     'uuid': 'EFGH', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST', 'full_path': 'FIRST'}},
                 {'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},

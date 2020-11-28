@@ -15,14 +15,15 @@ import os
 import sys
 import environ
 
-#Testing config
+# Testing config
 if sys.argv[1] != "test" and len(sys.argv) != 2:
     env = environ.Env()
     environ.Env.read_env()
     SECRET_KEY = env('SECRET_KEY')
 
 else:
-    SECRET_KEY = os.getenv('SECRET_KEY')
+    # Testing secret key
+    SECRET_KEY = '02963a29894ceaf3fd4d34afdd58927ab5244c58612cb5ca19'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
