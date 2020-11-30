@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react';
 import { fetchCsrf } from './fetchCsrf';
 import { useForm } from 'react-hook-form';
 import ToggleLoggedinContext from './ToggleLoginContext';
-import { Col, UncontrolledAlert, Row } from 'reactstrap';
+import { Col, Alert, Row } from 'reactstrap';
 
 import ShareImage from '../../images/undraw_share_online_r87b.svg';
 import '../../style/auth.css';
@@ -12,6 +12,8 @@ export default function Register() {
     const handleLogin = useContext(ToggleLoggedinContext);
     const submitButton = useRef();
     const [message, setMessage] = useState({});
+
+    const toggleMessage = () => setMessage({});
 
     const onSubmit = async data => {
         submitButton.current.disabled = true;
@@ -57,12 +59,9 @@ export default function Register() {
             </Col>
             <Col md="12">
                 {message.content && (
-                    <UncontrolledAlert
-                        color={message.type}
-                        toggle={() => setMessage({})}
-                    >
+                    <Alert color={message.type} toggle={toggleMessage}>
                         {message.content}
-                    </UncontrolledAlert>
+                    </Alert>
                 )}
                 <form
                     style={{

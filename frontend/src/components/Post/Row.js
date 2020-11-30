@@ -17,16 +17,13 @@ import '../../style/post.css';
 
 export default function Row({ post }) {
     const navigate = useNavigate();
+    const goToPost = () => navigate(`posts/${post.uuid}`);
 
     return !post ? (
         <Spinner color="primary" />
     ) : (
         <Col lg="6" xl="4" style={{ marginBottom: '30px' }}>
-            <Card
-                className="hover-card"
-                onClick={() => navigate(`posts/${post.uuid}`)}
-                title="See more"
-            >
+            <Card className="hover-card" onClick={goToPost} title="See more">
                 <CardHeader style={{ backgroundColor: '#68d8ee' }}>
                     <CardTitle>
                         <h5>{post.title}</h5>

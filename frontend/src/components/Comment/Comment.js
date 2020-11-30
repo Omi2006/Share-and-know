@@ -18,6 +18,8 @@ export default function Comment({ comment }) {
     const [content, setContent] = useState(comment.content);
     const [editing, setEditing] = useState(false);
 
+    const toggleEditing = () => setEditing(!editing);
+
     const editComment = async () => {
         if (editCommentContent.current) {
             const { value } = editCommentContent.current;
@@ -35,10 +37,10 @@ export default function Comment({ comment }) {
                 alert(result.errors[Object.keys(result.errors)[0]]);
             }
         }
-        setEditing(!editing);
+        toggleEditing();
     };
     return (
-        <Card style={{ margin: '20px', height: 'auto' }}>
+        <Card style={{ margin: '20px' }}>
             <CardHeader
                 style={{
                     backgroundColor: 'rgb(203, 223, 230)',
@@ -58,7 +60,7 @@ export default function Comment({ comment }) {
                                 style={{ fontSize: '0.9rem' }}
                                 outline
                                 title="Cancel"
-                                onClick={() => setEditing(false)}
+                                onClick={toggleEditing}
                             >
                                 <span className="visually-hidden">cancel</span>
                                 <FontAwesomeIcon icon={faWindowClose} />
@@ -73,7 +75,7 @@ export default function Comment({ comment }) {
                                 editCommentContent.current &&
                                 editCommentContent.current.length < 1
                             }
-                            onClick={() => editComment()}
+                            onClick={editComment}
                         >
                             <span className="visually-hidden">
                                 {editing ? 'save' : 'edit'}

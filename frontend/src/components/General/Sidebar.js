@@ -17,6 +17,8 @@ export default function Sidebar({ children }) {
         immediate: prefersReducedMotion,
     });
 
+    const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
+
     const toggleSidebar = () => {
         setCollapsed(!collapsed);
     };
@@ -35,13 +37,12 @@ export default function Sidebar({ children }) {
                     className="navnavicon"
                 >
                     <FontAwesomeIcon icon={faBars} />
+                    <span className="visually-hidden">Toggle sidebar</span>
                 </button>
                 <button
                     className="theme navnavicon"
                     style={{ padding: '0px ' }}
-                    onClick={() =>
-                        setTheme(theme === 'dark' ? 'light' : 'dark')
-                    }
+                    onClick={toggleTheme}
                 >
                     <FontAwesomeIcon
                         className="theme"
@@ -52,7 +53,7 @@ export default function Sidebar({ children }) {
             <SidebarContent toggleSidebar={toggleSidebar} style={content} />
             <div
                 style={{ filter: !collapsed && 'blur(5px)' }}
-                onClick={!collapsed ? toggleSidebar : () => {}}
+                onClick={!collapsed ? toggleSidebar : undefined}
             >
                 {children}
             </div>

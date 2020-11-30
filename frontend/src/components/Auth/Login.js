@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from 'react';
 import { fetchCsrf } from './fetchCsrf';
 import { Link } from 'react-router-dom';
-import { UncontrolledAlert, Row, Col } from 'reactstrap';
+import { Alert, Row, Col } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import '../../style/auth.css';
 import loginImage from '../../images/undraw_Login_re_4vu2.svg';
@@ -12,6 +12,8 @@ export default function Login() {
     const submitInput = useRef();
     const { register, errors, handleSubmit } = useForm();
     const handleLogin = useContext(ToggleLoggedinContext);
+
+    const toggleMessage = () => setMessage({});
 
     const onSubmit = async data => {
         submitInput.current.disabled = true;
@@ -47,12 +49,9 @@ export default function Login() {
             </Col>
             <Col md="12">
                 {message.content && (
-                    <UncontrolledAlert
-                        color={message.type}
-                        toggle={() => setMessage({})}
-                    >
+                    <Alert color={message.type} toggle={toggleMessage}>
                         {message.content}
-                    </UncontrolledAlert>
+                    </Alert>
                 )}
                 <form
                     onSubmit={handleSubmit(onSubmit)}

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { fetchCsrf } from '../Auth/fetchCsrf';
-import { Form, FormGroup, Label, UncontrolledAlert, Alert } from 'reactstrap';
+import { Form, FormGroup, Label, UncontrolledAlert } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import TextArea from 'react-autosize-textarea';
 
@@ -8,6 +8,8 @@ export default function New({ setComments, post }) {
     const { register, handleSubmit, reset, errors } = useForm();
     const [message, setMessage] = useState({});
     const submitButton = useRef();
+
+    const toggleMessage = () => setMessage({});
 
     const onSubmit = async data => {
         //Disable button to prevent submitting twice
@@ -44,16 +46,18 @@ export default function New({ setComments, post }) {
         try {
             setComments(prevComments => [result.comment, ...prevComments]);
         } catch (error) {
-            console.log(error);
+            alert(
+                'Something went wrong in showing your comment. It should show when you reload though.'
+            );
         }
     };
 
     return (
         <div>
             {message.content && (
-                <Alert color={message.type} toggle={() => setMessage({})}>
+                <UncontrolledAlert color={message.type} toggle={toggleMessage}>
                     {message.content}
-                </Alert>
+                </UncontrolledAlert>
             )}
             {errors.content && (
                 <UncontrolledAlert color="danger">

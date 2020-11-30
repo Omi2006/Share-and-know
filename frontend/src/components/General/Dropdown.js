@@ -5,8 +5,9 @@ import '../../style/dropdown.css';
 import usePrefersReducedMotion from './usePrefersReducedMotion';
 
 export default function Radio({ options, setSortBy, selected }) {
-    const [isToggled, setToggle] = useState(false);
+    const [isToggled, setIsToggled] = useState(false);
     const prefersReducedMotion = usePrefersReducedMotion();
+    const toggleDropdown = () => setIsToggled(!isToggled);
 
     const menubg = useSpring({ background: isToggled ? '#68d8ee' : '#8ee4f5' });
     const { y } = useSpring({
@@ -22,7 +23,7 @@ export default function Radio({ options, setSortBy, selected }) {
 
     const handleSetOption = option => {
         //Wait for items to disappear before toggle
-        setTimeout(() => setToggle(false), 0.01);
+        setTimeout(toggleDropdown, 0.01);
         setSortBy(option);
     };
 
@@ -32,7 +33,7 @@ export default function Radio({ options, setSortBy, selected }) {
                 style={menubg}
                 data-testid="toggle"
                 className="radio-wrapper"
-                onClick={() => setToggle(!isToggled)}
+                onClick={toggleDropdown}
             >
                 <div className="radio">
                     <p className="visually-hidden">Change sort options</p>

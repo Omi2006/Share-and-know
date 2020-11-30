@@ -15,14 +15,11 @@ import { faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 
 export default function Row({ hub }) {
     const navigate = useNavigate();
+    const goToHub = () => navigate(hub.title);
 
     return (
         <Col md="6" style={{ marginBottom: '30px' }}>
-            <Card
-                onClick={() => navigate(hub.title)}
-                title="Go to hub"
-                className="hover-card"
-            >
+            <Card onClick={goToHub} title="Go to hub" className="hover-card">
                 <CardHeader className="back-green">
                     <CardTitle>
                         <h5>{hub.title}</h5>

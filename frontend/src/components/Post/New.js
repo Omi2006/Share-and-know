@@ -12,6 +12,8 @@ export default function PostForm() {
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
+    const toggleMessage = () => setMessage({});
+
     const onSubmit = async data => {
         submitButton.current.disabled = true;
         data.hubs = pathname.split('/');
@@ -32,7 +34,7 @@ export default function PostForm() {
     return (
         <div>
             {message.content && (
-                <Alert color={message.type} toggle={() => setMessage({})}>
+                <Alert color={message.type} toggle={toggleMessage}>
                     {message.content}
                 </Alert>
             )}
