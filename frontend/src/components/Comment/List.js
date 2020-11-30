@@ -2,8 +2,7 @@ import React from 'react';
 import Comment from './Comment';
 import { useTransition, animated, config } from 'react-spring';
 import usePrefersReducedMotion from '../General/usePrefersReducedMotion';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function List({ comments }) {
     const prefersReducedMotion = usePrefersReducedMotion();
@@ -31,12 +30,14 @@ export default function List({ comments }) {
     let pageYOffset = window.pageYOffset;
 
     useEffect(() => {
-        setCommentList(prevCommentList => [
-            comments[0],
-            ...prevCommentList.slice(1),
-        ]);
+        if (comments[0] !== undefined)
+            setCommentList(prevCommentList => [
+                comments[0],
+                ...prevCommentList.slice(1),
+            ]);
     }, [comments]);
 
+    //Keep the same page scroll so that the comments don't appear at the bottom.
     useEffect(() => {
         window.scroll({ top: pageYOffset });
     }, [commentList]);

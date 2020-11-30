@@ -70,7 +70,11 @@ export default function Post() {
                     </Alert>
                 )}
                 <hr />
-                {comments && <CommentList comments={comments} />}
+                {comments && comments.length > 0 ? (
+                    <CommentList comments={comments} />
+                ) : (
+                    <Alert color="info">There are no comments here!</Alert>
+                )}
             </div>
         </div>
     );

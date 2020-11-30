@@ -14,10 +14,18 @@ Object.defineProperty(window, 'matchMedia', {
         matches: false,
         media: query,
         onchange: null,
-        addListener: jest.fn(), // Deprecated
-        removeListener: jest.fn(), // Deprecated
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
         dispatchEvent: jest.fn(),
     })),
+});
+
+Object.defineProperty(window, 'scroll', {
+    writable: true,
+    value: jest.fn(),
+});
+
+Object.defineProperty(window, 'alert', {
+    writable: true,
+    value: jest.fn(),
 });
