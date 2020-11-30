@@ -3,12 +3,14 @@ import Comment from './Comment';
 import { useTransition, animated, config } from 'react-spring';
 import usePrefersReducedMotion from '../General/usePrefersReducedMotion';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 export default function List({ comments }) {
     const prefersReducedMotion = usePrefersReducedMotion();
     const [page, setPage] = useState(1);
+    const [commentList, setCommentList] = useState(comments.slice(0, 5));
 
-    const transition = useTransition(comments, comment => comment.id, {
+    const transition = useTransition(commentList, comment => comment.id, {
         from: {
             opacity: 0,
             transform: 'translateX(-100px)',
@@ -19,12 +21,29 @@ export default function List({ comments }) {
     });
 
     const handleLoadMore = () => {
-        if (page * 5 <= comments.length) setPage(page + 1);
+        setCommentList([
+            ...commentList,
+            ...comments.slice(page * 5, (page + 1) * 5),
+        ]);
+        setPage(page + 1);
     };
+
+    let pageYOffset = window.pageYOffset;
+
+    useEffect(() => {
+        setCommentList(prevCommentList => [
+            comments[0],
+            ...prevCommentList.slice(1),
+        ]);
+    }, [comments]);
+
+    useEffect(() => {
+        window.scroll({ top: pageYOffset });
+    }, [commentList]);
 
     return (
         <div>
-            {transition.splice(0, page * 5).map(({ item, key, props }) => (
+            {transition.map(({ item, key, props }) => (
                 <animated.div
                     style={{ ...props, overflow: 'hidden' }}
                     key={key}
