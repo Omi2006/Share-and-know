@@ -32,7 +32,14 @@ export default function List({ comments }) {
                     <Comment comment={item} />
                 </animated.div>
             ))}
-            <button onClick={handleLoadMore}>Load more</button>
+            {page * 5 <= comments.length && (
+                <button
+                    className="btn btn-primary center"
+                    onClick={handleLoadMore}
+                >
+                    Load more
+                </button>
+            )}
         </div>
     );
 }

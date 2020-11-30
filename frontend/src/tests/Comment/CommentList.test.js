@@ -22,7 +22,7 @@ describe('Testing Comment list', () => {
         },
     ];
 
-    test('Renders right amount of comments', () => {
+    test('Renders right amount of comments and no load more for less than 5 comments', () => {
         const { container } = render(<CommentList comments={comments} />);
         expect([...container.firstChild.children]).toHaveLength(2);
     });
