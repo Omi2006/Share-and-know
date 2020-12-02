@@ -32,9 +32,25 @@
 }
 
 .display-3 {
-    font-size: 3.3rem !important;
+    font-size: 3rem !important;
+    text-align: center;
 }
 
 .back-green {
     background-color: #91ffa0;
+}
+
+.jumbotron {
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+}
+
+.breadcrumb {
+    justify-content: center;
+    margin-bottom: 0px;
+    border-bottom: 1px solid #b5d8df;
+    font-size: 1.5em;
 }

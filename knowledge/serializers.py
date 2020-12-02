@@ -81,7 +81,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'title', 'content', 'poster', 'uuid',
                   'date', 'comments', 'likes', 'hub')
-
+                  
     def get_fields(self):
         fields = super(PostSerializer, self).get_fields()
         fields['comments'] = CommentSerializer(many=True, required=False)

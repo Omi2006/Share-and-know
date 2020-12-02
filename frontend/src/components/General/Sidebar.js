@@ -13,7 +13,9 @@ export default function Sidebar({ children }) {
 
     const content = useSpring({
         opacity: !collapsed ? 1 : 0,
-        transform: !collapsed ? 'translateX(0%)' : 'translateX(-110%)',
+        transform: !collapsed
+            ? 'translate3D(0%, 0, 0)'
+            : 'translate3D(-100%, 0, 0)',
         immediate: prefersReducedMotion,
     });
 

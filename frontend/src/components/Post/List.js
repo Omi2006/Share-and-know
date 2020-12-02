@@ -11,17 +11,15 @@ export default function PostList({ posts }) {
 
     const deckStyles = useSpring({
         from: {
-            opacity: 0,
             transform: 'translateX(100px)',
         },
         to: {
-            opacity: 1,
             transform: 'translateX(0px)',
         },
         immediate: prefersReducedMotion,
     });
     //Handle no posts, temporal fix as for the poster, handle the type rerender before the items update
-    return posts[0].poster ? (
+    return posts[0]?.poster ? (
         <AnimatedDeck style={deckStyles} className="deck">
             {posts.map(post => (
                 <Row post={post} key={post.id} />

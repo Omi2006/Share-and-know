@@ -39,10 +39,10 @@ class CommentTestCase(APITestCase):
         post_comments = loads(response.content)['comments']
 
         self.assertEqual(post_comments, [
+            {'id': 2, 'commenter': {'username': 'Peter', 'email': 'Peter@peter.com'},
+                'post': 1, 'content': 'Test2', 'date': 'now'},
             {'id': 1, 'commenter': {'username': 'Joe', 'email': 'Joe@joe.com'},
                 'post': 1, 'content': 'Test1', 'date': 'now'},
-            {'id': 2, 'commenter': {'username': 'Peter',
-                                    'email': 'Peter@peter.com'}, 'post': 1, 'content': 'Test2', 'date': 'now'}
         ])
 
     def test_create_new_post(self):

@@ -13,6 +13,7 @@ import Post from './components/Post/Post';
 import PostForm from './components/Post/New';
 import Home from './components/Home';
 import Hub from './components/Hub/Hub';
+import HubPath from './components/Hub/HubPath';
 import { LoggedinProvider } from './components/Auth/LoggedInContext';
 import { ToggleLoggedinProvider } from './components/Auth/ToggleLoginContext';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -36,7 +37,8 @@ export default function App() {
             <LoggedinProvider value={loggedIn}>
                 <ToggleLoggedinProvider value={setLoggedIn}>
                     <Sidebar>
-                        <div className="App" style={{ marginTop: '65px' }}>
+                        <div className="App">
+                            <HubPath />
                             <Routes>
                                 <Route path="/" element={<Home />} />
                                 <Route

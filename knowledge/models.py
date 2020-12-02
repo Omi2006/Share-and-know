@@ -38,6 +38,9 @@ class Comment(models.Model):
 
         return naturaltime(self.date)
 
+    class Meta:
+        ordering = ('-date',)
+
 
 class Hub(models.Model):
     title = models.CharField(max_length=20)

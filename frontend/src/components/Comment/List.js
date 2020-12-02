@@ -40,7 +40,7 @@ export default function List({ comments }) {
     //Keep the same page scroll so that the comments don't appear at the bottom.
     useEffect(() => {
         window.scroll({ top: pageYOffset });
-    }, [commentList]);
+    }, [commentList, pageYOffset]);
 
     return (
         <div>

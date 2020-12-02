@@ -69,7 +69,14 @@ export default function Hub() {
         <Spinner color="primary" />
     ) : (
         <div style={{ overflow: 'hidden' }}>
-            <Jumbotron>
+            <Jumbotron
+                style={{
+                    paddingTop: 0,
+                    marginTop: '-20px',
+                    whiteSpace: 'pre-wrap',
+                }}
+            >
+                <hr />
                 <h2 className="display-3 hub-name">{title}</h2>
                 <p className="lead text-md-left">{hub.description}</p>
                 <hr className="my-2" />
