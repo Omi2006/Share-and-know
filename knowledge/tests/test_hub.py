@@ -38,11 +38,13 @@ class HubTestCase(APITestCase):
                  'description': 'THIRD',
                  'full_path': 'FIRST/THIRD',
                  'id': 3,
+                 'hub': 1,
                  'title': 'THIRD'},
                 {'date': 'now',
                  'description': 'SECOND',
                  'full_path': 'FIRST/SECOND',
                  'id': 2,
+                 'hub': 1,
                  'title': 'SECOND'}
             ]
         })
@@ -63,11 +65,13 @@ class HubTestCase(APITestCase):
                  'description': 'SECOND',
                  'full_path': 'FIRST/SECOND',
                  'id': 2,
+                 'hub': 1,
                  'title': 'SECOND'},
                 {'date': 'now',
                  'description': 'THIRD',
                  'full_path': 'FIRST/THIRD',
                  'id': 3,
+                 'hub': 1,
                  'title': 'THIRD'},
             ]
         })
@@ -88,6 +92,7 @@ class HubTestCase(APITestCase):
                  'description': 'THIRD',
                  'full_path': 'FIRST/THIRD',
                  'id': 3,
+                 'hub': 1,
                  'title': 'THIRD'}
             ]
         })
@@ -105,6 +110,7 @@ class HubTestCase(APITestCase):
             'description': 'FIRST',
             'full_path': 'FIRST',
             'id': 1,
+            'hub': None,
             'title': 'FIRST'
         })
 
@@ -122,5 +128,6 @@ class HubTestCase(APITestCase):
             'description': 'FOURTH',
             'full_path': 'FIRST/SECOND/SECOND',
             'id': 4,
+            'hub': 2,
             'title': 'SECOND'
         })

@@ -56,7 +56,7 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(loads(response.content), {
             'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},
-            'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST', 'full_path': 'FIRST'}
+            'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST', 'full_path': 'FIRST', 'hub': None}
         })
 
     def test_create_new_post_valid(self):
@@ -65,7 +65,7 @@ class PostTestCase(APITestCase):
         """
         c = APIClient()
         c.login(username='Joe', password='Joe')
-        url = reverse('new')
+        url = reverse('new_post')
 
         response = c.post(
             url, {'title': 'stuff', 'content': 'stuff', 'hubs': ['', 'hubs', 'FIRST']}, format='json')
@@ -86,7 +86,7 @@ class PostTestCase(APITestCase):
         """
         c = APIClient()
         c.login(username='Joe', password='Joe')
-        url = reverse('new')
+        url = reverse('new_post')
         response = c.post(
             url, {'title': '', 'content': 'stuff', 'hubs': ['', 'hubs', 'FIRST']}, format='json')
 
@@ -99,7 +99,7 @@ class PostTestCase(APITestCase):
         """
         c = APIClient()
         c.login(username='Joe', password='Joe')
-        url = reverse('new')
+        url = reverse('new_post')
         response = c.post(
             url, {'title': 'stuff', 'content': '', 'hubs': ['', 'hubs', 'FIRST']}, format='json')
 
@@ -112,7 +112,7 @@ class PostTestCase(APITestCase):
         """
         c = APIClient()
         c.login(username='Joe', password='Joe')
-        url = reverse('new')
+        url = reverse('new_post')
         response = c.post(
             url, {'title': 'x' * 66, 'content': 'stuff', 'hubs': ['', 'hubs', 'FIRST']}, format='json')
         self.assertDictEqual(loads(response.content), {'errors': {
