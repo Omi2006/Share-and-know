@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { screen, render, act } from '@testing-library/react';
 import { HashRouter } from 'react-router-dom';
-import { LoggedinProvider } from '../../components/Auth/LoggedInContext';
-import SidebarContent from '../../components/General/SidebarContent';
+import { LoggedInProvider } from '../../components/Auth';
+import { SidebarContent } from '../../components/General';
+import { ToggleLoggedInProvider } from '../../components/Auth';
 import userEvent from '@testing-library/user-event';
-import { ToggleLoggedinProvider } from '../../components/Auth/ToggleLoginContext';
 
 global.fetch = jest.fn(() =>
     Promise.resolve({
@@ -19,14 +19,14 @@ function TestWrapper(props) {
     const [loggedIn, setLoggedIn] = useState(props.loggedIn);
 
     return (
-        <LoggedinProvider value={loggedIn}>
-            <ToggleLoggedinProvider value={setLoggedIn}>
+        <LoggedInProvider value={loggedIn}>
+            <ToggleLoggedInProvider value={setLoggedIn}>
                 <HashRouter>
                     <SidebarContent style={{}} toggleSidebar={() => {}} />
                     <h1>{loggedIn}</h1>
                 </HashRouter>
-            </ToggleLoggedinProvider>
-        </LoggedinProvider>
+            </ToggleLoggedInProvider>
+        </LoggedInProvider>
     );
 }
 

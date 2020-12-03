@@ -1,8 +1,8 @@
 import React from 'react';
 import { screen, render, waitFor, act } from '@testing-library/react';
-import Post from '../../components/Post/Post';
+import { Post } from '../../components/Post';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { LoggedinProvider } from '../../components/Auth/LoggedInContext';
+import { LoggedInProvider } from '../../components/Auth';
 
 global.fetch = jest.fn(() =>
     Promise.resolve({
@@ -33,13 +33,13 @@ beforeEach(() => {
 function renderComponent(loggedIn) {
     render(
         <MemoryRouter initialEntries={['/posts/A']}>
-            <LoggedinProvider value={loggedIn}>
+            <LoggedInProvider value={loggedIn}>
                 <Routes>
                     <Route path="/posts/:uuid">
                         <Post />
                     </Route>
                 </Routes>
-            </LoggedinProvider>
+            </LoggedInProvider>
         </MemoryRouter>
     );
 }

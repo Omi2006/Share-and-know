@@ -1,8 +1,8 @@
 import React from 'react';
 import { screen, render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import Register from '../../components/Auth/Register';
+import { Register } from '../../components/Auth';
 import { HashRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 
 global.fetch = jest.fn(() =>
     Promise.resolve({

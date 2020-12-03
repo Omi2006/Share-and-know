@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { screen, render, act } from '@testing-library/react';
+import { Search } from '../../components/General';
 import userEvent from '@testing-library/user-event';
-import Search from '../../components/General/Search';
 
 function TestWrapper({ type, page }) {
     const [search, setSearch] = useState('');

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { screen, render, act, waitFor } from '@testing-library/react';
+import { Dropdown } from '../../components/General';
 import userEvent from '@testing-library/user-event';
-import Dropdown from '../../components/General/Dropdown';
 
 function TestWrapper() {
     const [selected, setSelected] = useState(['date', 'Oldest']);

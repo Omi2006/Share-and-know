@@ -1,8 +1,8 @@
 import React from 'react';
 import { screen, render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { HashRouter } from 'react-router-dom';
-import PostForm from '../../components/Post/New';
+import { NewPost } from '../../components/Post';
+import userEvent from '@testing-library/user-event';
 
 global.fetch = jest.fn(() =>
     Promise.resolve({
@@ -19,7 +19,7 @@ describe('Testing new post', () => {
     test('Throws error when empty fields', async () => {
         render(
             <HashRouter>
-                <PostForm />
+                <NewPost />
             </HashRouter>
         );
         const submitInput = screen.getByDisplayValue('Create post');
@@ -35,7 +35,7 @@ describe('Testing new post', () => {
     test('Typing registers', () => {
         render(
             <HashRouter>
-                <PostForm />
+                <NewPost />
             </HashRouter>
         );
         const titleInput = screen.getByPlaceholderText('Title...');
@@ -49,7 +49,7 @@ describe('Testing new post', () => {
     test('Handles too long of a title', async () => {
         render(
             <HashRouter>
-                <PostForm />
+                <NewPost />
             </HashRouter>
         );
         const titleInput = screen.getByPlaceholderText('Title...');
@@ -64,7 +64,7 @@ describe('Testing new post', () => {
     test('Handles submission reject', async () => {
         render(
             <HashRouter>
-                <PostForm />
+                <NewPost />
             </HashRouter>
         );
         const submitInput = screen.getByDisplayValue('Create post');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
-import Row from '../../components/Post/Row';
+import { PostRow } from '../../components/Post';
 
 test('renders correctly', () => {
     const post = {
@@ -16,7 +16,7 @@ test('renders correctly', () => {
 
     render(
         <HashRouter>
-            <Row post={post} />
+            <PostRow post={post} />
         </HashRouter>
     );
     expect(screen.getByText('Hello there')).toBeInTheDocument();
@@ -28,7 +28,7 @@ test('renders correctly', () => {
 test('renders null post correctly', () => {
     render(
         <HashRouter>
-            <Row post={null} />
+            <PostRow post={null} />
         </HashRouter>
     );
     expect(screen.getByRole('status')).toBeInTheDocument();

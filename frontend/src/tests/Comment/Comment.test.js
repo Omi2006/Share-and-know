@@ -1,10 +1,10 @@
 import React from 'react';
 import { HashRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import Comment from '../../components/Comment/Comment';
-import { LoggedinProvider } from '../../components/Auth/LoggedInContext';
+import { Comment } from '../../components/Comment';
+import { LoggedInProvider } from '../../components/Auth';
 import { act } from 'react-dom/test-utils';
+import userEvent from '@testing-library/user-event';
 
 global.fetch = jest.fn(() =>
     Promise.resolve({
@@ -43,9 +43,9 @@ describe('Testing comments', () => {
     test('Renders correctly when logged in user is poster', () => {
         render(
             <HashRouter>
-                <LoggedinProvider value="joe">
+                <LoggedInProvider value="joe">
                     <Comment comment={commentData} />
-                </LoggedinProvider>
+                </LoggedInProvider>
             </HashRouter>
         );
         expect(screen.getByText('@joe')).toBeInTheDocument();
@@ -57,9 +57,9 @@ describe('Testing comments', () => {
     test('Renders correctly when logged in user is not poster', () => {
         render(
             <HashRouter>
-                <LoggedinProvider value="peter">
+                <LoggedInProvider value="peter">
                     <Comment comment={commentData} />
-                </LoggedinProvider>
+                </LoggedInProvider>
             </HashRouter>
         );
         expect(screen.getByText('@joe')).toBeInTheDocument();
@@ -71,9 +71,9 @@ describe('Testing comments', () => {
     test('Edit shows textarea, save, and cancel', async () => {
         render(
             <HashRouter>
-                <LoggedinProvider value="joe">
+                <LoggedInProvider value="joe">
                     <Comment comment={commentData} />
-                </LoggedinProvider>
+                </LoggedInProvider>
             </HashRouter>
         );
         act(() => {
@@ -87,9 +87,9 @@ describe('Testing comments', () => {
     test('Editing textbox and saving changes content', async () => {
         render(
             <HashRouter>
-                <LoggedinProvider value="joe">
+                <LoggedInProvider value="joe">
                     <Comment comment={commentData} />
-                </LoggedinProvider>
+                </LoggedInProvider>
             </HashRouter>
         );
         act(() => {
@@ -107,9 +107,9 @@ describe('Testing comments', () => {
     test('Cancel editing works', () => {
         render(
             <HashRouter>
-                <LoggedinProvider value="joe">
+                <LoggedInProvider value="joe">
                     <Comment comment={commentData} />
-                </LoggedinProvider>
+                </LoggedInProvider>
             </HashRouter>
         );
         act(() => {

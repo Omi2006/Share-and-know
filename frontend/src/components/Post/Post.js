@@ -19,7 +19,6 @@ export default function Post() {
         const getPost = async () => {
             const response = await fetch(`knowledge/post/${uuid}`);
             const result = await response.json();
-            console.log(result);
             setPost(result);
             setLikes(result.likes);
             setComments(result.comments);
