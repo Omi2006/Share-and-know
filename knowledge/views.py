@@ -1,4 +1,5 @@
 import os
+from django.db.models import query
 
 from django.http.response import Http404
 from django.shortcuts import HttpResponse
@@ -95,6 +96,49 @@ class Register(generics.GenericAPIView):
         return Response({'errors': serializer.errors})
 
 
+class HubItems(generics.ListAPIView):
+
+    pagination_class = ItemPagination
+    paginate_by = 6
+
+    def get_queryset(self):
+        type = Post
+        if self.request.query_params['type'] == 'hubs':
+            type = Hub
+        return type.objects.filter(hub=self.kwargs['id'], title__icontains=self.request.query_params['search']).order_by(self.request.query_params['sort'])
+
+    def get_serializer_class(self):
+        return HubPostSerializer if self.request.query_params['type'] == 'posts' else HubSerializer
+
+
+class OneHub(generics.RetrieveAPIView):
+    """
+    Get all details of a specific hub
+    """
+    queryset = Hub.objects.all()
+    serializer_class = HubSerializer
+    lookup_field = 'title'
+
+    def get_object(self):
+        return get_hub_from_path(self.request.query_params['list'].split(','))
+
+
+class NewHub(generics.CreateAPIView):
+    queryset = Hub.objects.all()
+    serializer_class = HubSerializer
+
+    def post(self, request):
+        data = request.dataf
+        data['hub'] = get_hub_from_path(request.data['hubs'])
+        del data['hubs']
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            serializer.create(data)
+            return Response({'message': 'created successfully'})
+        else:
+            return Response({'errors': serializer.errors})
+
+
 class NewPost(generics.CreateAPIView):
     """
     Creates a new post
@@ -115,21 +159,6 @@ class NewPost(generics.CreateAPIView):
             return Response({'message': 'posted successfully'})
         else:
             return Response({'errors': serializer.errors})
-
-
-class HubItems(generics.ListAPIView):
-
-    pagination_class = ItemPagination
-    paginate_by = 6
-
-    def get_queryset(self):
-        type = Post
-        if self.request.query_params['type'] == 'hubs':
-            type = Hub
-        return type.objects.filter(hub=self.kwargs['id'], title__icontains=self.request.query_params['search']).order_by(self.request.query_params['sort'])
-
-    def get_serializer_class(self):
-        return HubPostSerializer if self.request.query_params['type'] == 'posts' else HubSerializer
 
 
 class OnePost(generics.RetrieveAPIView):
@@ -190,18 +219,6 @@ class Comments(generics.UpdateAPIView):
             return Response({'message': 'Comment edited successfully'})
         else:
             return Response({'errors': serializer.errors})
-
-
-class OneHub(generics.RetrieveAPIView):
-    """
-    Get all details of a specific hub
-    """
-    queryset = Hub.objects.all()
-    serializer_class = HubSerializer
-    lookup_field = 'title'
-
-    def get_object(self):
-        return get_hub_from_path(self.request.query_params['list'].split(','))
 
 
 class Logout(generics.GenericAPIView):

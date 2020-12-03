@@ -12,9 +12,9 @@ export default function List({ comments }) {
     const transition = useTransition(commentList, comment => comment.id, {
         from: {
             opacity: 0,
-            transform: 'translateX(-100px)',
+            transform: 'translate3D(-100px,0,0)',
         },
-        enter: { opacity: 1, transform: 'translateX(0px)' },
+        enter: { opacity: 1, transform: 'translate3D(0,0,0)' },
         config: config.wobbly,
         immediate: prefersReducedMotion,
     });

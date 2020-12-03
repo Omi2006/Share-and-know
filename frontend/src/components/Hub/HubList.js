@@ -10,10 +10,10 @@ export default function HubList({ hubs }) {
     const prefersReducedMotion = usePrefersReducedMotion();
     const deckStyles = useSpring({
         from: {
-            transform: 'translateY(100px)',
+            transform: 'translate3D(0,100px,0)',
         },
         to: {
-            transform: 'translateY(0px)',
+            transform: 'translate3D(0,0,0)',
         },
         immediate: prefersReducedMotion,
     });

@@ -6,8 +6,9 @@ import '../../style/hub.css';
 
 export default function ToggleButton({ type, handleTypeChange }) {
     const prefersReducedMotion = usePrefersReducedMotion();
-    const { x, color } = useSpring({
-        x: type !== 'hubs' ? 100 : 0,
+    const { transform, color } = useSpring({
+        transform:
+            type !== 'hubs' ? 'translate3D(100%,0,0)' : 'translate3d(0,0,0)',
         color: type !== 'hubs' ? 'white' : 'black',
         config: { ...config.molasses, friction: 60 },
         immediate: prefersReducedMotion,
@@ -28,7 +29,7 @@ export default function ToggleButton({ type, handleTypeChange }) {
             <animated.div
                 className="type-toggle-div"
                 style={{
-                    transform: x.interpolate(x => `translateX(-${x}%)`),
+                    transform: transform,
                 }}
             />
         </Button>

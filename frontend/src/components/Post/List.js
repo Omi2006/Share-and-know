@@ -11,10 +11,10 @@ export default function PostList({ posts }) {
 
     const deckStyles = useSpring({
         from: {
-            transform: 'translateX(100px)',
+            transform: 'translate3D(100px,0,0)',
         },
         to: {
-            transform: 'translateX(0px)',
+            transform: 'translate3D(0,0,0)',
         },
         immediate: prefersReducedMotion,
     });
