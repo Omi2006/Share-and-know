@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { fetchCsrf } from '../Auth/fetchCsrf';
+import { fetchCsrf } from '../Auth';
 import { Form, FormGroup, Label, UncontrolledAlert } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import TextArea from 'react-autosize-textarea';

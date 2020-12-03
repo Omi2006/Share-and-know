@@ -1,17 +1,16 @@
 import React, { useState, useContext, useRef } from 'react';
-import { fetchCsrf } from './fetchCsrf';
 import { Link } from 'react-router-dom';
 import { Alert, Row, Col } from 'reactstrap';
 import { useForm } from 'react-hook-form';
-import '../../style/auth.css';
+import { ToggleLoggedInContext, fetchCsrf } from './';
 import loginImage from '../../images/undraw_Login_re_4vu2.svg';
-import ToggleLoggedinContext from './ToggleLoginContext';
+import '../../style/auth.css';
 
 export default function Login() {
     const [message, setMessage] = useState({});
     const submitInput = useRef();
     const { register, errors, handleSubmit } = useForm();
-    const handleLogin = useContext(ToggleLoggedinContext);
+    const handleLogin = useContext(ToggleLoggedInContext);
 
     const toggleMessage = () => setMessage({});
 

@@ -17,7 +17,7 @@ export default function HubPath() {
         setHubPath(newHubPath);
     }, [pathname]);
 
-    return hubPath ? (
+    return pathname.split('/').includes('hubs') && hubPath ? (
         <Breadcrumb style={{ paddingTop: 0 }}>
             {hubPath.map((hub, index) => (
                 <BreadcrumbItem>

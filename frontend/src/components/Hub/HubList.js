@@ -1,7 +1,7 @@
 import React from 'react';
 import { animated, useSpring } from 'react-spring';
 import { CardDeck } from 'reactstrap';
-import usePrefersReducedMotion from '../General/usePrefersReducedMotion';
+import { usePrefersReducedMotion } from '../General';
 import Row from './Row';
 
 const AnimatedDeck = animated(CardDeck);

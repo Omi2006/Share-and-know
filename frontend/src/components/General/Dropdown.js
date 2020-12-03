@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useSpring, animated, config } from 'react-spring';
-
+import { usePrefersReducedMotion } from './';
 import '../../style/dropdown.css';
-import usePrefersReducedMotion from './usePrefersReducedMotion';
 
 export default function Radio({ options, setSortBy, selected }) {
     const [isToggled, setIsToggled] = useState(false);

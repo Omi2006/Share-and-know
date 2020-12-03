@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LoggedinContext = React.createContext({});
-export const LoggedinProvider = LoggedinContext.Provider;
+const LoggedInContext = React.createContext({});
+export const LoggedInProvider = LoggedInContext.Provider;
 
-export default LoggedinContext;
+export default LoggedInContext;

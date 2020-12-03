@@ -1,7 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
-import { fetchCsrf } from './fetchCsrf';
 import { useForm } from 'react-hook-form';
-import ToggleLoggedinContext from './ToggleLoginContext';
+import { ToggleLoggedInContext, fetchCsrf } from './';
 import { Col, Alert, Row } from 'reactstrap';
 
 import ShareImage from '../../images/undraw_share_online_r87b.svg';
@@ -9,7 +8,7 @@ import '../../style/auth.css';
 
 export default function Register() {
     const { handleSubmit, errors, register, watch } = useForm();
-    const handleLogin = useContext(ToggleLoggedinContext);
+    const handleLogin = useContext(ToggleLoggedInContext);
     const submitButton = useRef();
     const [message, setMessage] = useState({});
 

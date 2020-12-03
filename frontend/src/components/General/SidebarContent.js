@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import LoggedInContext from '../Auth/LoggedInContext';
 import { Nav, NavItem } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,7 +9,7 @@ import {
     faSignOutAlt,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import ToggleLoggedinContext from '../Auth/ToggleLoginContext';
+import { ToggleLoggedInContext, LoggedInContext } from '../Auth';
 import { animated } from 'react-spring';
 import '../../style/navbar.css';
 
@@ -18,7 +17,7 @@ const AnimatedNav = animated(Nav);
 
 export default function SidebarContent({ toggleSidebar, style }) {
     const loggedIn = useContext(LoggedInContext);
-    const handleLogin = useContext(ToggleLoggedinContext);
+    const handleLogin = useContext(ToggleLoggedInContext);
     const navigate = useNavigate();
 
     const logout = async () => {

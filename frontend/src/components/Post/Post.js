@@ -1,19 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Alert, Badge, Spinner } from 'reactstrap';
+import { CommentList, NewComment } from '../Comment';
+import { LoggedInContext } from '../Auth';
+import { LikeButton } from './';
 import Markdown from 'react-markdown';
-import CommentList from '../Comment/List';
-import CommentForm from '../Comment/New';
-import LoggedInContext from '../Auth/LoggedInContext';
-import LikeButton from './Like';
-
 import '../../style/post.css';
 
 export default function Post() {
     const { uuid } = useParams();
     const [post, setPost] = useState({});
     const [likes, setLikes] = useState();
-    const [comments, setComments] = useState(post.comments);
+    const [comments, setComments] = useState([]);
     const loggedIn = useContext(LoggedInContext);
 
     useEffect(() => {
@@ -21,6 +19,7 @@ export default function Post() {
         const getPost = async () => {
             const response = await fetch(`knowledge/post/${uuid}`);
             const result = await response.json();
+            console.log(result);
             setPost(result);
             setLikes(result.likes);
             setComments(result.comments);
@@ -63,7 +62,7 @@ export default function Post() {
                 </div>
                 <hr />
                 {loggedIn ? (
-                    <CommentForm post={post.id} setComments={setComments} />
+                    <NewComment post={post.id} setComments={setComments} />
                 ) : (
                     <Alert color="danger">
                         You must be logged in to comment!

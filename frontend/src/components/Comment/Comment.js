@@ -6,11 +6,11 @@ import {
     faSave,
     faWindowClose,
 } from '@fortawesome/free-solid-svg-icons';
+import { fetchCsrf } from '../Auth';
 import TextArea from 'react-autosize-textarea';
 import Markdown from 'react-markdown';
 import LoggedinContext from '../Auth/LoggedInContext';
 import '../../style/post.css';
-import { fetchCsrf } from '../Auth/fetchCsrf';
 
 export default function Comment({ comment }) {
     const loggedIn = useContext(LoggedinContext);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import PostList from './Post/List';
+import { PostList } from './Post';
 import { Spinner } from 'reactstrap';
+import { Dropdown } from './General';
 import Paginate from './Pagination';
-import Dropdown from './General/Dropdown';
 
 export default function Home() {
     const [posts, setPosts] = useState(null);

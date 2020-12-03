@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import { Jumbotron, Spinner } from 'reactstrap';
-import PostList from '../Post/List';
-import HubList from './HubList';
+import { PostList } from '../Post';
+import { HubList, ToggleButton } from './';
+import { Search, Dropdown } from '../General';
 import Paginate from '../Pagination';
-import Search from '../General/Search';
-import Dropdown from '../General/Dropdown';
-import ToggleButton from './ToggleButton';
 import '../../style/hub.css';
 
 export default function Hub() {

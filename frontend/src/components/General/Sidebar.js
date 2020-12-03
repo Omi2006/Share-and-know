@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import SidebarContent from './SidebarContent';
+import { SidebarContent, usePrefersReducedMotion } from './';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon, faBars } from '@fortawesome/free-solid-svg-icons';
 import { useSpring } from 'react-spring';
-import usePrefersReducedMotion from './usePrefersReducedMotion';
 import './../../style/navbar.css';
 
 export default function Sidebar({ children }) {

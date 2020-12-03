@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { fetchCsrf } from '../Auth/fetchCsrf';
 import { Badge } from 'reactstrap';
-import LoggedinContext from '../Auth/LoggedInContext';
+import { LoggedInContext } from '../Auth';
 import '../../style/post.css';
 
 export default function LikeButton({ likes, uuid, setLikes }) {
-    const loggedIn = useContext(LoggedinContext);
+    const loggedIn = useContext(LoggedInContext);
     const usernames = likes.map(user => user.username);
 
     const handleLike = async () => {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import { animated, useSpring, config } from 'react-spring';
+import { usePrefersReducedMotion } from '../General';
 import '../../style/hub.css';
-import usePrefersReducedMotion from '../General/usePrefersReducedMotion';
 
 export default function ToggleButton({ type, handleTypeChange }) {
     const prefersReducedMotion = usePrefersReducedMotion();

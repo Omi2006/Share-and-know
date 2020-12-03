@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ToggleLoggedinContext = React.createContext({});
-export const ToggleLoggedinProvider = ToggleLoggedinContext.Provider;
+const ToggleLoggedInContext = React.createContext({});
+export const ToggleLoggedInProvider = ToggleLoggedInContext.Provider;
 
-export default ToggleLoggedinContext;
+export default ToggleLoggedInContext;

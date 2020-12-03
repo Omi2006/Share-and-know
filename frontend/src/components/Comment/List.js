@@ -1,7 +1,7 @@
 import React from 'react';
 import Comment from './Comment';
 import { useTransition, animated, config } from 'react-spring';
-import usePrefersReducedMotion from '../General/usePrefersReducedMotion';
+import { usePrefersReducedMotion } from '../General';
 import { useState, useEffect } from 'react';
 
 export default function List({ comments }) {

@@ -6,18 +6,18 @@ import {
     Outlet,
     Navigate,
 } from 'react-router-dom';
-import Register from './components/Auth/Register';
-import Login from './components/Auth/Login';
-import Sidebar from './components/General/Sidebar';
-import Post from './components/Post/Post';
-import PostForm from './components/Post/New';
+import {
+    Register,
+    Login,
+    LoggedInProvider,
+    ToggleLoggedInProvider,
+} from './components/Auth';
+import { Sidebar } from './components/General';
+import { Post, NewPost } from './components/Post';
+import { Hub, HubPath } from './components/Hub';
 import Home from './components/Home';
-import Hub from './components/Hub/Hub';
-import HubPath from './components/Hub/HubPath';
-import { LoggedinProvider } from './components/Auth/LoggedInContext';
-import { ToggleLoggedinProvider } from './components/Auth/ToggleLoginContext';
-import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 export default function App() {
     const [loggedIn, setLoggedIn] = useState(undefined);
@@ -34,8 +34,8 @@ export default function App() {
 
     return (
         <Router>
-            <LoggedinProvider value={loggedIn}>
-                <ToggleLoggedinProvider value={setLoggedIn}>
+            <LoggedInProvider value={loggedIn}>
+                <ToggleLoggedInProvider value={setLoggedIn}>
                     <Sidebar>
                         <div className="App">
                             <HubPath />
@@ -66,8 +66,8 @@ export default function App() {
                             </Routes>
                         </div>
                     </Sidebar>
-                </ToggleLoggedinProvider>
-            </LoggedinProvider>
+                </ToggleLoggedInProvider>
+            </LoggedInProvider>
         </Router>
     );
 }
@@ -94,7 +94,7 @@ function HubRoutes({ loggedIn }) {
                 <Route path="/" element={<Hub />} />
                 <Route
                     path="posts/new"
-                    element={loggedIn ? <PostForm /> : <Navigate to="/login" />}
+                    element={loggedIn ? <NewPost /> : <Navigate to="/login" />}
                 />
                 <Route path="posts/:uuid" element={<Post />} />
                 <Route

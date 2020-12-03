@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FormGroup, Form, Label, Alert } from 'reactstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { fetchCsrf } from '../Auth/fetchCsrf';
+import { fetchCsrf } from '../Auth';
 import TextArea from 'react-autosize-textarea';
 
 export default function PostForm() {
