@@ -66,6 +66,15 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
 
+class HubPostSerializer(serializers.ModelSerializer):
+    poster = UserSerializer(read_only=True)
+    date = serializers.ReadOnlyField(source='get_date')
+
+    class Meta:
+        model = Post
+        fields = ('id', 'title', 'content', 'poster', 'uuid', 'date')
+
+
 class PostSerializer(serializers.ModelSerializer):
     poster = UserSerializer(read_only=True)
     likes = UserSerializer(read_only=False, many=True, required=False)
@@ -81,7 +90,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'title', 'content', 'poster', 'uuid',
                   'date', 'comments', 'likes', 'hub')
-                  
+
     def get_fields(self):
         fields = super(PostSerializer, self).get_fields()
         fields['comments'] = CommentSerializer(many=True, required=False)

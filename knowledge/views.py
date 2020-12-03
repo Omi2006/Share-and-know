@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .serializers import HubSerializer, CommentSerializer, LoginSerializer, RegisterSerializer, PostSerializer, UserSerializer
+from .serializers import HubSerializer, CommentSerializer, LoginSerializer, RegisterSerializer, PostSerializer, UserSerializer, HubPostSerializer
 from .models import Hub, Post, Comment
 
 DEFAULT_PAGE = 1
@@ -129,7 +129,7 @@ class HubItems(generics.ListAPIView):
         return type.objects.filter(hub=self.kwargs['id'], title__icontains=self.request.query_params['search']).order_by(self.request.query_params['sort'])
 
     def get_serializer_class(self):
-        return PostSerializer if self.request.query_params['type'] == 'posts' else HubSerializer
+        return HubPostSerializer if self.request.query_params['type'] == 'posts' else HubSerializer
 
 
 class OnePost(generics.RetrieveAPIView):

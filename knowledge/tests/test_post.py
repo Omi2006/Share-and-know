@@ -40,9 +40,9 @@ class PostTestCase(APITestCase):
             'total': 1,
             'results': [
                 {'id': 2, 'title': 'Test2', 'content': 'Test2', 'poster': {'username': 'Pete', 'email': 'Pete'},
-                    'uuid': 'EFGH', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST', 'full_path': 'FIRST'}},
+                    'uuid': 'EFGH', 'date': 'now'},
                 {'id': 1, 'title': 'Test1', 'content': 'Test1', 'poster': {'username': 'Joe', 'email': 'Joe'},
-                    'uuid': 'ABCD', 'date': 'now', 'comments': [], 'likes': [], 'hub': {'id': 1, 'title': 'FIRST', 'date': 'now', 'description': 'FIRST', 'full_path': 'FIRST'}}
+                    'uuid': 'ABCD', 'date': 'now'}
             ]}
         )
 
