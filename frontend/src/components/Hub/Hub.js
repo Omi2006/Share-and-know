@@ -10,6 +10,7 @@ import '../../style/hub.css';
 export default function Hub() {
     const [hub, setHub] = useState(useLocation().state?.hub);
     const [sortBy, setSortBy] = useState(['-date', 'Newest']);
+    const [isLoading, setIsLoading] = useState(true);
     const [items, setItems] = useState(undefined);
     const [currentPage, setCurrentPage] = useState(1);
     const [type, setType] = useState('posts');
@@ -33,7 +34,7 @@ export default function Hub() {
     //Get items for given category and skip if category isn't ready
     useEffect(() => {
         //Reset the items to make the loading effect
-        setItems(undefined);
+        setIsLoading(true);
         //Only fetch if items aren't set and the hub isn't undefined
         if (hub !== undefined) {
             const getItems = async () => {
@@ -42,14 +43,17 @@ export default function Hub() {
                 );
                 const result = await response.json();
                 setItems(result);
+                setIsLoading(false);
             };
             getItems();
         }
     }, [hub, currentPage, type, search, sortBy]);
 
     const handleTypeChange = () => {
-        setType(type === 'posts' ? 'hubs' : 'posts');
+        //Set is loading here to prevent memory leaks
+        setIsLoading(true);
         //Set the sort by to newest to avoid invalid sort by in the hubs
+        setType(type === 'posts' ? 'hubs' : 'posts');
         setSortBy(['-date', 'Newest']);
         //Set the current page to avoid errors if the pages count is less than the current page
         setCurrentPage(1);
@@ -99,7 +103,7 @@ export default function Hub() {
                 setSortBy={setSortBy}
                 selected={sortBy[1]}
             />
-            {items ? (
+            {!isLoading ? (
                 type === 'posts' ? (
                     <>
                         <PostList posts={items.results} />

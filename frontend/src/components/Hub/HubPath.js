@@ -20,7 +20,7 @@ export default function HubPath() {
     return pathname.split('/').includes('hubs') && hubPath ? (
         <Breadcrumb style={{ paddingTop: 0 }}>
             {hubPath.map((hub, index) => (
-                <BreadcrumbItem>
+                <BreadcrumbItem key={index}>
                     <Link to={`/hubs/${hubPath.slice(0, index + 1).join('/')}`}>
                         {hub}
                     </Link>

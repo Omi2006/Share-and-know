@@ -21,7 +21,7 @@ export default function HubList({ hubs }) {
     return (
         <AnimatedDeck style={deckStyles} className="deck">
             {hubs.map(hub => (
-                <Row hub={hub} />
+                <Row hub={hub} key={hub.id} />
             ))}
         </AnimatedDeck>
     );
