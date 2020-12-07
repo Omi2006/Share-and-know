@@ -83,10 +83,10 @@ export default function Hub() {
                 }}
             >
                 <hr />
-                <h2 className="display-3 hub-name">
+                <h3 className="display-3 hub-name">
                     {title.replace(/-/g, ' ')}
-                </h2>
-                <p className="lead text-md-left">{hub.description}</p>
+                </h3>
+                <p style={{ fontSize: '1.5rem' }}>{hub.description}</p>
                 <hr className="my-2" />
                 <div className="d-flex justify-content-between">
                     <ToggleButton
@@ -96,14 +96,18 @@ export default function Hub() {
                     {loggedIn && type === 'posts' ? (
                         /*Ensure this isn't a source hub */
                         hub.full_path.includes('/') && (
-                            <Link to="posts/new">+ New post</Link>
+                            <Link to="posts/new" className="lead">
+                                + New post
+                            </Link>
                         )
                     ) : (
-                        <Link to="new">+ New Hub</Link>
+                        <Link to="new" className="lead">
+                            + New Hub
+                        </Link>
                     )}
                 </div>
             </Jumbotron>
-            <div className="content-div">
+            <div className="wrapper">
                 <Search
                     setSearch={setSearch}
                     type={type}

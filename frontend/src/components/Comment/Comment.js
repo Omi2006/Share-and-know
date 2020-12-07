@@ -40,7 +40,7 @@ export default function Comment({ comment }) {
         toggleEditing();
     };
     return (
-        <Card style={{ margin: '20px' }}>
+        <Card style={{ marginTop: '20px', marginBottom: '20px' }}>
             <CardHeader
                 style={{
                     backgroundColor: 'rgb(203, 223, 230)',

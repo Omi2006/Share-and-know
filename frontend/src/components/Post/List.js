@@ -27,9 +27,9 @@ export default function PostList({ posts }) {
             ))}
         </AnimatedDeck>
     ) : (
-        <h3>
+        <h5>
             Looks like there are no posts here.{' '}
             <Link to="posts/new">Be the first one to make a post!</Link>
-        </h3>
+        </h5>
     );
 }

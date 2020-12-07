@@ -248,6 +248,9 @@ def get_hub_from_path(hubs: str) -> Hub:
     """
     # Remove the first 2 items since they are '' and 'hub'
     hubs_list = hubs[2:]
+    # Remove any extra ''
+    if '' in hubs_list:
+        hubs_list.remove('')
     # Remove last 2 items if there is a posts there because it will be a path like posts/new or posts/ABCDEFGH
     if 'posts' in hubs_list:
         del hubs_list[-2:]

@@ -55,7 +55,7 @@ export default function Post() {
                 <h2 id="post-title">{post.title}</h2>
             </div>
             <hr />
-            <div style={{ maxWidth: '1024px', margin: 'auto' }}>
+            <div className="wrapper">
                 <div id="post-div">
                     <Markdown>{post.content}</Markdown>
                 </div>
@@ -67,7 +67,6 @@ export default function Post() {
                         You must be logged in to comment!
                     </Alert>
                 )}
-                <hr />
                 {comments && comments.length > 0 ? (
                     <CommentList comments={comments} />
                 ) : (

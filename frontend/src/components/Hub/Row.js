@@ -18,7 +18,7 @@ export default function Row({ hub }) {
     const goToHub = () => navigate(hub.title);
 
     return (
-        <Col md="6" style={{ marginBottom: '30px' }}>
+        <Col md="12" style={{ marginBottom: '30px' }}>
             <Card onClick={goToHub} title="Go to hub" className="hover-card">
                 <CardHeader className="back-green">
                     <CardTitle>

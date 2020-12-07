@@ -20,15 +20,15 @@ export default function HubList({ hubs }) {
     });
 
     return hubs.length > 0 ? (
-        <AnimatedDeck style={deckStyles} className="deck">
+        <AnimatedDeck style={deckStyles} className="deck wrapper">
             {hubs.map(hub => (
                 <Row hub={hub} key={hub.id} />
             ))}
         </AnimatedDeck>
     ) : (
-        <h3>
+        <h5>
             Looks like there are no hubs here.{' '}
             <Link to="new">Be the first one to make a hub!</Link>
-        </h3>
+        </h5>
     );
 }

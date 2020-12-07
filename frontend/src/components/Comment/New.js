@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { fetchCsrf } from '../Auth';
-import { Form, FormGroup, Label, UncontrolledAlert } from 'reactstrap';
+import { Form, FormGroup, UncontrolledAlert } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import TextArea from 'react-autosize-textarea';
 
@@ -68,14 +68,12 @@ export default function New({ setComments, post }) {
             )}
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <FormGroup>
-                    <Label for="content">Content</Label>
                     <TextArea
                         ref={register({
                             required: true,
                             validate: value => value.length < 257,
                         })}
                         placeholder="A valuable comment..."
-                        id="content"
                         name="content"
                         aria-label="Comment content"
                         className="form-control"
