@@ -24,12 +24,3 @@ test('renders correctly', () => {
     expect(screen.getByText('How are you?')).toBeInTheDocument();
     expect(screen.getByText('10 days ago')).toBeInTheDocument();
 });
-
-test('renders null post correctly', () => {
-    render(
-        <HashRouter>
-            <PostRow post={null} />
-        </HashRouter>
-    );
-    expect(screen.getByRole('status')).toBeInTheDocument();
-});
