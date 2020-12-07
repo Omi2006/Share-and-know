@@ -9,11 +9,13 @@ export default function HubPath() {
     useEffect(() => {
         //Make an array from the path
         let newHubPath = pathname.split('/');
-        //Remove those 2 from the path
-        newHubPath = newHubPath.filter(path => !['', 'hubs'].includes(path));
-        //Remove the last two items if posts is there
+        //Remove those 3 from the path
         if (newHubPath[newHubPath.length - 2] === 'posts')
             newHubPath.splice(-2);
+        newHubPath = newHubPath.filter(
+            path => !['', 'hubs', 'new'].includes(path)
+        );
+        //Remove the last two items if posts is there
         setHubPath(newHubPath);
     }, [pathname]);
 

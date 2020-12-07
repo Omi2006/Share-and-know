@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import { Jumbotron, Spinner } from 'reactstrap';
 import { PostList } from '../Post';
 import { HubList, ToggleButton } from './';
 import { Search, Dropdown } from '../General';
+import { LoggedInContext } from '../Auth';
 import Paginate from '../Pagination';
 import '../../style/hub.css';
 
@@ -16,13 +17,14 @@ export default function Hub() {
     const [type, setType] = useState('posts');
     const [search, setSearch] = useState('');
     const { title } = useParams();
+    const loggedIn = useContext(LoggedInContext);
     const pathlist = useLocation().pathname.split('/');
 
     useEffect(() => {
         if (!hub) {
             const getHub = async () => {
                 const response = await fetch(
-                    `knowledge/hub/details/${title}?list=${pathlist}`
+                    `/knowledge/hub/details/${title}?list=${pathlist}`
                 );
                 const result = await response.json();
                 setHub(result);
@@ -39,7 +41,7 @@ export default function Hub() {
         if (hub !== undefined) {
             const getItems = async () => {
                 const response = await fetch(
-                    `knowledge/hub/items/${hub.id}?sort=${sortBy[0]}&page=${currentPage}&type=${type}&search=${search}`
+                    `/knowledge/hub/items/${hub.id}?sort=${sortBy[0]}&page=${currentPage}&type=${type}&search=${search}`
                 );
                 const result = await response.json();
                 setItems(result);
@@ -69,6 +71,8 @@ export default function Hub() {
 
     return !hub ? (
         <Spinner color="primary" />
+    ) : hub.error ? (
+        <h3>We couldn't find this hub.</h3>
     ) : (
         <div style={{ overflow: 'hidden' }}>
             <Jumbotron
@@ -79,7 +83,9 @@ export default function Hub() {
                 }}
             >
                 <hr />
-                <h2 className="display-3 hub-name">{title}</h2>
+                <h2 className="display-3 hub-name">
+                    {title.replace(/-/g, ' ')}
+                </h2>
                 <p className="lead text-md-left">{hub.description}</p>
                 <hr className="my-2" />
                 <div className="d-flex justify-content-between">
@@ -87,38 +93,51 @@ export default function Hub() {
                         type={type}
                         handleTypeChange={handleTypeChange}
                     />
-                    {/*Ensure this isn't a source hub */}
-                    {hub.full_path.includes('/') && (
-                        <Link to="posts/new">+ New post</Link>
+                    {loggedIn && type === 'posts' ? (
+                        /*Ensure this isn't a source hub */
+                        hub.full_path.includes('/') && (
+                            <Link to="posts/new">+ New post</Link>
+                        )
+                    ) : (
+                        <Link to="new">+ New Hub</Link>
                     )}
                 </div>
             </Jumbotron>
-            <Search
-                setSearch={setSearch}
-                type={type}
-                setCurrentPage={setCurrentPage}
-            />
-            <Dropdown
-                options={options}
-                setSortBy={setSortBy}
-                selected={sortBy[1]}
-            />
-            {!isLoading ? (
-                type === 'posts' ? (
-                    <>
-                        <PostList posts={items.results} />
-                        <Paginate
-                            currentPage={currentPage}
-                            last={items.total}
-                            setCurrentPage={setCurrentPage}
-                        />
-                    </>
+            <div className="content-div">
+                <Search
+                    setSearch={setSearch}
+                    type={type}
+                    setCurrentPage={setCurrentPage}
+                />
+                <Dropdown
+                    options={options}
+                    setSortBy={setSortBy}
+                    selected={sortBy[1]}
+                />
+                {!isLoading ? (
+                    type === 'posts' ? (
+                        <>
+                            <PostList posts={items.results} />
+                            <Paginate
+                                currentPage={currentPage}
+                                last={items.total}
+                                setCurrentPage={setCurrentPage}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <HubList hubs={items.results} />
+                            <Paginate
+                                currentPage={currentPage}
+                                last={items.total}
+                                setCurrentPage={setCurrentPage}
+                            />
+                        </>
+                    )
                 ) : (
-                    <HubList hubs={items.results} />
-                )
-            ) : (
-                <Spinner color="primary" />
-            )}
+                    <Spinner color="primary" />
+                )}
+            </div>
         </div>
     );
 }

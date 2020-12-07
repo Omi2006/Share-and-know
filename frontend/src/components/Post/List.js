@@ -1,7 +1,8 @@
 import React from 'react';
-import Row from './Row';
+import { PostRow } from './';
 import { CardDeck } from 'reactstrap';
 import { animated, useSpring } from 'react-spring';
+import { Link } from 'react-router-dom';
 import { usePrefersReducedMotion } from '../General';
 
 const AnimatedDeck = animated(CardDeck);
@@ -19,11 +20,16 @@ export default function PostList({ posts }) {
         immediate: prefersReducedMotion,
     });
     //Handle no posts, temporal fix as for the poster, handle the type rerender before the items update
-    return posts[0]?.poster ? (
+    return posts.length > 0 ? (
         <AnimatedDeck style={deckStyles} className="deck">
             {posts.map(post => (
-                <Row post={post} key={post.id} />
+                <PostRow post={post} key={post.id} />
             ))}
         </AnimatedDeck>
-    ) : null;
+    ) : (
+        <h3>
+            Looks like there are no posts here.{' '}
+            <Link to="posts/new">Be the first one to make a post!</Link>
+        </h3>
+    );
 }

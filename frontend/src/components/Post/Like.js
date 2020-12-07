@@ -11,7 +11,7 @@ export default function LikeButton({ likes, uuid, setLikes }) {
     const usernames = likes.map(user => user.username);
 
     const handleLike = async () => {
-        const result = await fetchCsrf(`knowledge/post/${uuid}`, {}, 'PUT');
+        const result = await fetchCsrf(`/knowledge/post/${uuid}`, {}, 'PUT');
         if (result.errors) {
             alert('An error has occured. Try again later.');
         } else {

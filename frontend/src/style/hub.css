@@ -53,4 +53,19 @@
     margin-bottom: 0px;
     border-bottom: 1px solid #b5d8df;
     font-size: 1.5em;
+    background-color: rgb(208 247 255);
+}
+
+@media screen and (min-width: 1440px) {
+    .content-div {
+        max-width: calc(100% - 400px);
+        margin: auto;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .content-div {
+        max-width: calc(100% - 160px);
+        margin: auto;
+    }
 }

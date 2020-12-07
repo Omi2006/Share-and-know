@@ -22,7 +22,7 @@ export default function Row({ post }) {
     return !post ? (
         <Spinner color="primary" />
     ) : (
-        <Col lg="6" xl="4" style={{ marginBottom: '30px' }}>
+        <Col md="6" style={{ marginBottom: '30px' }}>
             <Card className="hover-card" onClick={goToPost} title="See more">
                 <CardHeader style={{ backgroundColor: '#68d8ee' }}>
                     <CardTitle>

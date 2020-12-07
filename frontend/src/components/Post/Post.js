@@ -17,7 +17,7 @@ export default function Post() {
     useEffect(() => {
         //get the post and set the comments
         const getPost = async () => {
-            const response = await fetch(`knowledge/post/${uuid}`);
+            const response = await fetch(`/knowledge/post/${uuid}`);
             const result = await response.json();
             setPost(result);
             setLikes(result.likes);

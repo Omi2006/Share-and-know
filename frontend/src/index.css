@@ -52,14 +52,47 @@ center {
 .deck {
     padding: 10px 1.6rem;
     width: 100%;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .hover-card:hover {
     transform: scale(1.01);
 }
 
+h3 {
+    text-align: center;
+}
+
 .hover-card {
     margin: 0px;
     cursor: pointer;
+}
+
+.input {
+    border: none !important;
+    border-bottom: 1px solid #707375 !important;
+    border-radius: 0;
+    padding: 0 !important;
+    margin-bottom: 20px;
+    background: transparent !important;
+    transition: border-color 0.3s ease-in !important;
+}
+
+.input:focus {
+    box-shadow: none !important;
+    border-bottom: 2px solid #4dd1e1 !important;
+    backface-visibility: hidden !important;
+}
+
+.error-message {
+    color: #bf1650;
+}
+
+.error-message::before {
+    content: '⚠ ';
+}
+
+.col-md-12 {
+    text-align: center;
+    padding: 0px;
 }

@@ -140,4 +140,9 @@ class HubSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'date', 'description', 'full_path', 'hub')
 
     def create(self, validated_data):
+        hub = Hub.objects.get(id=validated_data['hub'])
+        validated_data['hub'] = hub
+        if Hub.objects.filter(hub=hub, title__iexact=validated_data['title'].lower()).exists():
+            raise serializers.ValidationError(
+                f'There is already a hub with this title in {hub.title}!', code="unique_hub")
         return Hub.objects.create(**validated_data)

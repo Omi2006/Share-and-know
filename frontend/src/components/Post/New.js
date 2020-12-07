@@ -32,7 +32,8 @@ export default function PostForm() {
     };
 
     return (
-        <div>
+        <div style={{ padding: '20px' }}>
+            <h3>New post</h3>
             {message.content && (
                 <Alert color={message.type} toggle={toggleMessage}>
                     {message.content}

@@ -1,8 +1,9 @@
 import React from 'react';
 import { animated, useSpring } from 'react-spring';
 import { CardDeck } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import { usePrefersReducedMotion } from '../General';
-import Row from './Row';
+import { Row } from './';
 
 const AnimatedDeck = animated(CardDeck);
 
@@ -18,11 +19,16 @@ export default function HubList({ hubs }) {
         immediate: prefersReducedMotion,
     });
 
-    return (
+    return hubs.length > 0 ? (
         <AnimatedDeck style={deckStyles} className="deck">
             {hubs.map(hub => (
                 <Row hub={hub} key={hub.id} />
             ))}
         </AnimatedDeck>
+    ) : (
+        <h3>
+            Looks like there are no hubs here.{' '}
+            <Link to="new">Be the first one to make a hub!</Link>
+        </h3>
     );
 }

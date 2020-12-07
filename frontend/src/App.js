@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-    HashRouter as Router,
+    BrowserRouter as Router,
     Route,
     Routes,
     Outlet,
@@ -14,7 +14,7 @@ import {
 } from './components/Auth';
 import { Sidebar } from './components/General';
 import { Post, NewPost } from './components/Post';
-import { Hub, HubPath } from './components/Hub';
+import { Hub, HubPath, NewHub } from './components/Hub';
 import Home from './components/Home';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -43,11 +43,23 @@ export default function App() {
                                 <Route path="/" element={<Home />} />
                                 <Route
                                     path="/register"
-                                    element={loggedIn ? <Home /> : <Register />}
+                                    element={
+                                        loggedIn ? (
+                                            <Navigate to="/" />
+                                        ) : (
+                                            <Register />
+                                        )
+                                    }
                                 />
                                 <Route
                                     path="/login"
-                                    element={loggedIn ? <Home /> : <Login />}
+                                    element={
+                                        loggedIn ? (
+                                            <Navigate to="/" />
+                                        ) : (
+                                            <Login />
+                                        )
+                                    }
                                 />
                                 <Route path="posts/:uuid" element={<Post />} />
                                 <Route path="/hubs/:title*" element={<Hubs />}>
@@ -56,6 +68,7 @@ export default function App() {
                                         path="posts/:uuid"
                                         element={<Post />}
                                     />
+                                    <Route path="new" element={<NewHub />} />
                                     <Route
                                         path=":title*"
                                         element={
@@ -97,6 +110,7 @@ function HubRoutes({ loggedIn }) {
                     element={loggedIn ? <NewPost /> : <Navigate to="/login" />}
                 />
                 <Route path="posts/:uuid" element={<Post />} />
+                <Route path="new" element={<NewHub />} />
                 <Route
                     path=":title*"
                     element={<HubRoutes loggedIn={loggedIn} />}

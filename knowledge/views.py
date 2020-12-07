@@ -1,4 +1,5 @@
 import os
+from django.core.exceptions import MultipleObjectsReturned
 from django.db.models import query
 
 from django.http.response import Http404
@@ -8,7 +9,7 @@ from django.views.generic import View
 from django.contrib.auth import login, logout
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, serializers
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -38,7 +39,7 @@ class FrontendURL(View):
     Render the frontend
     """
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         with open(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html')) as f:
             return HttpResponse(f.read())
 
@@ -120,7 +121,16 @@ class OneHub(generics.RetrieveAPIView):
     lookup_field = 'title'
 
     def get_object(self):
-        return get_hub_from_path(self.request.query_params['list'].split(','))
+        hub = get_hub_from_path(self.request.query_params['list'].split(','))
+        if isinstance(hub, Hub):
+            return hub
+        raise Http404
+
+    def handle_exception(self, exc):
+        if isinstance(exc, Http404):
+            return Response({'error': 'This post does not exist.'},)
+
+        return super(OnePost, self).handle_exception(exc)
 
 
 class NewHub(generics.CreateAPIView):
@@ -128,13 +138,13 @@ class NewHub(generics.CreateAPIView):
     serializer_class = HubSerializer
 
     def post(self, request):
-        data = request.dataf
-        data['hub'] = get_hub_from_path(request.data['hubs'])
+        data = request.data
+        data['hub'] = get_hub_from_path(request.data['hubs']).id
         del data['hubs']
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
-            serializer.create(data)
-            return Response({'message': 'created successfully'})
+            new_hub = serializer.create(data)
+            return Response(self.serializer_class(new_hub).data)
         else:
             return Response({'errors': serializer.errors})
 
@@ -241,13 +251,19 @@ def get_hub_from_path(hubs: str) -> Hub:
     # Remove last 2 items if there is a posts there because it will be a path like posts/new or posts/ABCDEFGH
     if 'posts' in hubs_list:
         del hubs_list[-2:]
+    # Remove new from the list
+    elif 'new' in hubs_list:
+        del hubs_list[-1]
     # Try to see if there is only one hub with the title
     try:
         current_hub = Hub.objects.get(title=hubs_list[-1])
     # If there is an error there are many with the same title
-    except:
+    except (Hub.DoesNotExist, MultipleObjectsReturned):
         # Go through the path list until we reach the last one
-        current_hub = Hub.objects.get(title=hubs_list.pop(0))
-        for hub in hubs_list:
-            current_hub = current_hub.sub_hubs.get(title=hub)
+        try:
+            current_hub = Hub.objects.get(title=hubs_list.pop(0))
+            for hub in hubs_list:
+                current_hub = current_hub.sub_hubs.get(title=hub)
+        except Hub.DoesNotExist:
+            return None
     return current_hub

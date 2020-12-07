@@ -22,8 +22,8 @@ export default function Radio({ options, setSortBy, selected }) {
 
     const handleSetOption = option => {
         //Wait for items to disappear before toggle
-        setTimeout(toggleDropdown, 0.01);
         setSortBy(option);
+        toggleDropdown();
     };
 
     return (

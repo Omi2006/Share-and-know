@@ -22,7 +22,7 @@ export default function Row({ hub }) {
             <Card onClick={goToHub} title="Go to hub" className="hover-card">
                 <CardHeader className="back-green">
                     <CardTitle>
-                        <h5>{hub.title}</h5>
+                        <h5>{hub.title.replace(/-/g, ' ')}</h5>
                     </CardTitle>
                     <CardSubtitle>
                         <p style={{ fontSize: '0.85em' }}>Made {hub.date}</p>

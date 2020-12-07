@@ -47,7 +47,7 @@ class Hub(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     hub = models.ForeignKey(
         'Hub', on_delete=models.CASCADE, related_name='sub_hubs', null=True)
-    description = models.CharField(max_length=60)
+    description = models.CharField(max_length=100)
 
     def get_date(self) -> str:
 
