@@ -15,6 +15,7 @@ export default function HubPath() {
         newHubPath = newHubPath.filter(
             path => !['', 'hubs', 'new'].includes(path)
         );
+        //Make the check again incase of a leading ''
         if (newHubPath[newHubPath.length - 2] === 'posts')
             newHubPath.splice(-2);
         //Remove the last two items if posts is there

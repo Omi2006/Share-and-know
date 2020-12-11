@@ -6,7 +6,6 @@ from ..models import User, Hub
 
 
 class HubTestCase(APITestCase):
-
     def setUp(self):
         user1 = User.objects.create(username='Joe', email='Joe')
         user1.set_password('Joe')
@@ -31,23 +30,30 @@ class HubTestCase(APITestCase):
 
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(loads(response.content), {
-            'total': 1,
-            'results': [
-                {'date': 'now',
-                 'description': 'THIRD',
-                 'full_path': 'FIRST/THIRD',
-                 'id': 3,
-                 'hub': 1,
-                 'title': 'THIRD'},
-                {'date': 'now',
-                 'description': 'SECOND',
-                 'full_path': 'FIRST/SECOND',
-                 'id': 2,
-                 'hub': 1,
-                 'title': 'SECOND'}
-            ]
-        })
+        self.assertDictEqual(
+            loads(response.content),
+            {
+                'total': 1,
+                'results': [
+                    {
+                        'date': 'now',
+                        'description': 'THIRD',
+                        'full_path': 'FIRST/THIRD',
+                        'id': 3,
+                        'hub': 1,
+                        'title': 'THIRD',
+                    },
+                    {
+                        'date': 'now',
+                        'description': 'SECOND',
+                        'full_path': 'FIRST/SECOND',
+                        'id': 2,
+                        'hub': 1,
+                        'title': 'SECOND',
+                    },
+                ],
+            },
+        )
 
     def test_hubs_sorting(self):
         """
@@ -58,23 +64,30 @@ class HubTestCase(APITestCase):
 
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(loads(response.content), {
-            'total': 1,
-            'results': [
-                {'date': 'now',
-                 'description': 'SECOND',
-                 'full_path': 'FIRST/SECOND',
-                 'id': 2,
-                 'hub': 1,
-                 'title': 'SECOND'},
-                {'date': 'now',
-                 'description': 'THIRD',
-                 'full_path': 'FIRST/THIRD',
-                 'id': 3,
-                 'hub': 1,
-                 'title': 'THIRD'},
-            ]
-        })
+        self.assertDictEqual(
+            loads(response.content),
+            {
+                'total': 1,
+                'results': [
+                    {
+                        'date': 'now',
+                        'description': 'SECOND',
+                        'full_path': 'FIRST/SECOND',
+                        'id': 2,
+                        'hub': 1,
+                        'title': 'SECOND',
+                    },
+                    {
+                        'date': 'now',
+                        'description': 'THIRD',
+                        'full_path': 'FIRST/THIRD',
+                        'id': 3,
+                        'hub': 1,
+                        'title': 'THIRD',
+                    },
+                ],
+            },
+        )
 
     def test_hub_search(self):
         """
@@ -85,17 +98,22 @@ class HubTestCase(APITestCase):
 
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(loads(response.content), {
-            'total': 1,
-            'results': [
-                {'date': 'now',
-                 'description': 'THIRD',
-                 'full_path': 'FIRST/THIRD',
-                 'id': 3,
-                 'hub': 1,
-                 'title': 'THIRD'}
-            ]
-        })
+        self.assertDictEqual(
+            loads(response.content),
+            {
+                'total': 1,
+                'results': [
+                    {
+                        'date': 'now',
+                        'description': 'THIRD',
+                        'full_path': 'FIRST/THIRD',
+                        'id': 3,
+                        'hub': 1,
+                        'title': 'THIRD',
+                    }
+                ],
+            },
+        )
 
     def test_get_hub_details(self):
         """
@@ -105,14 +123,17 @@ class HubTestCase(APITestCase):
         url = '/knowledge/hub/details/FIRST?list=,hubs,FIRST'
 
         response = c.get(url)
-        self.assertDictEqual(loads(response.content), {
-            'date': 'now',
-            'description': 'FIRST',
-            'full_path': 'FIRST',
-            'id': 1,
-            'hub': None,
-            'title': 'FIRST'
-        })
+        self.assertDictEqual(
+            loads(response.content),
+            {
+                'date': 'now',
+                'description': 'FIRST',
+                'full_path': 'FIRST',
+                'id': 1,
+                'hub': None,
+                'title': 'FIRST',
+            },
+        )
 
     def test_hub_finding(self):
         """
@@ -123,11 +144,14 @@ class HubTestCase(APITestCase):
 
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(loads(response.content), {
-            'date': 'now',
-            'description': 'FOURTH',
-            'full_path': 'FIRST/SECOND/SECOND',
-            'id': 4,
-            'hub': 2,
-            'title': 'SECOND'
-        })
+        self.assertDictEqual(
+            loads(response.content),
+            {
+                'date': 'now',
+                'description': 'FOURTH',
+                'full_path': 'FIRST/SECOND/SECOND',
+                'id': 4,
+                'hub': 2,
+                'title': 'SECOND',
+            },
+        )

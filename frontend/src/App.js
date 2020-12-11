@@ -68,7 +68,12 @@ export default function App() {
                                         path="posts/:uuid"
                                         element={<Post />}
                                     />
-                                    <Route path="new" element={<NewHub />} />
+                                    <Route
+                                        path="new"
+                                        element={
+                                            loggedIn ? <NewHub /> : <Login />
+                                        }
+                                    />
                                     <Route
                                         path=":title*"
                                         element={
@@ -107,10 +112,10 @@ function HubRoutes({ loggedIn }) {
                 <Route path="/" element={<Hub />} />
                 <Route
                     path="posts/new"
-                    element={loggedIn ? <NewPost /> : <Navigate to="/login" />}
+                    element={loggedIn ? <NewPost /> : <Login />}
                 />
                 <Route path="posts/:uuid" element={<Post />} />
-                <Route path="new" element={<NewHub />} />
+                <Route path="new" element={loggedIn ? <NewHub /> : <Login />} />
                 <Route
                     path=":title*"
                     element={<HubRoutes loggedIn={loggedIn} />}

@@ -14,7 +14,15 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .serializers import HubSerializer, CommentSerializer, LoginSerializer, RegisterSerializer, PostSerializer, UserSerializer, HubPostSerializer
+from .serializers import (
+    HubSerializer,
+    CommentSerializer,
+    LoginSerializer,
+    RegisterSerializer,
+    PostSerializer,
+    UserSerializer,
+    HubPostSerializer,
+)
 from .models import Hub, Post, Comment
 
 DEFAULT_PAGE = 1
@@ -27,10 +35,7 @@ class ItemPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
 
     def get_paginated_response(self, data):
-        return Response({
-            'total': self.page.paginator.num_pages,
-            'results': data
-        })
+        return Response({'total': self.page.paginator.num_pages, 'results': data})
 
 
 @method_decorator(cache_page(None), name='dispatch')
@@ -59,6 +64,7 @@ class Login(generics.GenericAPIView):
     """
     Handle user login
     """
+
     permission_classes = [permissions.AllowAny]
     serializer_class = LoginSerializer
 
@@ -71,7 +77,8 @@ class Login(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(
-            data=request.data, context={'request': request})
+            data=request.data, context={'request': request}
+        )
         if serializer.is_valid():
             user = serializer.validated_data['user']
             login(request, user)
@@ -83,12 +90,14 @@ class Register(generics.GenericAPIView):
     """
     Handle user registration
     """
+
     permission_classes = [permissions.AllowAny]
     serializer_class = RegisterSerializer
 
     def post(self, request):
         serializer = self.serializer_class(
-            data=request.data, context={'request': request})
+            data=request.data, context={'request': request}
+        )
         if serializer.is_valid():
             user = serializer.validated_data['user']
             login(request, user)
@@ -106,16 +115,23 @@ class HubItems(generics.ListAPIView):
         type = Post
         if self.request.query_params['type'] == 'hubs':
             type = Hub
-        return type.objects.filter(hub=self.kwargs['id'], title__icontains=self.request.query_params['search']).order_by(self.request.query_params['sort'])
+        return type.objects.filter(
+            hub=self.kwargs['id'], title__icontains=self.request.query_params['search']
+        ).order_by(self.request.query_params['sort'])
 
     def get_serializer_class(self):
-        return HubPostSerializer if self.request.query_params['type'] == 'posts' else HubSerializer
+        return (
+            HubPostSerializer
+            if self.request.query_params['type'] == 'posts'
+            else HubSerializer
+        )
 
 
 class OneHub(generics.RetrieveAPIView):
     """
     Get all details of a specific hub
     """
+
     queryset = Hub.objects.all()
     serializer_class = HubSerializer
     lookup_field = 'title'
@@ -128,12 +144,17 @@ class OneHub(generics.RetrieveAPIView):
 
     def handle_exception(self, exc):
         if isinstance(exc, Http404):
-            return Response({'error': 'This post does not exist.'},)
+            return Response(
+                {'error': 'This post does not exist.'},
+            )
 
         return super(OnePost, self).handle_exception(exc)
 
 
 class NewHub(generics.CreateAPIView):
+    """
+    Handles creating a new hub
+    """
     queryset = Hub.objects.all()
     serializer_class = HubSerializer
 
@@ -153,20 +174,20 @@ class NewPost(generics.CreateAPIView):
     """
     Creates a new post
     """
+
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Post.objects.all()
 
     def post(self, request):
         data = request.data
-        data['hub'] = HubSerializer(
-            get_hub_from_path(request.data['hubs'])).data
+        data['hub'] = HubSerializer(get_hub_from_path(request.data['hubs'])).data
         del data['hubs']
         data['poster'] = request.user
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
-            serializer.create(data)
-            return Response({'message': 'posted successfully'})
+            new_post = serializer.create(data)
+            return Response({'hub_path': self.serializer_class(new_post).data['hub']['full_path']})
         else:
             return Response({'errors': serializer.errors})
 
@@ -175,6 +196,7 @@ class OnePost(generics.RetrieveAPIView):
     """
     Get a specific post
     """
+
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = 'uuid'
@@ -182,7 +204,8 @@ class OnePost(generics.RetrieveAPIView):
     def put(self, request, uuid):
         post = Post.objects.get(uuid=uuid)
         serializer = self.serializer_class(
-            post, data={'likes': [{'username': request.user.username}]}, partial=True)
+            post, data={'likes': [{'username': request.user.username}]}, partial=True
+        )
         if serializer.is_valid():
             serializer.save()
             return Response({'likes': UserSerializer(post.likes.all(), many=True).data})
@@ -191,7 +214,9 @@ class OnePost(generics.RetrieveAPIView):
 
     def handle_exception(self, exc):
         if isinstance(exc, Http404):
-            return Response({'error': 'This post does not exist.'},)
+            return Response(
+                {'error': 'This post does not exist.'},
+            )
 
         return super(OnePost, self).handle_exception(exc)
 
@@ -200,6 +225,7 @@ class Comments(generics.UpdateAPIView):
     """
     Create and edit comments
     """
+
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Comment.objects.all()
@@ -209,7 +235,7 @@ class Comments(generics.UpdateAPIView):
         data = {
             'commenter': request.user,
             'post': str(request.data['post']),
-            'content': request.data['content']
+            'content': request.data['content'],
         }
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
@@ -222,8 +248,7 @@ class Comments(generics.UpdateAPIView):
         comment = Comment.objects.get(id=id)
         if comment.commenter != request.user:
             return Response({'errors': {'comment': 'You can not edit this post!'}})
-        serializer = self.serializer_class(
-            comment, data=request.data, partial=True)
+        serializer = self.serializer_class(comment, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({'message': 'Comment edited successfully'})

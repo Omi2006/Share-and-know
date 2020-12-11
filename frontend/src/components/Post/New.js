@@ -28,7 +28,7 @@ export default function PostForm() {
             return false;
         }
         submitButton.current.disabled = true;
-        navigate(-1);
+        navigate(`/hubs/${result.hub_path}`);
     };
 
     return (

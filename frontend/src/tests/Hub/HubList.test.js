@@ -1,52 +1,44 @@
 import React from 'react';
 import { HashRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
-import { PostList } from '../../components/Post';
+import { HubList } from '../../components/Hub';
 
-describe('Tests post list', () => {
+describe('Tests hub list functionality', () => {
     test('Renders correctly', () => {
-        const posts = [
+        const hubs = [
             {
-                id: '1',
+                id: 1,
                 title: 'Hello there',
-                poster: {
-                    username: 'General Kenobi',
-                },
-                content: 'How are you?',
                 date: '10 days ago',
-                uuid: 'ASJDJ34',
+                description: 'General Kenobi',
             },
             {
-                id: '2',
+                id: 2,
                 title: 'Hello there friend',
-                poster: {
-                    username: 'General Kennobi',
-                },
-                content: 'How are youu?',
+                description: 'General Kenobi',
                 date: '10 days agooo',
-                uuid: 'ASJDJ3434',
             },
         ];
 
         const { container } = render(
             <HashRouter>
-                <PostList posts={posts} />
+                <HubList hubs={hubs} />
             </HashRouter>
         );
         const list = container.firstChild;
         expect([...list.children]).toHaveLength(2);
     });
 
-    test('Renders correctly when no posts are present', () => {
-        const posts = [];
+    test('Renders correctly when no hubs are present', () => {
+        const hubs = [];
 
         render(
             <HashRouter>
-                <PostList posts={posts} />
+                <HubList hubs={hubs} />
             </HashRouter>
         );
         expect(
-            screen.getByText('Looks like there are no posts here.')
+            screen.getByText('Looks like there are no hubs here.')
         ).toBeInTheDocument();
     });
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Col, Form, FormGroup, Label, Row, Alert } from 'reactstrap';
+import { Form, FormGroup, Label, Alert } from 'reactstrap';
 import { fetchCsrf } from '../Auth';
 
 export default function NewHub() {
@@ -18,13 +18,11 @@ export default function NewHub() {
         //replace spaces with dashes
         data.title = data.title.replace(/ /g, '-');
         const result = await fetchCsrf('/knowledge/new/hub', data, 'POST');
-        console.log(result[0]);
-        if (result[0] !== undefined) {
+        if (result[0]) {
             setMessage(result[0]);
             return;
         }
         navigate(`/hubs/${result.full_path}`);
-        return;
     };
 
     return (
