@@ -12,6 +12,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
+import Identicon from 'react-identicons';
 import '../../style/post.css';
 
 export default function Row({ post }) {
@@ -25,7 +26,12 @@ export default function Row({ post }) {
                     <CardTitle>
                         <h5>{post.title}</h5>
                     </CardTitle>
-                    <CardSubtitle>By: {post.poster.username}</CardSubtitle>
+                    <CardSubtitle style={{ display: 'inline-flex' }}>
+                        <Identicon size="20" string={post.poster.username} />
+                        <h6 style={{ marginLeft: '10px' }}>
+                            {post.poster.username}
+                        </h6>
+                    </CardSubtitle>
                 </CardHeader>
                 <CardBody className="back-blue">
                     <CardText className="post-content">{post.content}</CardText>

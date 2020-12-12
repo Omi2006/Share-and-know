@@ -37,8 +37,6 @@ describe('Tests hub list functionality', () => {
                 <HubList hubs={hubs} />
             </HashRouter>
         );
-        expect(
-            screen.getByText('Looks like there are no hubs here.')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Nothing to see here!')).toBeInTheDocument();
     });
 });

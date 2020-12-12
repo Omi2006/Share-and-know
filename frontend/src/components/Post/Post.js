@@ -4,6 +4,7 @@ import { Alert, Badge, Spinner } from 'reactstrap';
 import { CommentList, NewComment } from '../Comment';
 import { LoggedInContext } from '../Auth';
 import { LikeButton } from './';
+import Identicon from 'react-identicons';
 import Markdown from 'react-markdown';
 import '../../style/post.css';
 
@@ -34,8 +35,13 @@ export default function Post() {
         )
     ) : (
         <div style={{ padding: '25px' }}>
-            <div>
-                <h4>{post.poster.username}</h4>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'inline-flex', marginBottom: '10px' }}>
+                    <Identicon size="33" string={post.poster.username} />
+                    <h3 style={{ marginLeft: '10px' }}>
+                        {post.poster.username}
+                    </h3>
+                </div>
                 <Link
                     to={{
                         pathname: `/hubs/${post.hub.full_path}`,

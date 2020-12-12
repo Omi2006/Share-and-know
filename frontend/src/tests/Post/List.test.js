@@ -45,8 +45,6 @@ describe('Tests post list', () => {
                 <PostList posts={posts} />
             </HashRouter>
         );
-        expect(
-            screen.getByText('Looks like there are no posts here.')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Nothing to see here!')).toBeInTheDocument();
     });
 });

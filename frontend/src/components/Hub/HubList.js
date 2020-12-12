@@ -1,7 +1,6 @@
 import React from 'react';
 import { animated, useSpring } from 'react-spring';
 import { CardDeck } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import { usePrefersReducedMotion } from '../General';
 import { Row } from './';
 
@@ -26,9 +25,8 @@ export default function HubList({ hubs }) {
             ))}
         </AnimatedDeck>
     ) : (
-        <h5>
-            Looks like there are no hubs here.{' '}
-            <Link to="new">Be the first one to make a hub!</Link>
+        <h5 style={{ margin: '20px', textAlign: 'center' }}>
+            Nothing to see here!
         </h5>
     );
 }

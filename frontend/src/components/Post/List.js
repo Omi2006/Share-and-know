@@ -2,7 +2,6 @@ import React from 'react';
 import { PostRow } from './';
 import { CardDeck } from 'reactstrap';
 import { animated, useSpring } from 'react-spring';
-import { Link } from 'react-router-dom';
 import { usePrefersReducedMotion } from '../General';
 
 const AnimatedDeck = animated(CardDeck);
@@ -27,9 +26,8 @@ export default function PostList({ posts }) {
             ))}
         </AnimatedDeck>
     ) : (
-        <h5>
-            Looks like there are no posts here.{' '}
-            <Link to="posts/new">Be the first one to make a post!</Link>
+        <h5 style={{ margin: '20px', textAlign: 'center' }}>
+            Nothing to see here!
         </h5>
     );
 }

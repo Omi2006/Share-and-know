@@ -7,6 +7,7 @@ import {
     faWindowClose,
 } from '@fortawesome/free-solid-svg-icons';
 import { fetchCsrf } from '../Auth';
+import Identicon from 'react-identicons';
 import TextArea from 'react-autosize-textarea';
 import Markdown from 'react-markdown';
 import LoggedinContext from '../Auth/LoggedInContext';
@@ -49,7 +50,15 @@ export default function Comment({ comment }) {
                 }}
             >
                 <div>
-                    <h4>@{comment.commenter.username}</h4>
+                    <div style={{ display: 'inline-flex' }}>
+                        <Identicon
+                            size="28"
+                            string={comment.commenter.username}
+                        />
+                        <h4 style={{ marginLeft: '10px' }}>
+                            {comment.commenter.username}
+                        </h4>
+                    </div>
                     <CardText className="text-muted">{comment.date}</CardText>
                 </div>
                 {comment.commenter.username === loggedIn && (
