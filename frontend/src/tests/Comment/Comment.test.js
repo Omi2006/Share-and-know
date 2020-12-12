@@ -48,7 +48,7 @@ describe('Testing comments', () => {
                 </LoggedInProvider>
             </HashRouter>
         );
-        expect(screen.getByText('@joe')).toBeInTheDocument();
+        expect(screen.getByText('joe')).toBeInTheDocument();
         expect(screen.getByText('Joe')).toBeInTheDocument();
         expect(screen.getByText('10 days ago')).toBeInTheDocument();
         expect(screen.getByText('edit')).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe('Testing comments', () => {
                 </LoggedInProvider>
             </HashRouter>
         );
-        expect(screen.getByText('@joe')).toBeInTheDocument();
+        expect(screen.getByText('joe')).toBeInTheDocument();
         expect(screen.getByText('Joe')).toBeInTheDocument();
         expect(screen.getByText('10 days ago')).toBeInTheDocument();
         expect(screen.queryByText('edit')).toBeNull();

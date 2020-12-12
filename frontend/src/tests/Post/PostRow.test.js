@@ -21,7 +21,7 @@ describe('Tests whether a post row renders correctly', () => {
             </HashRouter>
         );
         expect(screen.getByText('Hello there')).toBeInTheDocument();
-        expect(screen.getByText('By: General Kenobi')).toBeInTheDocument();
+        expect(screen.getByText('General Kenobi')).toBeInTheDocument();
         expect(screen.getByText('How are you?')).toBeInTheDocument();
         expect(screen.getByText('10 days ago')).toBeInTheDocument();
     });
