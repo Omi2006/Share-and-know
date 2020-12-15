@@ -1,6 +1,5 @@
 import os
 from django.core.exceptions import MultipleObjectsReturned
-from django.db.models import query
 
 from django.http.response import Http404
 from django.shortcuts import HttpResponse
@@ -9,7 +8,7 @@ from django.views.generic import View
 from django.contrib.auth import login, logout
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
-from rest_framework import generics, permissions, serializers
+from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -23,7 +22,7 @@ from .serializers import (
     UserSerializer,
     HubPostSerializer,
 )
-from .models import Hub, Post, Comment
+from .models import Hub, Post, Comment, User
 
 DEFAULT_PAGE = 1
 DEFAULT_PAGE_SIZE = 6
@@ -155,6 +154,7 @@ class NewHub(generics.CreateAPIView):
     """
     Handles creating a new hub
     """
+
     queryset = Hub.objects.all()
     serializer_class = HubSerializer
 
@@ -187,7 +187,9 @@ class NewPost(generics.CreateAPIView):
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             new_post = serializer.create(data)
-            return Response({'hub_path': self.serializer_class(new_post).data['hub']['full_path']})
+            return Response(
+                {'hub_path': self.serializer_class(new_post).data['hub']['full_path']}
+            )
         else:
             return Response({'errors': serializer.errors})
 
@@ -252,6 +254,30 @@ class Comments(generics.UpdateAPIView):
         if serializer.is_valid():
             serializer.save()
             return Response({'message': 'Comment edited successfully'})
+        else:
+            return Response({'errors': serializer.errors})
+
+
+class Joined(generics.ListAPIView):
+    """
+    For getting a user's joined hubs
+    """
+
+    serializer_class = HubSerializer
+
+    def get_queryset(self):
+        return self.request.user.joined.all()
+
+    def put(self, request):
+        hub = Hub.objects.get(pk=request.data['hub'])
+        serializer = self.serializer_class(
+            hub, data={}, partial=True, context={'user': request.user}
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {'status': 'Leave' if hub in request.user.joined.all() else 'Join'}
+            )
         else:
             return Response({'errors': serializer.errors})
 

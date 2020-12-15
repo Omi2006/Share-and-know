@@ -10,6 +10,7 @@ from .views import (
     HubItems,
     NewPost,
     NewHub,
+    Joined,
 )
 
 
@@ -25,4 +26,5 @@ urlpatterns = [
     path('hub/details/<str:title>', OneHub.as_view(), name='hub'),
     path('hub/items/<int:id>', HubItems.as_view()),
     path('logout', Logout.as_view(), name='logout'),
+    path('joined', Joined.as_view(), name='joined'),
 ]

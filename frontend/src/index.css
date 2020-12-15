@@ -23,8 +23,11 @@ code {
     filter: invert(1) hue-rotate(180deg);
 }
 
-.spinner-border,
-center {
+.spinner-border {
+    margin-left: 46.5%;
+}
+
+.center {
     margin-left: 50%;
 }
 

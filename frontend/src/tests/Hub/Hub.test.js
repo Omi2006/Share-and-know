@@ -27,6 +27,8 @@ global.fetch = jest.fn(() =>
                         uuid: 'ASJDJ34',
                     },
                 ],
+                members: ['joe'],
+                status: 'Join',
             }),
     })
 );
@@ -46,17 +48,18 @@ function renderComponent() {
 }
 
 describe('Tests whether hub shows correctly', () => {
-    test('Renders correctly when hub is source hub', async () => {
+    test('Renders correctly when hub is source hub and user is in members', async () => {
         act(renderComponent);
         await waitFor(() =>
             expect(screen.getByText('FIRST')).toBeInTheDocument()
         );
         expect(screen.getByText('THE FIRST')).toBeInTheDocument();
         expect(screen.getByText('How are you?')).toBeInTheDocument();
+        expect(screen.getByText('Leave')).toBeInTheDocument();
         expect(screen.queryByText('+ New Post')).toBeNull();
     });
 
-    test('Renders correctly when hub is not source hub', async () => {
+    test('Renders correctly when hub is not source hub and user is not in members', async () => {
         fetch.mockImplementationOnce(() =>
             Promise.resolve({
                 json: () =>
@@ -77,6 +80,7 @@ describe('Tests whether hub shows correctly', () => {
                                 uuid: 'ASJDJ34',
                             },
                         ],
+                        members: ['je'],
                     }),
             })
         );
@@ -86,7 +90,18 @@ describe('Tests whether hub shows correctly', () => {
         );
         expect(screen.getByText('How are you?')).toBeInTheDocument();
         expect(screen.getByText('THE FIRST')).toBeInTheDocument();
+        expect(screen.getByText('Join')).toBeInTheDocument();
         expect(screen.queryByText('+ New post')).toBeInTheDocument();
+    });
+
+    test('Clicking Join button changes display', async () => {
+        act(renderComponent);
+        await waitFor(() =>
+            expect(screen.getByText('Leave')).toBeInTheDocument()
+        );
+        const joinButton = screen.getByText('Leave');
+        userEvent.click(joinButton);
+        await waitFor(() => expect(joinButton).toHaveTextContent('Join'));
     });
 
     test('Renders sub hubs when type changes', async () => {

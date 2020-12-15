@@ -1,29 +1,109 @@
-.App {
+body {
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #caf0f8;
+}
+
+a {
+    color: #b917b1;
+}
+
+a:hover {
+    color: #690a65;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+[data-theme='dark'] {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+.spinner-border,
+center {
+    margin-left: 50%;
+}
+
+/* For accessible link icons and buttons */
+.visually-hidden {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.footer {
+    justify-content: space-between;
+    width: 100%;
+    display: inline-flex;
+}
+
+.deck {
+    padding: 10px 1.6rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.hover-card:hover {
+    transform: scale(1.01);
+}
+
+.hover-card {
+    margin: 0px;
+    cursor: pointer;
+}
+
+.input {
+    border: none !important;
+    border-bottom: 1px solid #707375 !important;
+    border-radius: 0;
+    padding: 0 !important;
+    margin-bottom: 20px;
+    background: transparent !important;
+    transition: border-color 0.3s ease-in !important;
+}
+
+.input:focus {
+    box-shadow: none !important;
+    border-bottom: 2px solid #4dd1e1 !important;
+    backface-visibility: hidden !important;
+}
+
+.error-message {
+    color: #bf1650;
+}
+
+.error-message::before {
+    content: '⚠ ';
+}
+
+.col-md-12 {
     text-align: center;
-  }
-  
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 80px;
-  }
-  
-  .App-header {
-    background-color: #222;
-    height: 150px;
-    padding: 20px;
-    color: white;
-  }
-  
-  .App-intro {
-    font-size: large;
-  }
-  
-  @keyframes App-logo-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
+    padding: 0px;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns:
+        1fr
+        min(80ch, calc(100% - 20px))
+        1fr;
+}
+.wrapper > * {
+    grid-column: 2;
+}
+
+.card {
+    text-align: left;
+}

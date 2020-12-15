@@ -46,14 +46,14 @@ class CommentTestCase(APITestCase):
             [
                 {
                     'id': 2,
-                    'commenter': {'username': 'Peter', 'email': 'Peter@peter.com'},
+                    'commenter': {'username': 'Peter'},
                     'post': 1,
                     'content': 'Test2',
                     'date': 'now',
                 },
                 {
                     'id': 1,
-                    'commenter': {'username': 'Joe', 'email': 'Joe@joe.com'},
+                    'commenter': {'username': 'Joe'},
                     'post': 1,
                     'content': 'Test1',
                     'date': 'now',
@@ -61,9 +61,9 @@ class CommentTestCase(APITestCase):
             ],
         )
 
-    def test_create_new_post(self):
+    def test_create_new_comment(self):
         """
-        Tests whether creating a new post works
+        Tests whether creating a new Comment works
         """
         c = APIClient()
         c.login(username='Dan', password='Dan')
@@ -78,7 +78,7 @@ class CommentTestCase(APITestCase):
             {
                 'comment': {
                     'id': new_comment.id,
-                    'commenter': {'username': 'Dan', 'email': 'Dan@dan.com'},
+                    'commenter': {'username': 'Dan'},
                     'post': post.id,
                     'content': 'Test3',
                     'date': 'now',

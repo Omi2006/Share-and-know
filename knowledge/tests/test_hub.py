@@ -1,5 +1,6 @@
 from json import loads
 
+from django.urls.base import reverse
 from rest_framework.test import APIClient, APITestCase
 
 from ..models import User, Hub
@@ -42,6 +43,7 @@ class HubTestCase(APITestCase):
                         'id': 3,
                         'hub': 1,
                         'title': 'THIRD',
+                        'members': [],
                     },
                     {
                         'date': 'now',
@@ -50,6 +52,7 @@ class HubTestCase(APITestCase):
                         'id': 2,
                         'hub': 1,
                         'title': 'SECOND',
+                        'members': [],
                     },
                 ],
             },
@@ -76,6 +79,7 @@ class HubTestCase(APITestCase):
                         'id': 2,
                         'hub': 1,
                         'title': 'SECOND',
+                        'members': [],
                     },
                     {
                         'date': 'now',
@@ -84,6 +88,7 @@ class HubTestCase(APITestCase):
                         'id': 3,
                         'hub': 1,
                         'title': 'THIRD',
+                        'members': [],
                     },
                 ],
             },
@@ -110,6 +115,7 @@ class HubTestCase(APITestCase):
                         'id': 3,
                         'hub': 1,
                         'title': 'THIRD',
+                        'members': [],
                     }
                 ],
             },
@@ -132,6 +138,7 @@ class HubTestCase(APITestCase):
                 'id': 1,
                 'hub': None,
                 'title': 'FIRST',
+                'members': [],
             },
         )
 
@@ -153,5 +160,24 @@ class HubTestCase(APITestCase):
                 'id': 4,
                 'hub': 2,
                 'title': 'SECOND',
+                'members': [],
             },
         )
+
+    def test_hub_join(self):
+        """
+        Tests whether joining and leaving a hub works
+        """
+        c = APIClient()
+        c.login(username='Joe', password='Joe')
+        url = reverse('joined')
+        user = User.objects.get(username='Joe')
+        hub = Hub.objects.get(id=1)
+
+        response = c.put(url, {'hub': 1})
+        self.assertIn(hub, user.joined.all())
+        self.assertEqual(loads(response.content), {'status': 'Leave'})
+
+        response = c.put(url, {'hub': 1})
+        self.assertNotIn(hub, user.joined.all())
+        self.assertEqual(loads(response.content), {'status': 'Join'})

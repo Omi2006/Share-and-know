@@ -1,23 +1,26 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
-import { Jumbotron, Spinner } from 'reactstrap';
+import { Jumbotron, Spinner, Button } from 'reactstrap';
 import { PostList } from '../Post';
 import { HubList, ToggleButton } from './';
 import { Search, Dropdown } from '../General';
-import { LoggedInContext } from '../Auth';
+import { fetchCsrf, LoggedInContext } from '../Auth';
 import Paginate from '../Pagination';
 import '../../style/hub.css';
 
 export default function Hub() {
-    const [hub, setHub] = useState(useLocation().state?.hub);
+    const loggedIn = useContext(LoggedInContext);
+    const [hub, setHub] = useState(undefined);
+    const [joinStatus, setJoinStatus] = useState(
+        hub?.members.includes(loggedIn) ? 'Leave' : 'Join'
+    );
     const [sortBy, setSortBy] = useState(['-date', 'Newest']);
     const [isLoading, setIsLoading] = useState(true);
-    const [items, setItems] = useState(undefined);
+    const [items, setItems] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
     const [type, setType] = useState('posts');
     const [search, setSearch] = useState('');
     const { title } = useParams();
-    const loggedIn = useContext(LoggedInContext);
     const pathlist = useLocation().pathname.split('/');
 
     useEffect(() => {
@@ -28,10 +31,13 @@ export default function Hub() {
                 );
                 const result = await response.json();
                 setHub(result);
+                setJoinStatus(
+                    result.members.includes(loggedIn) ? 'Leave' : 'Join'
+                );
             };
             getHub();
         }
-    }, [title, hub, pathlist]);
+    }, [title, hub, pathlist, loggedIn]);
 
     //Get items for given category and skip if category isn't ready
     useEffect(() => {
@@ -49,7 +55,7 @@ export default function Hub() {
             };
             getItems();
         }
-    }, [hub, currentPage, type, search, sortBy]);
+    }, [hub, currentPage, type, search, sortBy, loggedIn]);
 
     const handleTypeChange = () => {
         //Set is loading here to prevent memory leaks
@@ -61,6 +67,19 @@ export default function Hub() {
         setCurrentPage(1);
     };
 
+    const joinHub = async () => {
+        const result = await fetchCsrf(
+            `/knowledge/joined`,
+            { hub: hub.id },
+            'PUT'
+        );
+        if (result.errors) {
+            alert('An error has occured. Please try again');
+            return;
+        }
+        setJoinStatus(result.status);
+    };
+
     const options = [
         ['-date', 'Newest'],
         ['date', 'Oldest'],
@@ -69,7 +88,7 @@ export default function Hub() {
     if (type === 'posts')
         options.push(['-likes', 'Most Liked'], ['likes', 'Least liked']);
 
-    return !hub ? (
+    return hub === undefined ? (
         <Spinner color="primary" />
     ) : hub.error ? (
         <h3>We couldn't find this hub.</h3>
@@ -86,6 +105,13 @@ export default function Hub() {
                 <h3 className="display-3 hub-name">
                     {title.replace(/-/g, ' ')}
                 </h3>
+                <Button
+                    onClick={joinHub}
+                    color="success"
+                    style={{ color: 'black' }}
+                >
+                    {joinStatus}
+                </Button>
                 <p style={{ fontSize: '1.5rem' }}>{hub.description}</p>
                 <hr className="my-2" />
                 <div className="d-flex justify-content-between">
@@ -118,29 +144,16 @@ export default function Hub() {
                     setSortBy={setSortBy}
                     selected={sortBy[1]}
                 />
-                {!isLoading ? (
-                    type === 'posts' ? (
-                        <>
-                            <PostList posts={items.results} />
-                            <Paginate
-                                currentPage={currentPage}
-                                last={items.total}
-                                setCurrentPage={setCurrentPage}
-                            />
-                        </>
-                    ) : (
-                        <>
-                            <HubList hubs={items.results} />
-                            <Paginate
-                                currentPage={currentPage}
-                                last={items.total}
-                                setCurrentPage={setCurrentPage}
-                            />
-                        </>
-                    )
+                {type === 'posts' ? (
+                    <PostList posts={items.results} isLoading={isLoading} />
                 ) : (
-                    <Spinner color="primary" />
+                    <HubList hubs={items.results} isLoading={isLoading} />
                 )}
+                <Paginate
+                    currentPage={currentPage}
+                    last={items.total}
+                    setCurrentPage={setCurrentPage}
+                />
             </div>
         </div>
     );

@@ -75,7 +75,7 @@ class RegisterSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ('username',)
         extra_kwargs = {'username': {'validators': []}}
 
 
@@ -150,10 +150,11 @@ class HubSerializer(serializers.ModelSerializer):
 
     date = serializers.ReadOnlyField(source="get_date")
     full_path = serializers.ReadOnlyField(source="get_full_path")
+    members = serializers.SlugRelatedField(slug_field='username', many=True, queryset=User.objects.all())
 
     class Meta:
         model = Hub
-        fields = ('id', 'title', 'date', 'description', 'full_path', 'hub')
+        fields = ('id', 'title', 'date', 'description', 'full_path', 'hub', 'members')
 
     def create(self, validated_data):
         hub = Hub.objects.get(id=validated_data['hub'])
@@ -166,3 +167,12 @@ class HubSerializer(serializers.ModelSerializer):
                 code="unique_hub",
             )
         return Hub.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        user = self.context['user']
+        if instance in user.joined.all():
+            user.joined.remove(instance)
+        else:
+            user.joined.add(instance)
+        instance.save()
+        return instance

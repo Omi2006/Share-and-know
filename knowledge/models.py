@@ -51,6 +51,7 @@ class Hub(models.Model):
     hub = models.ForeignKey(
         'Hub', on_delete=models.CASCADE, related_name='sub_hubs', null=True
     )
+    members = models.ManyToManyField(User, related_name='joined')
     description = models.CharField(max_length=100)
 
     def get_date(self) -> str:

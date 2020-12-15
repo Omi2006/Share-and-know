@@ -42,12 +42,7 @@ export default function Post() {
                         {post.poster.username}
                     </h3>
                 </div>
-                <Link
-                    to={{
-                        pathname: `/hubs/${post.hub.full_path}`,
-                        state: { hub: post.hub },
-                    }}
-                >
+                <Link to={`/hubs/${post.hub.full_path}`}>
                     <Badge color="primary">{post.hub.title}</Badge>
                 </Link>
                 {likes && (
