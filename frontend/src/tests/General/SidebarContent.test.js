@@ -39,7 +39,7 @@ describe('Testing sidebar', () => {
 
     test('Renders logged in urls correctly', () => {
         render(<TestWrapper loggedIn="omar" />);
-        expect(screen.getByText(/New post/)).toBeInTheDocument();
+        expect(screen.getByText(/Your hubs/)).toBeInTheDocument();
         expect(screen.getByText(/Logout/)).toBeInTheDocument();
     });
 

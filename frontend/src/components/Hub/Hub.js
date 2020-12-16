@@ -145,15 +145,24 @@ export default function Hub() {
                     selected={sortBy[1]}
                 />
                 {type === 'posts' ? (
-                    <PostList posts={items.results} isLoading={isLoading} />
+                    <>
+                        <PostList posts={items.results} isLoading={isLoading} />
+                        <Paginate
+                            currentPage={currentPage}
+                            last={items.total}
+                            setCurrentPage={setCurrentPage}
+                        />
+                    </>
                 ) : (
-                    <HubList hubs={items.results} isLoading={isLoading} />
+                    <>
+                        <HubList hubs={items.results} isLoading={isLoading} />
+                        <Paginate
+                            currentPage={currentPage}
+                            last={items.total}
+                            setCurrentPage={setCurrentPage}
+                        />
+                    </>
                 )}
-                <Paginate
-                    currentPage={currentPage}
-                    last={items.total}
-                    setCurrentPage={setCurrentPage}
-                />
             </div>
         </div>
     );

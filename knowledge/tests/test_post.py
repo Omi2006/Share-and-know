@@ -20,12 +20,17 @@ class PostTestCase(APITestCase):
         user2.save()
 
         h1 = Hub.objects.create(title='FIRST', hub=None, description='FIRST')
+        h2 = Hub.objects.create(title='SECOND', hub=None, description='second')
+        h2.members.add(user1)
 
         Post.objects.create(
             title='Test1', content='Test1', poster=user1, uuid='ABCD', hub=h1
         )
         Post.objects.create(
             title='Test2', content='Test2', poster=user2, uuid='EFGH', hub=h1
+        )
+        Post.objects.create(
+            title='Test3', content='Test3', poster=user1, uuid='ABCDEFGH', hub=h2
         )
 
     def test_get_all_posts(self):
@@ -49,6 +54,7 @@ class PostTestCase(APITestCase):
                         'poster': {'username': 'Pete'},
                         'uuid': 'EFGH',
                         'date': 'now',
+                        'path': 'FIRST',
                     },
                     {
                         'id': 1,
@@ -56,6 +62,7 @@ class PostTestCase(APITestCase):
                         'content': 'Test1',
                         'poster': {'username': 'Joe'},
                         'uuid': 'ABCD',
+                        'path': 'FIRST',
                         'date': 'now',
                     },
                 ],
@@ -186,3 +193,30 @@ class PostTestCase(APITestCase):
         self.assertEqual(post.likes.count(), 1)
         c.put(url)
         self.assertEqual(post.likes.count(), 0)
+
+    def test_joined_posts(self):
+        """
+        tests getting the posts of hubs a user joined
+        """
+        c = APIClient()
+        c.login(username='Joe', password='Joe')
+        url = '/knowledge/hub/items/1?page=1&sort=-date&type=posts&search=&filter=true'
+        response = c.get(url)
+
+        self.assertEqual(
+            loads(response.content),
+            {
+                'total': 1,
+                'results': [
+                    {
+                        'id': 3,
+                        'path': 'SECOND',
+                        'title': 'Test3',
+                        'date': 'now',
+                        'content': 'Test3',
+                        'poster': {'username': 'Joe'},
+                        'uuid': 'ABCDEFGH',
+                    }
+                ],
+            },
+        )

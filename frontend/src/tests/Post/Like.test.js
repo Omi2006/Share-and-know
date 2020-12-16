@@ -8,11 +8,7 @@ global.fetch = jest.fn(() =>
     Promise.resolve({
         json: () =>
             Promise.resolve({
-                likes: [
-                    { username: 'joe' },
-                    { username: 'peter' },
-                    { username: 'omar' },
-                ],
+                likes: ['joe', 'peter', 'omar'],
             }),
     })
 );
@@ -41,7 +37,7 @@ describe('Testing like functionlity', () => {
     });
 
     test('Liking increases like count', async () => {
-        const likes = [{ username: 'joe' }, { username: 'peter' }];
+        const likes = ['joe', 'peter'];
 
         render(<TestWrapper likes={likes} loggedIn="omar" />);
         const likeButton = screen.getByTitle('like button');
@@ -54,16 +50,12 @@ describe('Testing like functionlity', () => {
             Promise.resolve({
                 json: () =>
                     Promise.resolve({
-                        likes: [{ username: 'joe' }, { username: 'peter' }],
+                        likes: ['joe', 'peter'],
                     }),
             })
         );
 
-        const likes = [
-            { username: 'joe' },
-            { username: 'peter' },
-            { username: 'omar' },
-        ];
+        const likes = ['joe', 'peter', 'omar'];
 
         render(<TestWrapper likes={likes} loggedIn="omar" />);
         const likeButton = screen.getByTitle('like button');

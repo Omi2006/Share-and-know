@@ -10,6 +10,7 @@ describe('Tests whether a post row renders correctly', () => {
             poster: {
                 username: 'General Kenobi',
             },
+            path: '',
             content: 'How are you?',
             date: '10 days ago',
             uuid: 'ASJDJ34',

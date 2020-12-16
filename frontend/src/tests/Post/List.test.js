@@ -12,6 +12,7 @@ describe('Tests post list', () => {
                 poster: {
                     username: 'General Kenobi',
                 },
+                hub: { hub_path: '' },
                 content: 'How are you?',
                 date: '10 days ago',
                 uuid: 'ASJDJ34',
@@ -22,6 +23,7 @@ describe('Tests post list', () => {
                 poster: {
                     username: 'General Kennobi',
                 },
+                path: '',
                 content: 'How are youu?',
                 date: '10 days agooo',
                 uuid: 'ASJDJ3434',

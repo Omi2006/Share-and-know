@@ -17,7 +17,7 @@ import '../../style/post.css';
 
 export default function Row({ post }) {
     const navigate = useNavigate();
-    const goToPost = () => navigate(`posts/${post.uuid}`);
+    const goToPost = () => navigate(`/hubs/${post.path}/posts/${post.uuid}`);
 
     return (
         <Col md="12" style={{ marginBottom: '30px' }}>
@@ -38,7 +38,10 @@ export default function Row({ post }) {
                 </CardBody>
                 <CardFooter className="footer back-blue">
                     <p className="card-link">
-                        <Link to={`/posts/${post.uuid}`} aria-label="see more">
+                        <Link
+                            to={`/hubs/${post.path}/posts/${post.uuid}`}
+                            aria-label="see more"
+                        >
                             <FontAwesomeIcon icon={faArrowCircleRight} />
                             <span className="visually-hidden">See more</span>
                         </Link>

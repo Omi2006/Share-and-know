@@ -28,6 +28,9 @@ class Post(models.Model):
 
         return naturaltime(self.date)
 
+    def get_path(self) -> str:
+        return self.hub.get_full_path()
+
 
 class Comment(models.Model):
     content = models.CharField(max_length=256)

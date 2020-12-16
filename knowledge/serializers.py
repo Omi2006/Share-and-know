@@ -82,15 +82,18 @@ class UserSerializer(serializers.ModelSerializer):
 class HubPostSerializer(serializers.ModelSerializer):
     poster = UserSerializer(read_only=True)
     date = serializers.ReadOnlyField(source='get_date')
+    path = serializers.ReadOnlyField(source='get_path')
 
     class Meta:
         model = Post
-        fields = ('id', 'title', 'content', 'poster', 'uuid', 'date')
+        fields = ('id', 'title', 'content', 'poster', 'uuid', 'date', 'path')
 
 
 class PostSerializer(serializers.ModelSerializer):
     poster = UserSerializer(read_only=True)
-    likes = UserSerializer(read_only=False, many=True, required=False)
+    likes = serializers.SlugRelatedField(
+        slug_field='username', many=True, queryset=User.objects.all(), required=False
+    )
     date = serializers.ReadOnlyField(source='get_date')
 
     extra_kwargs = {'likes': {'validators': []}}
@@ -120,7 +123,7 @@ class PostSerializer(serializers.ModelSerializer):
         return Post.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        liker = User.objects.get(username=validated_data['likes'][0]['username'])
+        liker = validated_data['likes'][0]
         if liker in instance.likes.all():
             instance.likes.remove(liker)
         else:
@@ -150,7 +153,11 @@ class HubSerializer(serializers.ModelSerializer):
 
     date = serializers.ReadOnlyField(source="get_date")
     full_path = serializers.ReadOnlyField(source="get_full_path")
-    members = serializers.SlugRelatedField(slug_field='username', many=True, queryset=User.objects.all())
+    members = serializers.SlugRelatedField(
+        slug_field='username', many=True, queryset=User.objects.all()
+    )
+
+    extra_kwargs = {'likes': {'validators': []}}
 
     class Meta:
         model = Hub

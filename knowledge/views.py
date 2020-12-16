@@ -114,9 +114,16 @@ class HubItems(generics.ListAPIView):
         type = Post
         if self.request.query_params['type'] == 'hubs':
             type = Hub
-        return type.objects.filter(
-            hub=self.kwargs['id'], title__icontains=self.request.query_params['search']
-        ).order_by(self.request.query_params['sort'])
+        filters = {
+            'title__icontains': self.request.query_params['search'],
+        }
+        if self.request.query_params.get('filter'):
+            filters['hub__in'] = self.request.user.joined.all()
+        else:
+            filters['hub'] = self.kwargs['id']
+        return type.objects.filter(**filters).order_by(
+            self.request.query_params['sort']
+        )
 
     def get_serializer_class(self):
         return (
@@ -206,11 +213,11 @@ class OnePost(generics.RetrieveAPIView):
     def put(self, request, uuid):
         post = Post.objects.get(uuid=uuid)
         serializer = self.serializer_class(
-            post, data={'likes': [{'username': request.user.username}]}, partial=True
+            post, data={'likes': [request.user]}, partial=True
         )
         if serializer.is_valid():
             serializer.save()
-            return Response({'likes': UserSerializer(post.likes.all(), many=True).data})
+            return Response({'likes': self.serializer_class(post).data['likes']})
         else:
             return Response({'errors': serializer.errors})
 
@@ -258,7 +265,7 @@ class Comments(generics.UpdateAPIView):
             return Response({'errors': serializer.errors})
 
 
-class Joined(generics.ListAPIView):
+class Joined(generics.UpdateAPIView):
     """
     For getting a user's joined hubs
     """

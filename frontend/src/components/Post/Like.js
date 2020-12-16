@@ -8,7 +8,6 @@ import '../../style/post.css';
 
 export default function LikeButton({ likes, uuid, setLikes }) {
     const loggedIn = useContext(LoggedInContext);
-    const usernames = likes.map(user => user.username);
 
     const handleLike = async () => {
         const result = await fetchCsrf(`/knowledge/post/${uuid}`, {}, 'PUT');
@@ -27,13 +26,13 @@ export default function LikeButton({ likes, uuid, setLikes }) {
                         icon={faHeart}
                         title="like button"
                         className={
-                            usernames.includes(loggedIn)
+                            likes.includes(loggedIn)
                                 ? 'dislike-icon'
                                 : 'like-icon'
                         }
                     />
                     <span className="visually-hidden">
-                        {usernames.includes(loggedIn) ? 'Like' : 'Dislike'}
+                        {likes.includes(loggedIn) ? 'Like' : 'Dislike'}
                         the post
                     </span>
                 </button>

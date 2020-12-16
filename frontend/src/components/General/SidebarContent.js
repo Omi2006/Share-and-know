@@ -3,8 +3,8 @@ import { Nav, NavItem } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+    faArchway,
     faHome,
-    faPlus,
     faSignInAlt,
     faSignOutAlt,
     faUser,
@@ -48,9 +48,9 @@ export default function SidebarContent({ toggleSidebar, style }) {
     loggedIn
         ? routes.push(
               {
-                  onClick: () => goToRoute('/new/post'),
-                  icon: faPlus,
-                  name: 'New post',
+                  onClick: () => goToRoute('/joined'),
+                  icon: faArchway,
+                  name: 'Your hubs',
               },
               {
                   onClick: logout,

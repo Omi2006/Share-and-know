@@ -13,7 +13,7 @@ import {
     ToggleLoggedInProvider,
 } from './components/Auth';
 import { Sidebar } from './components/General';
-import { Post, NewPost } from './components/Post';
+import { Post, NewPost, JoinedPosts } from './components/Post';
 import { Hub, HubPath, NewHub } from './components/Hub';
 import Home from './components/Home';
 import './index.css';
@@ -41,6 +41,12 @@ export default function App() {
                             <HubPath />
                             <Routes>
                                 <Route path="/" element={<Home />} />
+                                <Route
+                                    path="/joined"
+                                    element={
+                                        loggedIn ? <JoinedPosts /> : <Login />
+                                    }
+                                />
                                 <Route
                                     path="/register"
                                     element={

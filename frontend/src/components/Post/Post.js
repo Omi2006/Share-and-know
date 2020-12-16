@@ -42,7 +42,10 @@ export default function Post() {
                         {post.poster.username}
                     </h3>
                 </div>
-                <Link to={`/hubs/${post.hub.full_path}`}>
+                <Link
+                    to={`/hubs/${post.hub.full_path}`}
+                    style={{ width: 'min-content' }}
+                >
                     <Badge color="primary">{post.hub.title}</Badge>
                 </Link>
                 {likes && (
@@ -53,7 +56,7 @@ export default function Post() {
                     />
                 )}
                 <footer style={{ fontSize: '12px' }}>{post.date}</footer>
-                <h2 id="post-title">{post.title}</h2>
+                <h1 id="post-title">{post.title}</h1>
             </div>
             <hr />
             <div className="wrapper">
