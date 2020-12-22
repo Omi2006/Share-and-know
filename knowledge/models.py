@@ -6,7 +6,11 @@ from django.contrib.humanize.templatetags.humanize import naturaltime
 
 
 class User(AbstractUser):
-    pass
+    def get_post_count(self):
+        return self.posts.count()
+
+    def get_joined_hubs_count(self):
+        return self.joined.count()
 
 
 class Post(models.Model):

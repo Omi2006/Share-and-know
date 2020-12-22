@@ -11,9 +11,7 @@ global.fetch = jest.fn(() =>
                 id: '1',
                 title: 'Hello there',
                 content: 'How are you?',
-                poster: {
-                    username: 'General Kenobi',
-                },
+                poster: 'General Kenobi',
                 comments: [],
                 likes: [],
                 uuid: 'ABCDEFG',

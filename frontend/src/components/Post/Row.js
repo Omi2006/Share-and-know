@@ -27,10 +27,8 @@ export default function Row({ post }) {
                         <h5>{post.title}</h5>
                     </CardTitle>
                     <CardSubtitle style={{ display: 'inline-flex' }}>
-                        <Identicon size="20" string={post.poster.username} />
-                        <h6 style={{ marginLeft: '10px' }}>
-                            {post.poster.username}
-                        </h6>
+                        <Identicon size="20" string={post.poster} />
+                        <h6 style={{ marginLeft: '10px' }}>{post.poster}</h6>
                     </CardSubtitle>
                 </CardHeader>
                 <CardBody className="back-blue">

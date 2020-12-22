@@ -15,6 +15,7 @@ import {
 import { Sidebar } from './components/General';
 import { Post, NewPost, JoinedPosts } from './components/Post';
 import { Hub, HubPath, NewHub } from './components/Hub';
+import { UserList, UserProfile } from './components/User';
 import Home from './components/Home';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -46,6 +47,11 @@ export default function App() {
                                     element={
                                         loggedIn ? <JoinedPosts /> : <Login />
                                     }
+                                />
+                                <Route path="/users" element={<UserList />} />
+                                <Route
+                                    path="/users/:username"
+                                    element={<UserProfile />}
                                 />
                                 <Route
                                     path="/register"

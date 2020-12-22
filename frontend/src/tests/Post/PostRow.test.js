@@ -7,9 +7,7 @@ describe('Tests whether a post row renders correctly', () => {
     test('renders correctly', () => {
         const post = {
             title: 'Hello there',
-            poster: {
-                username: 'General Kenobi',
-            },
+            poster: 'General Kenobi',
             path: '',
             content: 'How are you?',
             date: '10 days ago',

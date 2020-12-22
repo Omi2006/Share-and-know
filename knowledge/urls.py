@@ -11,6 +11,8 @@ from .views import (
     NewPost,
     NewHub,
     Joined,
+    UserProfile,
+    Users,
 )
 
 
@@ -27,4 +29,6 @@ urlpatterns = [
     path('hub/items/<int:id>', HubItems.as_view()),
     path('logout', Logout.as_view(), name='logout'),
     path('joined', Joined.as_view(), name='joined'),
+    path('user/<str:username>', UserProfile.as_view(), name='user'),
+    path('users', Users.as_view(), name='users'),
 ]

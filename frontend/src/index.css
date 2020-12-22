@@ -63,7 +63,9 @@ code {
 }
 
 .hover-card {
+    border: none !important;
     margin: 0px;
+    box-shadow: 1px 4px 6px 0 rgba(0, 0, 0, 0.068);
     cursor: pointer;
 }
 
@@ -109,4 +111,12 @@ code {
 
 .card {
     text-align: left;
+}
+
+.discrete-link {
+    color: black;
+}
+
+.discrete-link:hover {
+    color: black;
 }

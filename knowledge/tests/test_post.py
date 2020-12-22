@@ -51,7 +51,7 @@ class PostTestCase(APITestCase):
                         'id': 2,
                         'title': 'Test2',
                         'content': 'Test2',
-                        'poster': {'username': 'Pete'},
+                        'poster': 'Pete',
                         'uuid': 'EFGH',
                         'date': 'now',
                         'path': 'FIRST',
@@ -60,7 +60,7 @@ class PostTestCase(APITestCase):
                         'id': 1,
                         'title': 'Test1',
                         'content': 'Test1',
-                        'poster': {'username': 'Joe'},
+                        'poster': 'Joe',
                         'uuid': 'ABCD',
                         'path': 'FIRST',
                         'date': 'now',
@@ -83,7 +83,7 @@ class PostTestCase(APITestCase):
                 'id': 1,
                 'title': 'Test1',
                 'content': 'Test1',
-                'poster': {'username': 'Joe'},
+                'poster': 'Joe',
                 'uuid': 'ABCD',
                 'date': 'now',
                 'comments': [],
@@ -200,7 +200,9 @@ class PostTestCase(APITestCase):
         """
         c = APIClient()
         c.login(username='Joe', password='Joe')
-        url = '/knowledge/hub/items/1?page=1&sort=-date&type=posts&search=&filter=true'
+        url = (
+            '/knowledge/hub/items/1?page=1&sort=-date&type=posts&search=&filter=joined'
+        )
         response = c.get(url)
 
         self.assertEqual(
@@ -214,7 +216,7 @@ class PostTestCase(APITestCase):
                         'title': 'Test3',
                         'date': 'now',
                         'content': 'Test3',
-                        'poster': {'username': 'Joe'},
+                        'poster': 'Joe',
                         'uuid': 'ABCDEFGH',
                     }
                 ],

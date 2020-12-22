@@ -12,6 +12,7 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework import filters
 
 from .serializers import (
     HubSerializer,
@@ -117,8 +118,13 @@ class HubItems(generics.ListAPIView):
         filters = {
             'title__icontains': self.request.query_params['search'],
         }
-        if self.request.query_params.get('filter'):
+        item_filter = self.request.query_params.get('filter')
+        # Filter based on the page by using kwargs
+        if item_filter == 'joined':
             filters['hub__in'] = self.request.user.joined.all()
+        # If it isn't joined and it exists, it must be a user profile
+        elif item_filter:
+            filters['poster'] = User.objects.get(username=item_filter)
         else:
             filters['hub'] = self.kwargs['id']
         return type.objects.filter(**filters).order_by(
@@ -287,6 +293,35 @@ class Joined(generics.UpdateAPIView):
             )
         else:
             return Response({'errors': serializer.errors})
+
+
+class UserProfile(generics.RetrieveAPIView):
+    """
+    Gets a user's profile
+    """
+
+    serializer_class = UserSerializer
+    lookup_field = 'username'
+    queryset = User.objects.all()
+
+    def handle_exception(self, exc):
+        if isinstance(exc, Http404):
+            return Response(
+                {'error': 'This user does not exist.'},
+            )
+
+        return super(UserProfile, self).handle_exception(exc)
+
+
+class Users(generics.ListAPIView):
+    """
+    Gets a list of users based on their username
+    """
+
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('username',)
 
 
 class Logout(generics.GenericAPIView):

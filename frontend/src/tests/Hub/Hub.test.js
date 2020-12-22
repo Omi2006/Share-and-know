@@ -18,9 +18,7 @@ global.fetch = jest.fn(() =>
                     {
                         id: '1',
                         title: 'Hello there',
-                        poster: {
-                            username: 'General Kenobi',
-                        },
+                        poster: 'General Kenobi',
                         path: '',
                         description: 'SECOND',
                         content: 'How are you?',
@@ -73,9 +71,7 @@ describe('Tests whether hub shows correctly', () => {
                             {
                                 id: '1',
                                 title: 'Hello there',
-                                poster: {
-                                    username: 'General Kenobi',
-                                },
+                                poster: 'General Kenobi',
                                 path: '',
                                 content: 'How are you?',
                                 date: '10 days ago',

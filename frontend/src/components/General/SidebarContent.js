@@ -8,6 +8,7 @@ import {
     faSignInAlt,
     faSignOutAlt,
     faUser,
+    faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { ToggleLoggedInContext, LoggedInContext } from '../Auth';
 import { animated } from 'react-spring';
@@ -43,6 +44,11 @@ export default function SidebarContent({ toggleSidebar, style }) {
             onClick: () => goToRoute('/'),
             icon: faHome,
             name: 'Home',
+        },
+        {
+            onClick: () => goToRoute('/users'),
+            name: 'Users',
+            icon: faUsers,
         },
     ];
     loggedIn

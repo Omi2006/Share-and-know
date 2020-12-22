@@ -36,12 +36,18 @@ export default function Post() {
     ) : (
         <div style={{ padding: '25px' }}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'inline-flex', marginBottom: '10px' }}>
-                    <Identicon size="33" string={post.poster.username} />
-                    <h3 style={{ marginLeft: '10px' }}>
-                        {post.poster.username}
-                    </h3>
-                </div>
+                <Link
+                    to={`/users/${post.poster}`}
+                    className="discrete-link"
+                    style={{
+                        display: 'inline-flex',
+                        marginBottom: '10px',
+                        width: 'min-content',
+                    }}
+                >
+                    <Identicon size="33" string={post.poster} />
+                    <h3 style={{ marginLeft: '10px' }}>{post.poster}</h3>
+                </Link>
                 <Link
                     to={`/hubs/${post.hub.full_path}`}
                     style={{ width: 'min-content' }}

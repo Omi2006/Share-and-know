@@ -6,6 +6,7 @@ import {
     faSave,
     faWindowClose,
 } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 import { fetchCsrf } from '../Auth';
 import Identicon from 'react-identicons';
 import TextArea from 'react-autosize-textarea';
@@ -50,18 +51,19 @@ export default function Comment({ comment }) {
                 }}
             >
                 <div>
-                    <div style={{ display: 'inline-flex' }}>
-                        <Identicon
-                            size="28"
-                            string={comment.commenter.username}
-                        />
+                    <Link
+                        to={`/users/${comment.commenter}`}
+                        className="discrete-link"
+                        style={{ display: 'inline-flex' }}
+                    >
+                        <Identicon size="28" string={comment.commenter} />
                         <h4 style={{ marginLeft: '10px' }}>
-                            {comment.commenter.username}
+                            {comment.commenter}
                         </h4>
-                    </div>
+                    </Link>
                     <CardText className="text-muted">{comment.date}</CardText>
                 </div>
-                {comment.commenter.username === loggedIn && (
+                {comment.commenter === loggedIn && (
                     <div>
                         {editing && (
                             <Button

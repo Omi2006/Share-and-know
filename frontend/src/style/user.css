@@ -1,0 +1,16 @@
+.item {
+    background-color: rgb(199, 237, 245);
+    display: inline-flex;
+    width: 100%;
+    border: none;
+    padding: 16px 18px;
+    cursor: pointer;
+}
+
+.item:hover {
+    background-color: rgb(212, 247, 255);
+}
+
+.item-list {
+    box-shadow: 1px 5px 6px 0 rgba(0, 0, 0, 0.164);
+}

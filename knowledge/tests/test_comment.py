@@ -46,14 +46,14 @@ class CommentTestCase(APITestCase):
             [
                 {
                     'id': 2,
-                    'commenter': {'username': 'Peter'},
+                    'commenter': 'Peter',
                     'post': 1,
                     'content': 'Test2',
                     'date': 'now',
                 },
                 {
                     'id': 1,
-                    'commenter': {'username': 'Joe'},
+                    'commenter': 'Joe',
                     'post': 1,
                     'content': 'Test1',
                     'date': 'now',
@@ -78,7 +78,7 @@ class CommentTestCase(APITestCase):
             {
                 'comment': {
                     'id': new_comment.id,
-                    'commenter': {'username': 'Dan'},
+                    'commenter': 'Dan',
                     'post': post.id,
                     'content': 'Test3',
                     'date': 'now',

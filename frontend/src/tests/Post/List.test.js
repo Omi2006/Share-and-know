@@ -9,9 +9,7 @@ describe('Tests post list', () => {
             {
                 id: '1',
                 title: 'Hello there',
-                poster: {
-                    username: 'General Kenobi',
-                },
+                poster: 'General Kenobi',
                 hub: { hub_path: '' },
                 content: 'How are you?',
                 date: '10 days ago',
@@ -20,9 +18,7 @@ describe('Tests post list', () => {
             {
                 id: '2',
                 title: 'Hello there friend',
-                poster: {
-                    username: 'General Kennobi',
-                },
+                poster: 'General Kennobi',
                 path: '',
                 content: 'How are youu?',
                 date: '10 days agooo',

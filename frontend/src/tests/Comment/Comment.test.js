@@ -33,9 +33,7 @@ afterAll(() => consoleSpy.mockRestore());
 
 describe('Testing comments', () => {
     const commentData = {
-        commenter: {
-            username: 'joe',
-        },
+        commenter: 'joe',
         content: 'Joe',
         date: '10 days ago',
     };

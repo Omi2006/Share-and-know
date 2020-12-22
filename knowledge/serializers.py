@@ -73,14 +73,17 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    post_count = serializers.IntegerField(source="get_post_count")
+    joined_hubs_count = serializers.IntegerField(source="get_joined_hubs_count")
+
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('id', 'username', 'post_count', 'joined_hubs_count')
         extra_kwargs = {'username': {'validators': []}}
 
 
 class HubPostSerializer(serializers.ModelSerializer):
-    poster = UserSerializer(read_only=True)
+    poster = serializers.SlugRelatedField(read_only=True, slug_field='username')
     date = serializers.ReadOnlyField(source='get_date')
     path = serializers.ReadOnlyField(source='get_path')
 
@@ -90,7 +93,7 @@ class HubPostSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    poster = UserSerializer(read_only=True)
+    poster = serializers.SlugRelatedField(read_only=True, slug_field='username')
     likes = serializers.SlugRelatedField(
         slug_field='username', many=True, queryset=User.objects.all(), required=False
     )
@@ -132,7 +135,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    commenter = UserSerializer(read_only=True)
+    commenter = serializers.SlugRelatedField(read_only=True, slug_field='username')
     date = serializers.ReadOnlyField(source='get_date')
 
     class Meta:

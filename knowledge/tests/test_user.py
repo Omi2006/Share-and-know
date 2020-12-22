@@ -13,6 +13,10 @@ class UserTestCAse(APITestCase):
         u1.set_password('Joe')
         u1.save()
 
+        u2 = User.objects.create(username='Pete', email='Joe@joe.com')
+        u2.set_password('Joe')
+        u2.save()
+
     def test_login_existing_user(self):
         """
         Tests whether login with an existing user works
@@ -161,4 +165,46 @@ class UserTestCAse(APITestCase):
         self.assertDictEqual(
             loads(response.content),
             {'errors': {'non_field_errors': ['Password and confirm must match!']}},
+        )
+
+    def test_get_user_profile_exists(self):
+        """
+        Tests whether getting an existing user's profile works
+        """
+        c = APIClient()
+        url = '/knowledge/user/Joe'
+
+        response = c.get(url)
+
+        self.assertDictEqual(
+            loads(response.content),
+            {'id': 1, 'username': 'Joe', 'joined_hubs_count': 0, 'post_count': 0},
+        )
+
+    def test_get_user_profile_not_exists(self):
+        """
+        Tests whether getting an existing user's profile works
+        """
+        c = APIClient()
+        url = '/knowledge/user/joe'
+
+        response = c.get(url)
+
+        self.assertDictEqual(
+            loads(response.content),
+            {'error': 'This user does not exist.'},
+        )
+
+    def test_get_many_users(self):
+        """
+        Tests whether getting many users based on search works
+        """
+        c = APIClient()
+        url = '/knowledge/users?search=P'
+
+        response = c.get(url)
+
+        self.assertEqual(
+            loads(response.content),
+            [{'id': 2, 'username': 'Pete', 'joined_hubs_count': 0, 'post_count': 0}],
         )
