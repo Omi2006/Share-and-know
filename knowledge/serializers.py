@@ -157,7 +157,7 @@ class HubSerializer(serializers.ModelSerializer):
     date = serializers.ReadOnlyField(source="get_date")
     full_path = serializers.ReadOnlyField(source="get_full_path")
     members = serializers.SlugRelatedField(
-        slug_field='username', many=True, queryset=User.objects.all()
+        slug_field='username', many=True, queryset=User.objects.all(), required=False
     )
 
     extra_kwargs = {'likes': {'validators': []}}
@@ -165,6 +165,17 @@ class HubSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hub
         fields = ('id', 'title', 'date', 'description', 'full_path', 'hub', 'members')
+
+    def validate(self, attrs):
+        hub = attrs.get('hub', None)
+        if hub is None or not self.context.get('new_hub'):
+            return super().validate(attrs)
+        if Hub.objects.filter(hub=hub, title__iexact=attrs['title'].lower()).exists():
+            raise serializers.ValidationError(
+                f'There is already a hub with this title in {hub.title}!',
+                code="unique_hub",
+            )
+        return super().validate(attrs)
 
     def create(self, validated_data):
         hub = Hub.objects.get(id=validated_data['hub'])

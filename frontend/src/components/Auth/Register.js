@@ -1,20 +1,21 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { ToggleLoggedInContext, fetchCsrf } from './';
-import { Col, Alert, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
+import toast from 'react-hot-toast';
 
 import ShareImage from '../../images/undraw_share_online_r87b.svg';
 import '../../style/auth.css';
 
 export default function Register() {
-    const { handleSubmit, errors, register, watch } = useForm();
+    const { handleSubmit, errors, register, getValues } = useForm();
     const handleLogin = useContext(ToggleLoggedInContext);
     const submitButton = useRef();
-    const [message, setMessage] = useState({});
 
-    const toggleMessage = () => setMessage({});
-
-    const onSubmit = async data => {
+    const onSubmit = data => {
+        if (!submitButton.current) {
+            return;
+        }
         submitButton.current.disabled = true;
         if (
             data.username.length <= 0 ||
@@ -23,27 +24,35 @@ export default function Register() {
             data.email.length <= 0
         ) {
             submitButton.current.disabled = false;
-            setMessage({ type: 'danger', content: 'Fill out all fields!' });
+            toast.error('Fill out all fields!', { duration: 1000 });
             return false;
         } else if (data.password !== data.confirm) {
             submitButton.current.disabled = false;
-            setMessage({
-                type: 'danger',
-                content: 'Password and confirm fields must match!',
+            toast.error('Password and confirm fields must match!', {
+                duration: 1000,
             });
             return false;
         }
-        const result = await fetchCsrf('/knowledge/register', data, 'POST');
-        if (result.errors) {
-            submitButton.current.disabled = false;
-            setMessage({
-                type: 'danger',
-                content: result.errors[Object.keys(result.errors)[0]],
-            });
-            return false;
-        }
-        submitButton.current.disabled = false;
-        handleLogin(result.username);
+        const result = fetchCsrf('/knowledge/register', data, 'POST');
+        toast.dismiss();
+        toast.promise(
+            result,
+            {
+                loading: 'Loading...',
+                error: err => {
+                    submitButton.current.disabled = false;
+                    return err.toString();
+                },
+                success: info => {
+                    submitButton.current.disabled = false;
+                    handleLogin(info.username);
+                    return 'Account created successfully!';
+                },
+            },
+            {
+                error: { duration: 2000 },
+            }
+        );
     };
 
     return (
@@ -57,11 +66,6 @@ export default function Register() {
                 />
             </Col>
             <Col md="12">
-                {message.content && (
-                    <Alert color={message.type} toggle={toggleMessage}>
-                        {message.content}
-                    </Alert>
-                )}
                 <form
                     style={{
                         padding: '10px',
@@ -105,7 +109,7 @@ export default function Register() {
                         aria-label="password"
                         ref={register({
                             required: true,
-                            validate: value => value === watch('confirm'),
+                            validate: value => value === getValues().confirm,
                         })}
                         style={{ marginTop: '10px', marginBottom: '10px' }}
                     />

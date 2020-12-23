@@ -41,6 +41,8 @@ class PostTestCase(APITestCase):
         url = '/knowledge/hub/items/1?sort=-date&type=posts&search=&hubs=,hubs,FIRST'
 
         response = c.get(url)
+        post1 = Post.objects.get(id=1)
+        post2 = Post.objects.get(id=2)
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(
             loads(response.content),
@@ -52,7 +54,7 @@ class PostTestCase(APITestCase):
                         'title': 'Test2',
                         'content': 'Test2',
                         'poster': 'Pete',
-                        'uuid': 'EFGH',
+                        'uuid': post2.uuid,
                         'date': 'now',
                         'path': 'FIRST',
                     },
@@ -61,7 +63,7 @@ class PostTestCase(APITestCase):
                         'title': 'Test1',
                         'content': 'Test1',
                         'poster': 'Joe',
-                        'uuid': 'ABCD',
+                        'uuid': post1.uuid,
                         'path': 'FIRST',
                         'date': 'now',
                     },
@@ -74,7 +76,8 @@ class PostTestCase(APITestCase):
         Tests whether one post is returned correctly
         """
         c = APIClient()
-        url = '/knowledge/post/ABCD'
+        post = Post.objects.get(id=1)
+        url = f'/knowledge/post/{post.uuid}'
         response = c.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(
@@ -84,7 +87,7 @@ class PostTestCase(APITestCase):
                 'title': 'Test1',
                 'content': 'Test1',
                 'poster': 'Joe',
-                'uuid': 'ABCD',
+                'uuid': post.uuid,
                 'date': 'now',
                 'comments': [],
                 'likes': [],
@@ -113,11 +116,12 @@ class PostTestCase(APITestCase):
             {'title': 'stuff', 'content': 'stuff', 'hubs': ['', 'hubs', 'FIRST']},
             format='json',
         )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(loads(response.content), {'hub_path': 'FIRST'})
-
         post = Post.objects.get(title='stuff')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            loads(response.content), {'hub_path': 'FIRST', 'uuid': post.uuid}
+        )
+
         self.assertEqual(post.title, 'stuff')
         self.assertEqual(post.poster, User.objects.get(username='Joe'))
         self.assertEqual(post.content, 'stuff')
@@ -186,8 +190,8 @@ class PostTestCase(APITestCase):
         """
         c = APIClient()
         c.login(username='Joe', password='Joe')
-        url = '/knowledge/post/ABCD'
-        post = Post.objects.get(uuid='ABCD')
+        post = Post.objects.get(id=1)
+        url = f'/knowledge/post/{post.uuid}'
 
         c.put(url)
         self.assertEqual(post.likes.count(), 1)
@@ -204,7 +208,7 @@ class PostTestCase(APITestCase):
             '/knowledge/hub/items/1?page=1&sort=-date&type=posts&search=&filter=joined'
         )
         response = c.get(url)
-
+        post = Post.objects.get(id=3)
         self.assertEqual(
             loads(response.content),
             {
@@ -217,7 +221,7 @@ class PostTestCase(APITestCase):
                         'date': 'now',
                         'content': 'Test3',
                         'poster': 'Joe',
-                        'uuid': 'ABCDEFGH',
+                        'uuid': post.uuid,
                     }
                 ],
             },

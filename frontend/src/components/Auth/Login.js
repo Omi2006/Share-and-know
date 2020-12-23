@@ -1,37 +1,47 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Alert, Row, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import { ToggleLoggedInContext, fetchCsrf } from './';
+import toast from 'react-hot-toast';
 import loginImage from '../../images/undraw_Login_re_4vu2.svg';
 import '../../style/auth.css';
 
 export default function Login() {
-    const [message, setMessage] = useState({});
     const submitInput = useRef();
     const { register, errors, handleSubmit } = useForm();
     const handleLogin = useContext(ToggleLoggedInContext);
 
-    const toggleMessage = () => setMessage({});
-
-    const onSubmit = async data => {
+    const onSubmit = data => {
+        if (!submitInput.current) {
+            return;
+        }
         submitInput.current.disabled = true;
         if (data.username.length <= 0 || data.password.length <= 0) {
-            setMessage({ type: 'danger', content: 'Fill out all fields!' });
+            toast.error('Fill out all fields!', { duration: 1000 });
             submitInput.current.disabled = false;
             return false;
         }
-        const result = await fetchCsrf('/knowledge/login', data, 'POST');
-        if (result.errors) {
-            setMessage({
-                type: 'danger',
-                content: result.errors[Object.keys(result.errors)[0]],
-            });
-            submitInput.current.disabled = false;
-            return false;
-        }
-        submitInput.current.disabled = false;
-        handleLogin(result.username);
+        const result = fetchCsrf('/knowledge/login', data, 'POST');
+        toast.dismiss();
+        toast.promise(
+            result,
+            {
+                loading: 'Loading...',
+                error: err => {
+                    submitInput.current.disabled = false;
+                    return err.toString();
+                },
+                success: info => {
+                    submitInput.current.disabled = false;
+                    handleLogin(info.username);
+                    return 'Logged in successfully!';
+                },
+            },
+            {
+                error: { duration: 2000 },
+            }
+        );
     };
 
     return (
@@ -47,11 +57,6 @@ export default function Login() {
                 />
             </Col>
             <Col md="12">
-                {message.content && (
-                    <Alert color={message.type} toggle={toggleMessage}>
-                        {message.content}
-                    </Alert>
-                )}
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     style={{

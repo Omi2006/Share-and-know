@@ -13,6 +13,7 @@ import {
     ToggleLoggedInProvider,
 } from './components/Auth';
 import { Sidebar } from './components/General';
+import { Toaster } from 'react-hot-toast';
 import { Post, NewPost, JoinedPosts } from './components/Post';
 import { Hub, HubPath, NewHub } from './components/Hub';
 import { UserList, UserProfile } from './components/User';
@@ -35,6 +36,7 @@ export default function App() {
 
     return (
         <Router>
+            <Toaster />
             <LoggedInProvider value={loggedIn}>
                 <ToggleLoggedInProvider value={setLoggedIn}>
                     <Sidebar>

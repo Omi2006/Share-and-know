@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Alert, Badge, Spinner } from 'reactstrap';
+import { Badge, Spinner } from 'reactstrap';
 import { CommentList, NewComment } from '../Comment';
 import { LoggedInContext } from '../Auth';
 import { LikeButton } from './';
@@ -73,14 +73,14 @@ export default function Post() {
                 {loggedIn ? (
                     <NewComment post={post.id} setComments={setComments} />
                 ) : (
-                    <Alert color="danger">
+                    <h2 className="error-message">
                         You must be logged in to comment!
-                    </Alert>
+                    </h2>
                 )}
                 {comments && comments.length > 0 ? (
                     <CommentList comments={comments} />
                 ) : (
-                    <Alert color="info">There are no comments here!</Alert>
+                    <h3 color="info">There are no comments here!</h3>
                 )}
             </div>
         </div>

@@ -5,16 +5,21 @@ import { fetchCsrf } from '../Auth/fetchCsrf';
 import { Badge } from 'reactstrap';
 import { LoggedInContext } from '../Auth';
 import '../../style/post.css';
+import toast from 'react-hot-toast';
 
 export default function LikeButton({ likes, uuid, setLikes }) {
     const loggedIn = useContext(LoggedInContext);
 
     const handleLike = async () => {
-        const result = await fetchCsrf(`/knowledge/post/${uuid}`, {}, 'PUT');
-        if (result.errors) {
-            alert('An error has occured. Try again later.');
-        } else {
+        try {
+            const result = await fetchCsrf(
+                `/knowledge/post/${uuid}`,
+                {},
+                'PUT'
+            );
             setLikes(result.likes);
+        } catch (err) {
+            toast.error(err.toString());
         }
     };
 

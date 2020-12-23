@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, render } from '@testing-library/react';
+import { screen, render, act } from '@testing-library/react';
 import { HashRouter } from 'react-router-dom';
 import { NewPost } from '../../components/Post';
 import userEvent from '@testing-library/user-event';
@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event';
 global.fetch = jest.fn(() =>
     Promise.resolve({
         json: () =>
-            Promise.resolve({
+            Promise.reject({
                 errors: {
                     title: 'Too weird',
                 },
@@ -61,7 +61,7 @@ describe('Testing new post', () => {
         expect(await screen.findByText('Title must be 64 characters at most!'));
     });
 
-    test('Handles submission reject', async () => {
+    test('Handles submission reject', () => {
         render(
             <HashRouter>
                 <NewPost />
@@ -72,7 +72,10 @@ describe('Testing new post', () => {
         const bodyInput = screen.getByPlaceholderText('Some good content...');
         userEvent.type(titleInput, 'Hello there');
         userEvent.type(bodyInput, 'General Kenobi');
-        userEvent.click(submitInput);
-        expect(await screen.findByText('Too weird')).toBeInTheDocument();
+        act(() => userEvent.click(submitInput));
+        setTimeout(
+            () => expect(screen.getByText('Too weird')).toBeInTheDocument(),
+            3000
+        );
     });
 });

@@ -1,28 +1,28 @@
 import React from 'react';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Form, FormGroup, Label, Alert } from 'reactstrap';
+import { Form, FormGroup, Label } from 'reactstrap';
 import { fetchCsrf } from '../Auth';
+import toast from 'react-hot-toast';
 
 export default function NewHub() {
     const { register, errors, handleSubmit } = useForm();
-    const [message, setMessage] = useState(null);
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
-    const toggleMessage = () => setMessage(null);
-
-    const onSubmit = async data => {
+    const onSubmit = data => {
         data.hubs = pathname.split('/');
         //replace spaces with dashes
         data.title = data.title.replace(/ /g, '-');
-        const result = await fetchCsrf('/knowledge/new/hub', data, 'POST');
-        if (result[0]) {
-            setMessage(result[0]);
-            return;
-        }
-        navigate(`/hubs/${result.full_path}`);
+        const result = fetchCsrf('/knowledge/new/hub', data, 'POST');
+        toast.promise(result, {
+            loading: 'Loading...',
+            error: err => err.toString(),
+            success: info => {
+                navigate(`/hubs/${info.full_path}`);
+                return 'Hub created successfully!';
+            },
+        });
     };
 
     return (
@@ -33,11 +33,6 @@ export default function NewHub() {
             <h5 style={{ margin: '20px' }}>
                 Create a new hub to share all sorts of things with others!
             </h5>
-            {message && (
-                <Alert color="danger" toggle={toggleMessage}>
-                    {message}
-                </Alert>
-            )}
             <Form
                 onSubmit={handleSubmit(onSubmit)}
                 style={{ textAlign: 'left' }}

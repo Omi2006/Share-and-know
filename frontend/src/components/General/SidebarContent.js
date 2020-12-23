@@ -12,6 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ToggleLoggedInContext, LoggedInContext } from '../Auth';
 import { animated } from 'react-spring';
+import toast from 'react-hot-toast';
 import '../../style/navbar.css';
 
 const AnimatedNav = animated(Nav);
@@ -23,14 +24,16 @@ export default function SidebarContent({ toggleSidebar, style }) {
 
     const logout = async () => {
         const response = await fetch('/knowledge/logout');
-        const result = await response.json();
-        if (result.errors) {
-            alert('An error has occured');
-            return;
-        }
-        alert('Logged out successfully!');
-        handleLogin(null);
-        toggleSidebar();
+        const result = response.json();
+        toast.promise(result, {
+            loading: 'Loading...',
+            error: err => err.toString(),
+            success: () => {
+                handleLogin(null);
+                toggleSidebar();
+                return 'Logged out successfully!';
+            },
+        });
     };
 
     const goToRoute = route => {

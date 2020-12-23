@@ -12,6 +12,7 @@ import Identicon from 'react-identicons';
 import TextArea from 'react-autosize-textarea';
 import Markdown from 'react-markdown';
 import LoggedinContext from '../Auth/LoggedInContext';
+import toast from 'react-hot-toast';
 import '../../style/post.css';
 
 export default function Comment({ comment }) {
@@ -22,22 +23,30 @@ export default function Comment({ comment }) {
 
     const toggleEditing = () => setEditing(!editing);
 
-    const editComment = async () => {
+    const editComment = () => {
         if (editCommentContent.current) {
             const { value } = editCommentContent.current;
             if (value.length > 256) {
-                alert('Comment must be less than 256 characters long');
+                toast.error('Comment must be less than 256 characters long');
                 return;
             }
             setContent(value);
-            const result = await fetchCsrf(
+            const result = fetchCsrf(
                 `/knowledge/comment/${comment.id}`,
                 { content: value },
                 'PUT'
             );
-            if (result.errors) {
-                alert(result.errors[Object.keys(result.errors)[0]]);
-            }
+            toast.promise(
+                result,
+                {
+                    loading: 'Loading...',
+                    error: err => err.toString(),
+                    success: 'Comment edited successfully!',
+                },
+                {
+                    error: { duration: 2000 },
+                }
+            );
         }
         toggleEditing();
     };

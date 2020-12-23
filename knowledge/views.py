@@ -83,7 +83,7 @@ class Login(generics.GenericAPIView):
             user = serializer.validated_data['user']
             login(request, user)
             return Response({'username': user.username})
-        return Response({'errors': serializer.errors})
+        return Response({'errors': serializer.errors}, status=400)
 
 
 class Register(generics.GenericAPIView):
@@ -103,7 +103,7 @@ class Register(generics.GenericAPIView):
             login(request, user)
             return Response({'username': user.username})
 
-        return Response({'errors': serializer.errors})
+        return Response({'errors': serializer.errors}, status=400)
 
 
 class HubItems(generics.ListAPIView):
@@ -177,10 +177,10 @@ class NewHub(generics.CreateAPIView):
         del data['hubs']
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
-            new_hub = serializer.create(data)
+            new_hub = serializer.create(data, context={'new_hub': True})
             return Response(self.serializer_class(new_hub).data)
         else:
-            return Response({'errors': serializer.errors})
+            return Response({'errors': serializer.errors}, status=400)
 
 
 class NewPost(generics.CreateAPIView):
@@ -200,11 +200,15 @@ class NewPost(generics.CreateAPIView):
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             new_post = serializer.create(data)
+            new_post_data = self.serializer_class(new_post).data
             return Response(
-                {'hub_path': self.serializer_class(new_post).data['hub']['full_path']}
+                {
+                    'hub_path': new_post_data['hub']['full_path'],
+                    'uuid': new_post_data['uuid'],
+                }
             )
         else:
-            return Response({'errors': serializer.errors})
+            return Response({'errors': serializer.errors}, status=400)
 
 
 class OnePost(generics.RetrieveAPIView):
@@ -257,7 +261,7 @@ class Comments(generics.UpdateAPIView):
             comment = serializer.create(data)
             return Response({'comment': self.serializer_class(comment).data})
         else:
-            return Response({'errors': serializer.errors})
+            return Response({'errors': serializer.errors}, status=400)
 
     def put(self, request, id):
         comment = Comment.objects.get(id=id)
@@ -268,7 +272,7 @@ class Comments(generics.UpdateAPIView):
             serializer.save()
             return Response({'message': 'Comment edited successfully'})
         else:
-            return Response({'errors': serializer.errors})
+            return Response({'errors': serializer.errors}, status=400)
 
 
 class Joined(generics.UpdateAPIView):
@@ -292,7 +296,7 @@ class Joined(generics.UpdateAPIView):
                 {'status': 'Leave' if hub in request.user.joined.all() else 'Join'}
             )
         else:
-            return Response({'errors': serializer.errors})
+            return Response({'errors': serializer.errors}, status=400)
 
 
 class UserProfile(generics.RetrieveAPIView):

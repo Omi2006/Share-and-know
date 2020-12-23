@@ -6,6 +6,7 @@ import { HubList, ToggleButton } from './';
 import { Search, Dropdown } from '../General';
 import { fetchCsrf, LoggedInContext } from '../Auth';
 import Paginate from '../Pagination';
+import toast from 'react-hot-toast';
 import '../../style/hub.css';
 
 export default function Hub() {
@@ -67,17 +68,18 @@ export default function Hub() {
         setCurrentPage(1);
     };
 
-    const joinHub = async () => {
-        const result = await fetchCsrf(
-            `/knowledge/joined`,
-            { hub: hub.id },
-            'PUT'
-        );
-        if (result.errors) {
-            alert('An error has occured. Please try again');
-            return;
-        }
-        setJoinStatus(result.status);
+    const joinHub = () => {
+        const result = fetchCsrf(`/knowledge/joined`, { hub: hub.id }, 'PUT');
+        toast.promise(result, {
+            loading: 'Loading...',
+            error: err => err.toString(),
+            success: data => {
+                setJoinStatus(data.status);
+                return data.status === 'Leave'
+                    ? 'Hub left successfully'
+                    : 'Hub joined successfully';
+            },
+        });
     };
 
     const options = [

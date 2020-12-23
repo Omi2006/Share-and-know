@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -20,7 +21,7 @@ class Post(models.Model):
         User, related_name='posts', on_delete=models.SET_NULL, null=True
     )
     uuid = models.CharField(
-        default=str(uuid.uuid4()).replace('-', '')[:9].upper(),
+        default='',
         unique=True,
         max_length=9,
     )
@@ -34,6 +35,15 @@ class Post(models.Model):
 
     def get_path(self) -> str:
         return self.hub.get_full_path()
+
+    def save(self, *args, **kwargs):
+        self.uuid = str(
+            uuid.uuid5(
+                uuid.NAMESPACE_URL,
+                self.title + self.hub.title + datetime.now().strftime('%m%d%Y%H%M%S'),
+            )
+        ).upper()
+        super(Post, self).save(*args, **kwargs)
 
 
 class Comment(models.Model):

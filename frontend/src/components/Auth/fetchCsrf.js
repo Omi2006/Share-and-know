@@ -27,12 +27,15 @@ export async function fetchCsrf(url, body, method) {
             body: JSON.stringify(body),
         });
         const result = await response.json();
+        if (response.status > 399) {
+            return Promise.reject(
+                new Error(result.errors[Object.keys(result.errors)[0]])
+            );
+        }
         return result;
     } catch {
-        return {
-            errors: {
-                serverError: ['An error has occured, please try again later'],
-            },
-        };
+        return Promise.reject(
+            new Error('An error has occured, try again later')
+        );
     }
 }

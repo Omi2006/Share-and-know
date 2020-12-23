@@ -1,44 +1,43 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { FormGroup, Form, Label, Alert } from 'reactstrap';
+import { FormGroup, Form, Label } from 'reactstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchCsrf } from '../Auth';
 import TextArea from 'react-autosize-textarea';
+import toast from 'react-hot-toast';
 
 export default function PostForm() {
     const submitButton = useRef();
     const { register, handleSubmit, errors } = useForm();
-    const [message, setMessage] = useState({});
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
-    const toggleMessage = () => setMessage({});
-
-    const onSubmit = async data => {
-        submitButton.current.disabled = true;
-        data.hubs = pathname.split('/');
-        const result = await fetchCsrf('/knowledge/new/post', data, 'POST');
-        //Check for server errors
-        if (result.errors) {
-            submitButton.current.disabled = false;
-            setMessage({
-                type: 'danger',
-                content: result.errors[Object.keys(result.errors)[0]],
-            });
-            return false;
+    const onSubmit = data => {
+        if (!submitButton.current) {
+            return;
         }
         submitButton.current.disabled = true;
-        navigate(`/hubs/${result.hub_path}`);
+        data.hubs = pathname.split('/');
+        const result = fetchCsrf('/knowledge/new/post', data, 'POST');
+        //Check for server errors
+        toast.promise(result, {
+            loading: 'Loading...',
+            error: err => {
+                submitButton.current.disabled = false;
+                return err.toString();
+            },
+            success: info => {
+                //Solve hanging loading toast
+                submitButton.current.disabled = false;
+                navigate(`/hubs/${info.hub_path}/posts/${info.uuid}`);
+                return 'Post created successfully!';
+            },
+        });
     };
 
     return (
         <div style={{ padding: '20px' }}>
             <h3>New post</h3>
-            {message.content && (
-                <Alert color={message.type} toggle={toggleMessage}>
-                    {message.content}
-                </Alert>
-            )}
             <Form
                 style={{ margin: '10px' }}
                 method="POST"

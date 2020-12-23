@@ -36,7 +36,8 @@ class CommentTestCase(APITestCase):
         Tests whether a post's comments are correct
         """
         c = APIClient()
-        url = '/knowledge/post/ABCD'
+        post = Post.objects.get(id=1)
+        url = f'/knowledge/post/{post.uuid}'
 
         response = c.get(url)
         post_comments = loads(response.content)['comments']

@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event';
 global.fetch = jest.fn(() =>
     Promise.resolve({
         json: () =>
-            Promise.resolve({
+            Promise.reject({
                 errors: {
                     credentials: 'User with that username already exists.',
                 },
@@ -96,8 +96,12 @@ describe('Testing Register', () => {
         userEvent.type(passwordInput, 'General Kenobi');
         userEvent.type(confirmInput, 'General Kenobi');
         userEvent.click(submitInput);
-        expect(
-            await screen.findByText('User with that username already exists.')
-        ).toBeInTheDocument();
+        setTimeout(
+            () =>
+                expect(
+                    screen.getByText('User with that username already exists.')
+                ).toBeInTheDocument(),
+            3000
+        );
     });
 });
