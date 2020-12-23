@@ -13,7 +13,7 @@ export default function Register() {
     const submitButton = useRef();
 
     const onSubmit = data => {
-        if (!submitButton.current) {
+        if (submitButton.current === null) {
             return;
         }
         submitButton.current.disabled = true;

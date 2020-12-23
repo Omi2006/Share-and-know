@@ -13,7 +13,7 @@ export default function Login() {
     const handleLogin = useContext(ToggleLoggedInContext);
 
     const onSubmit = data => {
-        if (!submitInput.current) {
+        if (submitInput.current === null) {
             return;
         }
         submitInput.current.disabled = true;

@@ -13,7 +13,7 @@ export default function PostForm() {
     const navigate = useNavigate();
 
     const onSubmit = data => {
-        if (!submitButton.current) {
+        if (submitButton.current === null) {
             return;
         }
         submitButton.current.disabled = true;
