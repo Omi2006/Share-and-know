@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, render } from '@testing-library/react';
+import { screen, render, act } from '@testing-library/react';
 import { Register } from '../../components/Auth';
 import { HashRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -81,11 +81,13 @@ describe('Testing Register', () => {
     });
 
     test('Handles submission reject', async () => {
-        render(
-            <HashRouter>
-                <Register />
-            </HashRouter>
-        );
+        act(() => {
+            render(
+                <HashRouter>
+                    <Register />
+                </HashRouter>
+            );
+        });
         const submitInput = screen.getByDisplayValue('Register');
         const usernameInput = screen.getByPlaceholderText('Username');
         const emailInput = screen.getByPlaceholderText('Email');

@@ -26,21 +26,12 @@ jobs:
         defaults:
             run:
                 working-directory: ./frontend
-        strategy:
-            matrix:
-                node-version: [12.x]
 
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v2
-
-            - name: Set up Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
+            - uses: actions/checkout@v2
+            - uses: borales/actions-yarn@v2.0.0
               with:
-                  node-version: ${{ matrix.node-version }}
-
-            - name: Install dependencies
-              run: npm install
-
-            - name: Run the tests
-              run: npm test
+                  cmd: install
+            - uses: borales/actions-yarn@v2.0.0
+              with:
+                  cmd: test

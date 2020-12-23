@@ -62,11 +62,13 @@ describe('Testing new post', () => {
     });
 
     test('Handles submission reject', () => {
-        render(
-            <HashRouter>
-                <NewPost />
-            </HashRouter>
-        );
+        act(() => {
+            render(
+                <HashRouter>
+                    <NewPost />
+                </HashRouter>
+            );
+        });
         const submitInput = screen.getByDisplayValue('Create post');
         const titleInput = screen.getByPlaceholderText('Title...');
         const bodyInput = screen.getByPlaceholderText('Some good content...');

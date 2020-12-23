@@ -47,13 +47,13 @@ describe('Testing login', () => {
     });
 
     test('Handles submission reject', async () => {
-        act(() =>
+        act(() => {
             render(
                 <HashRouter>
                     <Login />
                 </HashRouter>
-            )
-        );
+            );
+        });
         const submitInput = screen.getByDisplayValue('Login');
         const usernameInput = screen.getByPlaceholderText('Username');
         const passwordInput = screen.getByPlaceholderText('Password');
