@@ -28,7 +28,7 @@ jobs:
                 working-directory: ./frontend
         strategy:
             matrix:
-                node-version: [12.x]
+                node-version: [10.x]
 
         steps:
             - name: Checkout repository
