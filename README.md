@@ -33,12 +33,13 @@ can also see posts from hubs they have joined.
 Whenever posts and hubs are shown, users can choose from a set of ordering options. When visiting hubs, a breadcrumb menu will show at the top listing the hubs they are in 
 currently.
 
-## Files 
+## Files
 
 There are 2 main directories where the code is, knowledge for the backend logic and frontend for the frontend of the app
 
 ### [Knowledge](./knowledge)
-Here is the backend logic + all the tests for the backend. The django-rest-framework was used to achieve the backend functionality
+<details>
+  <summary>Here is the backend logic + all the tests for the backend. The django-rest-framework was used to achieve the backend functionality</summary>
 
 #### [models.py](./knowledge/models.py)
 Here are the User, Post, Hub, and Comment models. 
@@ -55,3 +56,52 @@ Here we have the following serializers:
 - ##### [HubSerializer](./knowledge/serializers.py#L155)
 
 #### [views.py](./knowledge/views.py)
+Here we have all the views where the backend recieves requests from the frontend and returns responses. We have the following views:
+
+- ##### [FrontendURL](./knowledge/views.py#L43)
+- ##### [FileView](./knowledge/views.py#L54)
+- ##### [Login](./knowledge/views.py#L64)
+- ##### [Register](./knowledge/views.py#L90)
+- ##### [HubItems](./knowledge/views.py#L110)
+- ##### [OneHub](./knowledge/views.py#L143)
+- ##### [NewHub](./knowledge/views.py#L167)
+- ##### [NewPost](./knowledge/views.py#L187)
+- ##### [OnePost](./knowledge/views.py#L215)
+- ##### [Comments](./knowledge/views.py#L244)
+- ##### [Joined](./knowledge/views.py#L279)
+- ##### [UserProfile](./knowledge/views.py#L303)
+- ##### [Users](./knowledge/views.py#L321)
+- ##### [Logout](./knowledge/views.py#L332)
+
+We also have the following things here:
+- ##### [ItemPagination](./knowledge/views.py#L33)
+- ##### [get_hub_from_path](./knowledge/views.py#L342)
+
+#### [urls.py](./knowledge/urls.py)
+Here we have the url paths that allow the frontend to make requests to the backend by linking a path to each view
+
+#### [tests](./knowledge/tests)
+Here we have all the tests for the backend. We have the following files:
+
+- ##### \_\_init.py__
+
+ Just allows us to use relative imports
+ 
+- ##### [test_comment.py](./knowledge/test_comment.py)
+
+ Tests for comments
+ 
+- ##### [test_hub.py](./knowledge/test_hub.py)
+
+ Tests for hubs
+
+- ##### [test_post.py](./knowledge/test_post.py)
+
+ Tests for posts
+
+- ##### [test_user.py](./knowledge/test_user.py)
+
+ Tests for users
+ 
+
+</details>
