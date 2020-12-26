@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+Django=="3.1.2"
+django-environ=="0.4.5"
+djangorestframework=="3.12.1"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
+
+[scripts]
+build = "bash -c 'cd frontend && yarn build && cd .. && python manage.py runserver'"
+test = "bash -c 'cd frontend && yarn test:nowatch && cd .. && python manage.py test knowledge/tests/'"

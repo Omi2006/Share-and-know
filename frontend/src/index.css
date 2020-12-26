@@ -64,6 +64,7 @@ code {
 
 .hover-card {
     border: none !important;
+    margin-bottom: 15px !important;
     margin: 0px;
     box-shadow: 1px 4px 6px 0 rgba(0, 0, 0, 0.068);
     cursor: pointer;
@@ -105,8 +106,17 @@ code {
         min(80ch, calc(100% - 20px))
         1fr;
 }
-.wrapper > * {
+.wrapper > *,
+.big-wrapper > * {
     grid-column: 2;
+}
+
+.big-wrapper {
+    display: grid;
+    grid-template-columns:
+        1fr
+        min(120ch, calc(100% - 20px))
+        1fr;
 }
 
 .card {

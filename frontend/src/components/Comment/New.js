@@ -32,25 +32,20 @@ export default function New({ setComments, post }) {
                     submitButton.current.disabled = false;
                     return err.toString();
                 },
-                success: () => {
+                success: data => {
                     reset();
+                    setComments(prevComments => [
+                        data.comment,
+                        ...prevComments,
+                    ]);
                     submitButton.current.disabled = false;
-                    return 'Comment edited successfully!';
+                    return 'Comment created successfully!';
                 },
             },
             {
                 error: { duration: 2000 },
             }
         );
-
-        //Add comment to comment lists
-        try {
-            setComments(prevComments => [result.comment, ...prevComments]);
-        } catch (error) {
-            alert(
-                'Something went wrong in showing your comment. It should show when you reload though.'
-            );
-        }
     };
 
     return (

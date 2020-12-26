@@ -177,7 +177,7 @@ class HubSerializer(serializers.ModelSerializer):
             )
         return super().validate(attrs)
 
-    def create(self, validated_data):
+    def create(self, validated_data, context):
         hub = Hub.objects.get(id=validated_data['hub'])
         validated_data['hub'] = hub
         if Hub.objects.filter(

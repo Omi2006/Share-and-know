@@ -20,11 +20,7 @@ class Post(models.Model):
     poster = models.ForeignKey(
         User, related_name='posts', on_delete=models.SET_NULL, null=True
     )
-    uuid = models.CharField(
-        default='',
-        unique=True,
-        max_length=9,
-    )
+    uuid = models.CharField(default='', unique=True, max_length=30)
     date = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='posts_liked')
     hub = models.ForeignKey('Hub', on_delete=models.CASCADE, related_name='posts')
@@ -40,7 +36,10 @@ class Post(models.Model):
         self.uuid = str(
             uuid.uuid5(
                 uuid.NAMESPACE_URL,
-                self.title + self.hub.title + datetime.now().strftime('%m%d%Y%H%M%S'),
+                self.title
+                + self.hub.title
+                + datetime.now().strftime('%m%d%Y%H%M%S')
+                + self.poster.username,
             )
         ).upper()
         super(Post, self).save(*args, **kwargs)
@@ -66,7 +65,11 @@ class Hub(models.Model):
     title = models.CharField(max_length=20)
     date = models.DateTimeField(auto_now_add=True)
     hub = models.ForeignKey(
-        'Hub', on_delete=models.CASCADE, related_name='sub_hubs', null=True
+        'Hub',
+        on_delete=models.CASCADE,
+        related_name='sub_hubs',
+        null=True,
+        default=None,
     )
     members = models.ManyToManyField(User, related_name='joined')
     description = models.CharField(max_length=100)

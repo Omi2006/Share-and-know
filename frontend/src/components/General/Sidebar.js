@@ -33,7 +33,7 @@ export default function Sidebar({ children }) {
         <>
             <div className="navnavbar">
                 <button
-                    style={{ padding: '0px ' }}
+                    style={{ padding: '0px ', zIndex: 9998 }}
                     onClick={toggleSidebar}
                     className="navnavicon"
                 >

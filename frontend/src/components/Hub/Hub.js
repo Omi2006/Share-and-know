@@ -13,7 +13,7 @@ export default function Hub() {
     const loggedIn = useContext(LoggedInContext);
     const [hub, setHub] = useState(undefined);
     const [joinStatus, setJoinStatus] = useState(
-        hub?.members.includes(loggedIn) ? 'Leave' : 'Join'
+        hub?.members?.includes(loggedIn) ? 'Leave' : 'Join'
     );
     const [sortBy, setSortBy] = useState(['-date', 'Newest']);
     const [isLoading, setIsLoading] = useState(true);
@@ -76,8 +76,8 @@ export default function Hub() {
             success: data => {
                 setJoinStatus(data.status);
                 return data.status === 'Leave'
-                    ? 'Hub left successfully'
-                    : 'Hub joined successfully';
+                    ? 'Hub joined successfully'
+                    : 'Hub left successfully';
             },
         });
     };
@@ -107,13 +107,16 @@ export default function Hub() {
                 <h3 className="display-3 hub-name">
                     {title.replace(/-/g, ' ')}
                 </h3>
-                <Button
-                    onClick={joinHub}
-                    color="success"
-                    style={{ color: 'black' }}
-                >
-                    {joinStatus}
-                </Button>
+                {loggedIn && (
+                    <Button
+                        onClick={joinHub}
+                        color="success"
+                        style={{ color: 'black' }}
+                    >
+                        {joinStatus}
+                    </Button>
+                )}
+
                 <p style={{ fontSize: '1.5rem' }}>{hub.description}</p>
                 <hr className="my-2" />
                 <div className="d-flex justify-content-between">
@@ -121,18 +124,19 @@ export default function Hub() {
                         type={type}
                         handleTypeChange={handleTypeChange}
                     />
-                    {loggedIn && type === 'posts' ? (
-                        /*Ensure this isn't a source hub */
-                        hub.full_path.includes('/') && (
-                            <Link to="posts/new" className="lead">
-                                + New post
+                    {loggedIn &&
+                        (type === 'posts' ? (
+                            /*Ensure this isn't a source hub */
+                            hub.full_path.includes('/') && (
+                                <Link to="posts/new" className="lead">
+                                    + New post
+                                </Link>
+                            )
+                        ) : (
+                            <Link to="new" className="lead">
+                                + New Hub
                             </Link>
-                        )
-                    ) : (
-                        <Link to="new" className="lead">
-                            + New Hub
-                        </Link>
-                    )}
+                        ))}
                 </div>
             </Jumbotron>
             <div className="wrapper">
@@ -148,7 +152,10 @@ export default function Hub() {
                 />
                 {type === 'posts' ? (
                     <>
-                        <PostList posts={items.results} isLoading={isLoading} />
+                        <PostList
+                            posts={items.results || []}
+                            isLoading={isLoading}
+                        />
                         <Paginate
                             currentPage={currentPage}
                             last={items.total}

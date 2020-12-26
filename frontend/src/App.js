@@ -17,7 +17,7 @@ import { Toaster } from 'react-hot-toast';
 import { Post, NewPost, JoinedPosts } from './components/Post';
 import { Hub, HubPath, NewHub } from './components/Hub';
 import { UserList, UserProfile } from './components/User';
-import Home from './components/Home';
+import { Home } from './components/Home';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 

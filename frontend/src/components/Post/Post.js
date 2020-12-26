@@ -27,6 +27,10 @@ export default function Post() {
         getPost();
     }, [uuid]);
 
+    useEffect(() => {
+        console.log(comments);
+    }, [comments]);
+
     return !post.content ? (
         !post.error ? (
             <Spinner color="primary" />
