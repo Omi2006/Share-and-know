@@ -368,6 +368,11 @@ Contains the images used in the app, from [undraw.co/illustrations](https://undr
    Shows a user row of the users list, when clicked navigates to the user's profile.
    
 </details>
+
+#### [tests](./frontend/src/tests)
+
+Has tests for almost every component in the frontend. The file structure is the same and each file has the name of the file it tests plus a test.js at the end. So for Profile.js, it would be Profile.test.js. This structure is the same for every file in this tests directory
+
 </details>
 
 ## Running and using
