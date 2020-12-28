@@ -202,22 +202,149 @@ Contains the images used in the app, from [undraw.co/illustrations](https://undr
 
 </details>
 
-##### [components](./frontend/src/components)
+#### [components](./frontend/src/components)
 
 <details>
   <summary>Here we have all the app components and a few extra things. In every directory there is an index.js file that exports every file inside it</summary>
   
   - ##### [Auth](./frontend/src/components/Auth)
-  Here goes anything auth related. We have the following things:
+  
+   Here goes anything auth related. We have the following things:
    
    ###### [fetchCsrf.js](./frontend/src/components/Auth/fetchCsrf.js)
    Makes a fetch given a url, data, and method to use while passing the CSRF token gotten from the cookies
    
    ###### [LoggedInContext.js](./frontend/src/components/Auth/LoggedInContext.js)
-   A React context for allowing the whole app know who is logged in. Exports a provider and a context. [More abput React cpntext](https://reactjs.org/docs/context.html)
+   A React context for allowing the whole app know who is logged in. Exports a provider and a context. [More about React context](https://reactjs.org/docs/context.html)
    
    ###### [Login.js](./frontend/src/components/Auth/Login.js)
-   Component which handles users logging in.
+   Component which handles users logging in, fetches to the login view
+   
+   ###### [Register.js](./frontend/src/components/Auth/Register.js)
+   Component that allows users to create an account, fetches to the Register view
+   
+   ###### [ToggleLoginContext.js](./frontend/src/components/Auth/ToggleLoginContext.js)
+   React context for allowing components like Login and Register change who is logged in. Exports a provider and a context
+   
+  - ##### [Comment](./frontend/src/components/Comment)
+  
+   Here goes anything related to making and showing comments.
+  
+   ###### [Comment.js](./frontend/src/components/Comment/Comment.js)
+   Component that shows a comment given commenter, content, date commented, and an id. It also allows users to edit the comment if the logged in user is the commenter, in which case when the commment is submitted it makes a fetch to the Comments view.
+   
+   ###### [List.js](./frontend/src/components/Comment/List.js)
+   Component that shows a list of comments, animates them when appearing, and also splits them into "batches" of 5 so that more can be loaded on the press of the load more button.
+   
+   ###### [New,js](./frontend/src/components/Comment/New.js)
+   Component that allows a user to make a new comment given the content, makes a fetch to the Comments view and if comment was created successfully, immediately adds it to the comments list.
+   
+  - ##### [General](./frontend/src/components/General)
+  
+   Here we have components and a hook used throughout the whole app
+  
+   ###### [Dropdown.js](./frontend/src/components/General/Dropdown.js)
+   Animated dropdown component that recieves a list of options, selected option, and a setSortBy function to change which option is selected. Used to change post and hub sorting methods.
+   
+   ###### [Pagination.js](./frontend/src/components/General/Pagination.js)
+   Component that recieves a currentPage, last page, and a setCurrentPage function and shows a group of pagination items being the first, current, and last one and a prev and next item. When each item is clicked, it sets the current page to the item's number.
+   
+   ###### [Search.js](./frontend/src/components/General/Search.js)
+   Component that shows a search form and accepts an item type to search for, a setCurrentPage method to set the page back to 1 (explained why in component), and a setSearch method to change what was searched when the form submits.
+   
+   ###### [Sidebar.js](./frontend/src/components/General/Sidebar.js)
+   Component that has a theme changing button from dark to light, a button to toggle (and animate on appearance) the sidebar content, a top bar with these 2 buttons, and a div to blur everything if the sidebar is shown.
+   
+   ###### [SidebarContent.js](./frontend/src/components/General/SidebarContent.js)
+   The sidebar content that is shown from the sidebar, contains routes for Home and Users always and if the user is not logged in, Login and Register. If they are logged in, shows joined route and logout. The logout route is handled here too, makes a fetch to the Logout view and if everything is successful the user is logged out and sets the app's logged in user to null.
+   
+   ###### [usePrefersReducedMotion.js](./frontend/src/components/General/usePrefersReducedMotion.js) 
+   React hook to see if the user prefers reduced motion from the prefers-reduced-motion media query. Used to make animations immediate. Returns true if they do prefer reduced motion, false otherwise.
+   
+  - ##### [Home](./frontend/src/components/Home)
+  
+   Everything related to showing the 8 main hubs in the homepage.
+  
+   ###### [Home.js](./frontend/src/components/Home/Home.js)
+   The homepage itself, shows the 8 main hubs plus a welcome message.
+   
+   ###### [HomeRow.js](./frontend/src/components/Home/HomeRow.js)
+   Shows a main hub row similar to a normal hub but with a box shadow and a different description and date.
+   
+  - ##### [Post](./frontend/src/components/Post)
+  Here is everything related to posts
+   
+   ###### [GeneralPosts.js](./frontend/src/components/Post/GeneralPosts.js)
+   Component that shows a paginated list of posts and allows users to sort by newest, oldest, most liked, and least liked. Makes a fetch to the HubItems view with a specific page, sorting method, and filter (user or joined).
+   
+   ###### [Joined.js](./frontend/src/components/Post/Joined.js)
+   Component that shows posts from hubs a user has joined, user can choose from the 4 ordering methods of GeneralPosts.js
+   
+   ###### [Like.js](./frontend/src/components/Post/Liked.js)
+   If the user is logged in, allows users to like or unlike a post, makes a fetch to OnePost.
+   
+   ###### [List.js](./frontend/src/components/Post/List.js)
+   Shows a list of posts and animates them on appearance.
+   
+   ###### [New.js](./frontend/src/components/Post/New.js)
+   Allows users to make a new post in a hub, makes a fetch to NewPost and if post was created successfully navigates to it.
+   
+   ###### [Post.js](./frontend/src/components/Post/Post.js)
+   Shows a specific post with its poster, title, content, like amount and button, hubs, and all of its comments plus the ability to make a new one
+   
+   ###### [Row.js](./frontend/src/components/Post/Row.js)
+   The post row shown in List.js, when clicked goes to its specific post.
+   
+  - ##### [Hub](./frontend/src/components/Hub)
+  
+   Here we have everything related to hubs.
+  
+   ###### [Hub.s](./frontend/src/components/Hub/Hub.js)
+   Here is a main hub page. It shows the hub title and description, and also the posts/hubs of this hub which can be changed on the click of a button. Users can choose how the items (posts/hubs) are ordered, search for specific items and items are displayed in groups of 6 with pagination. Logged in users can also join the hub, make a new hub inside it and if the hub isn't a main hub users can make a new post as well.
+   
+   ###### [HubList.js](./frontend/src/components/Hub/HubList.js)
+   Component that given a list of hubs, shows and animates them on appearing.
+   
+   ###### [HubPath.js](./frontend/src/components/Hub/HubPath.js)
+   Component that shows the breadcrumb menu at the top of the screen when going through hubs. Sanitizes the path to only include hub names, removing stuff like new or posts/UUID and only showing the sanitized hubs
+   
+   ###### [New.js](./frontend/src/components/Hub/New.js)
+   Component that handles users creating a new hub, makes a fetch to the NewHub view and if the hub was created successfully, navigates to its page.
+   
+   ###### [Row.js](./frontend/src/components/Hub/Row.js)
+   Component that shows a HubRow, when clicked it navigates to the hub's page
+   
+   ###### [ToggleButton.js](./frontend/src/components/Hub/ToggleButton.js)
+   The toggle button that allows us to change from one type to another in a Hub, animates with a color change.
+   
+  - ##### [User](./frontend/src/components/User)
+  Component with eberything relaed to searching for users and a user profile
+  
+   ###### [List.js](./frontend/src/components/User/List.js)
+   Shows a list of users and animates them, allows other users to search for specific users. Users only show up when something has been searched.
+   
+   ###### [Profile.js](./frontend/src/components/User/Profile.js)
+   Shows a user profile, which is their username, profile pic, posts count, and joined hubs count. Shows all the user's posts as well and allows users to choose how they are ordered as always.
+   
+   ###### [Row.js](./frontend/src/components/User/Row.js)
+   Shows a user row of the users list, when clicked navigates to the user's profile.
    
 </details>
+</details>
+
+## Running and using
+<details>
+  <summary>Instructions on how to run the server</summary>
+  Install packages and make migrations in the root directory:
+  ```py
+  pip install -r requirements.txt
+  python manage.py makemigrations knowledge
+  python manage.py makemigrations
+  python manage.py migrate
+  ```
+  Then, go to the share folder, create a .env file and have its contents be the following
+  ```
+  SECRET_KEY=02963a29894ceaf3fd4d34afdd58927ab5244c58612cb5ca19
+  ```
+  now go back to the root directory and run `python manage.py runserver` to see the app live!
 </details>
