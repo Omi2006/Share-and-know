@@ -56,7 +56,7 @@ This project is different to each of the projects in the following ways:
 -   Commerce: The project has nothing to do with online commerce and users can't upload images at all. The hubs of share and know are much more complex than the categories of commerce as well as the comments since they can be edited and load in batches of 5.
 -   Mail: Even though this project is a single page app, it has custom routes, doesn't show only one type of thing(emails) and it doesn't serve the purpose of communication.
 -   Network: The only similarity is users can see posts, like them, and visit a user's profile. However, users can't follow each other and users have to place posts in a specific place. Additionally, users can't edit posts but they can comment on them. Users can also choose how projects are ordered.
--   All: React was used for the frontend with js and on the backend I used the django-rest-framework. I also secured the hidden key in a separate .env file for security reasons. Finally, recursive routing was used so users can visit an unlimited depth of hubs, so not all routes are completely fixed which makes it even more complex.
+-   All: React was used for the frontend with js and on the backend I used the django-rest-framework. I also secured the hidden key in a separate .env file for security reasons. Finally, recursive routing was used so users can visit an unlimited depth of hubs, so not all routes are completely fixed which makes it even more complex. There were also tests written for both the frontend and the backend, making a total of over 80 tests!
 
 ## Files
 
