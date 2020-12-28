@@ -3,9 +3,8 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 import { Jumbotron, Spinner, Button } from 'reactstrap';
 import { PostList } from '../Post';
 import { HubList, ToggleButton } from './';
-import { Search, Dropdown } from '../General';
+import { Search, Dropdown, Paginate } from '../General';
 import { fetchCsrf, LoggedInContext } from '../Auth';
-import Paginate from '../Pagination';
 import toast from 'react-hot-toast';
 import '../../style/hub.css';
 

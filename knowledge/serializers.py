@@ -7,6 +7,10 @@ from .models import Hub, User, Post, Comment
 
 
 class LoginSerializer(serializers.Serializer):
+    """
+    Gets the user with the specified username and password and raises an error if they don't exist
+    """
+
     username = serializers.CharField()
     password = serializers.CharField(
         label=_(
@@ -35,6 +39,10 @@ class LoginSerializer(serializers.Serializer):
 
 
 class RegisterSerializer(serializers.Serializer):
+    """
+    Checks if there is a user with the specified username, password, and email and raises an error if they already exist or if password and confirm fields don't match
+    """
+
     username = serializers.CharField()
     email = serializers.CharField()
     password = serializers.CharField(
@@ -73,6 +81,10 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer a user for their profile page
+    """
+
     post_count = serializers.IntegerField(source="get_post_count")
     joined_hubs_count = serializers.IntegerField(source="get_joined_hubs_count")
 
@@ -83,6 +95,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class HubPostSerializer(serializers.ModelSerializer):
+    """
+    Serializer a post for displaying in the hub lists
+    """
+
     poster = serializers.SlugRelatedField(read_only=True, slug_field='username')
     date = serializers.ReadOnlyField(source='get_date')
     path = serializers.ReadOnlyField(source='get_path')
@@ -93,6 +109,10 @@ class HubPostSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    """
+    Serializes a post for its page and also handles liking and creating posts
+    """
+
     poster = serializers.SlugRelatedField(read_only=True, slug_field='username')
     likes = serializers.SlugRelatedField(
         slug_field='username', many=True, queryset=User.objects.all(), required=False
@@ -135,6 +155,10 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    """
+    Handles serializing comments for a post, creating, and editing them
+    """
+
     commenter = serializers.SlugRelatedField(read_only=True, slug_field='username')
     date = serializers.ReadOnlyField(source='get_date')
 
@@ -153,6 +177,9 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class HubSerializer(serializers.ModelSerializer):
+    """
+    Serializes hubs and also handles creating them and having members join them
+    """
 
     date = serializers.ReadOnlyField(source="get_date")
     full_path = serializers.ReadOnlyField(source="get_full_path")

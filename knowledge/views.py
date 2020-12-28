@@ -31,6 +31,10 @@ DEFAULT_PAGE_SIZE = 6
 
 
 class ItemPagination(PageNumberPagination):
+    """
+    Handles pagination for the whole app
+    """
+
     page = DEFAULT_PAGE
     page_size = DEFAULT_PAGE_SIZE
     page_size_query_param = 'page_size'
@@ -108,6 +112,9 @@ class Register(generics.GenericAPIView):
 
 
 class HubItems(generics.ListAPIView):
+    """
+    Gets the items in a hub and also handles joined and user profile posts
+    """
 
     pagination_class = ItemPagination
     paginate_by = 6
@@ -214,7 +221,7 @@ class NewPost(generics.CreateAPIView):
 
 class OnePost(generics.RetrieveAPIView):
     """
-    Get a specific post
+    Get a specific post and also allows liking it
     """
 
     queryset = Post.objects.all()
@@ -234,9 +241,7 @@ class OnePost(generics.RetrieveAPIView):
 
     def handle_exception(self, exc):
         if isinstance(exc, Http404):
-            return Response(
-                {'error': 'This post does not exist.'},
-            )
+            return Response({'error': 'This post does not exist.'})
 
         return super(OnePost, self).handle_exception(exc)
 
@@ -278,7 +283,7 @@ class Comments(generics.UpdateAPIView):
 
 class Joined(generics.UpdateAPIView):
     """
-    For getting a user's joined hubs
+    For getting a user's posts from joined hubs and join new hubs
     """
 
     serializer_class = HubSerializer

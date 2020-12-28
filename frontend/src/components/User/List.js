@@ -11,15 +11,15 @@ export default function UserList() {
 
     const transitions = useTransition(users, user => user.id, {
         enter: {
-            transform: 'scale(1)',
+            height: 83,
             opacity: 1,
         },
         from: {
-            transform: 'scale(0)',
+            height: 0,
             opacity: 0,
         },
         leave: {
-            transform: 'scale(0)',
+            height: 0,
             opacity: 0,
         },
         immediate: prefersReducedMotion,

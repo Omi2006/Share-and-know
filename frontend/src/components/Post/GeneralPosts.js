@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PostList } from './';
 import { Spinner } from 'reactstrap';
-import { Dropdown } from '../General';
-import Paginate from '../Pagination';
+import { Dropdown, Paginate } from '../General';
 
 export default function JoinedHubs({ filter }) {
     const [posts, setPosts] = useState(null);

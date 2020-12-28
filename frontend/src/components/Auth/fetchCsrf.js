@@ -1,3 +1,4 @@
+//Get a cookie function, taken from Stack Overflow and django docs
 function getCookie(name) {
     if (!document.cookie) {
         return null;

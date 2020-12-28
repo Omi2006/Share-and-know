@@ -25,6 +25,7 @@ export default function App() {
     const [loggedIn, setLoggedIn] = useState(undefined);
 
     useEffect(() => {
+        //Get the current logged in user
         if (loggedIn !== undefined) return () => {};
         const getUser = async () => {
             const response = await fetch('/knowledge/login');
@@ -94,6 +95,9 @@ export default function App() {
                                             <HubRoutes loggedIn={loggedIn} />
                                         }
                                     />
+                                </Route>
+                                <Route path="*">
+                                    <h3>This page couldn't be found :(</h3>
                                 </Route>
                             </Routes>
                         </div>

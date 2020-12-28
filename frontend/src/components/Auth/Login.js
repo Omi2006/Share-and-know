@@ -13,10 +13,12 @@ export default function Login() {
     const handleLogin = useContext(ToggleLoggedInContext);
 
     const onSubmit = data => {
+        // For tests only
         if (submitInput.current === null) {
             return;
         }
         submitInput.current.disabled = true;
+        // Check inputs were filled out
         if (data.username.length <= 0 || data.password.length <= 0) {
             toast.error('Fill out all fields!', { duration: 1000 });
             submitInput.current.disabled = false;
@@ -33,6 +35,7 @@ export default function Login() {
                     return err.toString();
                 },
                 success: info => {
+                    // login the user
                     submitInput.current.disabled = false;
                     handleLogin(info.username);
                     return 'Logged in successfully!';

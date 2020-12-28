@@ -30,14 +30,7 @@ export default function List({ comments }) {
     let pageYOffset = window.pageYOffset;
 
     useEffect(() => {
-        if (comments[0] !== undefined) {
-            console.log(comments);
-            setCommentList(prevCommentList => [
-                comments[0],
-                ...prevCommentList.slice(1),
-            ]);
-            console.log(commentList);
-        }
+        setCommentList(comments.slice(0, page * 5));
     }, [comments]);
 
     //Keep the same page scroll so that the comments don't appear at the bottom.
