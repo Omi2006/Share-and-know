@@ -335,6 +335,7 @@ Contains the images used in the app, from [undraw.co/illustrations](https://undr
 ## Running and using
 <details>
   <summary>Instructions on how to run the server</summary>
+  
   Install packages and make migrations in the root directory:
   ```py
   pip install -r requirements.txt
