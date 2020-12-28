@@ -338,14 +338,14 @@ Contains the images used in the app, from [undraw.co/illustrations](https://undr
   
   Install packages and make migrations in the root directory:
   ```py
-  pip install -r requirements.txt
-  python manage.py makemigrations knowledge
-  python manage.py makemigrations
-  python manage.py migrate
+  pip3 install -r requirements.txt
+  python3 manage.py makemigrations knowledge
+  python3 manage.py makemigrations
+  python3 manage.py migrate
   ```
   Then, go to the share folder, create a .env file and have its contents be the following
   ```
   SECRET_KEY=02963a29894ceaf3fd4d34afdd58927ab5244c58612cb5ca19
   ```
-  now go back to the root directory and run `python manage.py runserver` to see the app live!
+  now go back to the root directory and run `python3 manage.py runserver` to see the app live!
 </details>
